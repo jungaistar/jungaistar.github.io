@@ -11,9 +11,9 @@ contact_note: >
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
   직업학박사 정동엽의 직업미래연구소. 미래사회와 직업세계 연구, 커리어 경력설계, 전직지원, 창업·창직, 직업심리, AI 리터러시 전문 컨설팅.
 footer_text: >
-  © 2026 직업미래연구소 (Job Future Institute).
-  Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
-  Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+  직업미래연구소 (Job Future Institute) ·
+  <a href="https://jdy.dreamitbiz.com" target="_blank">jdy.dreamitbiz.com</a> ·
+  Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a>.
 keywords: 직업학, 미래직업, 진로, 커리어, 전직지원, 창업, 직업심리, AI리터러시, 직업미래연구소 # add your own keywords or leave empty
 lang: ko # the language of your site (for example: en, fr, cn, ru, etc.)
 icon: 🎓 # the emoji used as the favicon (alternatively, provide image name in /assets/img/)

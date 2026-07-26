@@ -5,7 +5,7 @@ permalink: /
 subtitle: 직업학박사 · 직업미래연구소 소장 · <a href='https://jdy.dreamitbiz.com'>직업미래연구소</a>
 profile:
   align: right
-  image: prof_pic.jpg
+  image: prof_pic.png
   image_circular: false # crops the image to make it circular
   more_info: >
     <p>📞 010-7315-4585</p>
