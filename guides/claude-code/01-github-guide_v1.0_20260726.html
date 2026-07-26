@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>① GitHub 가입 &amp; 저장소 만들기 — 클로드 코드 준비 가이드</title>
+<style>
+:root{
+  --navy:#0E2A47; --navy-2:#1B4A78; --accent:#F26B21; --accent-soft:#FFF1E7;
+  --paper:#FFFFFF; --surface:#F4F6F9; --line:#D9E0E8; --muted:#5B6B7C; --ink:#16202B; --ok:#1A7F37; --bad:#C4341C;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Malgun Gothic','Nanum Gothic','Apple SD Gothic Neo',sans-serif;background:#8E9AA8;color:var(--ink);
+  -webkit-font-smoothing:antialiased;padding:28px 0;}
+.deck{display:flex;flex-direction:column;align-items:center;gap:24px;}
+.slide{width:1280px;height:720px;background:var(--paper);position:relative;overflow:hidden;
+  box-shadow:0 10px 34px rgba(0,0,0,.22);flex:0 0 auto;}
+.slide::after{content:attr(data-no);position:absolute;right:36px;bottom:22px;font-size:13px;font-weight:700;color:#A8B4C0;letter-spacing:.08em;}
+.rail{position:absolute;left:0;top:0;width:10px;height:100%;background:var(--navy);}
+.rail.acc{background:var(--accent);}
+
+.cover{background:var(--navy);color:#fff;padding:0 90px;display:flex;flex-direction:column;justify-content:center;}
+.cover .kicker{font-size:15px;letter-spacing:.3em;color:#F9B27A;font-weight:700;margin-bottom:24px;}
+.cover h1{font-size:62px;line-height:1.18;letter-spacing:-.02em;font-weight:800;}
+.cover h1 em{font-style:normal;color:#F9B27A;}
+.cover .sub{margin-top:24px;font-size:20px;color:#B7C7D8;line-height:1.55;max-width:940px;}
+.cover .bar{width:96px;height:6px;background:var(--accent);margin:36px 0 32px;}
+.cover .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px;}
+.cover .chip{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:9px 20px;font-size:14px;color:#DCE6EF;}
+.cover .chip.ver{border-color:var(--accent);color:#F9B27A;font-weight:700;letter-spacing:.05em;}
+.cover .stamp{position:absolute;right:-24px;bottom:-84px;font-size:300px;font-weight:800;color:rgba(255,255,255,.055);letter-spacing:-.04em;}
+
+.head{padding:34px 60px 0 70px;}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;margin-bottom:11px;}
+.eyebrow .tag{background:var(--accent);color:#fff;font-size:13px;font-weight:800;letter-spacing:.1em;padding:5px 12px;border-radius:4px;}
+.eyebrow .sm{font-size:12.5px;color:var(--muted);letter-spacing:.14em;font-weight:700;}
+.head h2{font-size:36px;font-weight:800;letter-spacing:-.02em;color:var(--navy);line-height:1.2;}
+.head .lead{margin-top:9px;font-size:15.5px;color:var(--muted);}
+.hr{height:3px;background:var(--navy);margin:15px 70px 0 70px;}
+.hr i{display:block;width:120px;height:3px;background:var(--accent);}
+
+.body{display:grid;grid-template-columns:706px 1fr;gap:32px;padding:22px 70px 0 70px;}
+.shot{border:1px solid var(--line);background:var(--surface);padding:9px;}
+.shot svg{display:block;}
+.side{display:flex;flex-direction:column;gap:12px;overflow:hidden;}
+.goal{background:var(--navy);color:#fff;padding:14px 18px;}
+.goal>b{display:block;font-size:11.5px;letter-spacing:.18em;color:#F9B27A;margin-bottom:6px;}
+.goal p{font-size:15.5px;line-height:1.45;font-weight:700;}
+ol.acts{list-style:none;counter-reset:a;display:flex;flex-direction:column;gap:9px;}
+ol.acts li{counter-increment:a;position:relative;padding-left:34px;font-size:14px;line-height:1.5;color:#25313D;}
+ol.acts li::before{content:counter(a);position:absolute;left:0;top:1px;width:23px;height:23px;border-radius:50%;
+  background:var(--accent);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.tip{border-left:4px solid var(--accent);background:var(--accent-soft);padding:11px 14px;}
+.tip.warn{border-left-color:var(--bad);background:#FDEEEB;}
+.tip.ok{border-left-color:var(--ok);background:#F0F7F1;}
+.tip.info{border-left-color:var(--navy-2);background:#EDF3F9;}
+.tip>b{display:block;font-size:12.5px;color:var(--accent);margin-bottom:5px;font-weight:800;}
+.tip.warn>b{color:var(--bad);} .tip.ok>b{color:var(--ok);} .tip.info>b{color:var(--navy-2);}
+.tip p{font-size:13px;line-height:1.55;color:#3A4855;}
+
+/* 명령어 + 복사 버튼 */
+.cmd .lbl{display:block;font-size:11.5px;font-weight:800;letter-spacing:.1em;color:var(--navy);margin-bottom:5px;}
+.cmdwrap{position:relative;}
+.cmdwrap pre{background:var(--navy);color:#E7EEF6;padding:12px 62px 12px 14px;border-radius:6px;
+  font-family:'Consolas','D2Coding',monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-all;}
+.cp{position:absolute;right:8px;top:8px;background:var(--accent);color:#fff;border:0;border-radius:4px;
+  font-size:11px;font-weight:800;padding:5px 10px;cursor:pointer;font-family:inherit;letter-spacing:.02em;}
+.cp:hover{filter:brightness(1.08);}
+.cp.done{background:var(--ok);}
+.out{margin-top:5px;font-family:'Consolas','D2Coding',monospace;font-size:11.5px;color:var(--muted);}
+
+/* 내용이 많은 슬라이드용 축약 모드 */
+.side.dense{gap:9px;}
+.side.dense .goal{padding:11px 15px;}
+.side.dense .goal>b{font-size:11px;margin-bottom:5px;}
+.side.dense .goal p{font-size:14px;line-height:1.4;}
+.side.dense ol.acts{gap:6px;}
+.side.dense ol.acts li{font-size:13px;line-height:1.45;padding-left:29px;}
+.side.dense ol.acts li::before{width:20px;height:20px;font-size:11px;}
+.side.dense .cmd .lbl{font-size:11px;margin-bottom:4px;}
+.side.dense .cmdwrap pre{font-size:11.5px;line-height:1.5;padding:9px 54px 9px 11px;}
+.side.dense .cp{padding:4px 8px;font-size:10px;top:6px;right:6px;}
+.side.dense .out{font-size:10.5px;margin-top:4px;}
+.side.dense .tip{padding:9px 12px;}
+.side.dense .tip>b{font-size:11.5px;margin-bottom:4px;}
+.side.dense .tip p{font-size:12px;line-height:1.5;}
+
+/* 명령어 모음 슬라이드 */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px;padding:22px 70px 0 70px;}
+.ccard{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);padding:13px 15px;}
+.ccard .ct{font-size:13.5px;font-weight:800;color:var(--navy);margin-bottom:8px;}
+.ccard .cd{margin-top:7px;font-size:12.5px;line-height:1.5;color:var(--muted);}
+
+/* 문제 해결 표 */
+.tbwrap{padding:20px 70px 0 70px;}
+table.tb{width:100%;border-collapse:collapse;}
+table.tb th{background:var(--navy);color:#fff;font-size:13px;text-align:left;padding:10px 13px;font-weight:700;}
+table.tb td{border-bottom:1px solid var(--line);padding:9px 13px;font-size:12.8px;vertical-align:top;line-height:1.5;}
+table.tb tr:nth-child(even) td{background:#FAFBFC;}
+table.tb td.s{font-weight:700;color:var(--bad);}
+table.tb td.c{color:var(--muted);}
+table.tb code{font-family:'Consolas','D2Coding',monospace;background:#EEF2F6;padding:1px 5px;border-radius:3px;font-size:12px;color:#20364C;}
+
+/* 마무리 */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:30px;padding:24px 70px 0 70px;}
+.panel h3{font-size:17px;color:var(--navy);font-weight:800;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--line);}
+ul.chk{list-style:none;display:flex;flex-direction:column;gap:7px;}
+ul.chk li{display:flex;gap:11px;align-items:flex-start;background:var(--surface);padding:8px 12px;}
+ul.chk .box{width:16px;height:16px;border:2px solid var(--accent);flex:0 0 auto;margin-top:2px;}
+ul.chk .t{display:block;font-size:13.5px;font-weight:700;color:#25313D;}
+ul.chk .d{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45;}
+ul.nxt{list-style:none;display:flex;flex-direction:column;gap:9px;}
+ul.nxt li{border-left:3px solid var(--navy-2);padding:6px 0 6px 12px;}
+ul.nxt>li>b{display:block;font-size:13.5px;color:var(--navy);margin-bottom:3px;}
+ul.nxt>li>span{font-size:12.5px;color:var(--muted);line-height:1.5;}
+.final{margin:18px 70px 0 70px;background:var(--navy);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:24px;}
+.final b{font-size:13px;color:#F9B27A;letter-spacing:.14em;flex:0 0 auto;}
+.final span{font-family:'Consolas','D2Coding',monospace;font-size:17px;}
+
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#0E2A47;color:#fff;
+  padding:11px 22px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;transition:.22s;pointer-events:none;z-index:99;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+@media print{
+  body{background:#fff;padding:0;} .deck{gap:0;}
+  .slide{box-shadow:none;page-break-after:always;}
+  .cp,.toast{display:none!important;}
+  .cmdwrap pre{padding-right:14px;}
+  @page{size:1280px 720px;margin:0;}
+}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<section class="slide cover" data-no="01 / 15">
+  <div class="stamp">GH</div>
+  <div class="kicker">CLAUDE CODE 준비 · 01 GITHUB</div>
+  <h1>GitHub 계정 만들고<br><em>내 저장소 열기</em></h1>
+  <div class="bar"></div>
+  <p class="sub">클로드 코드로 만든 프로그램을 보관하고 공유할 GitHub 계정을 만듭니다. 화면 그림의 <b>주황색 번호</b>와 오른쪽 <b>실행 순서 번호</b>가 같습니다.</p>
+  <div class="meta"><span class="chip">소요 시간 약 10분</span><span class="chip">설치 프로그램 없음(웹)</span><span class="chip">완전 무료</span><span class="chip">초보자 대상</span><span class="chip ver">v1.0 · 2026-07-26</span></div>
+</section>
+
+<section class="slide" data-no="02 / 15">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">한눈에 보기</span></div>
+    <h2>GitHub 준비 전체 흐름</h2>
+    <p class="lead">가입 → 인증 → 2단계 인증 → 로그인 확인 → 저장소 만들기 순서입니다. 프로그램을 설치하는 것이 아니라 <b>웹사이트에 회원가입</b>하는 과정입니다.</p>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="flowwrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 372" width="100%" preserveAspectRatio="xMidYMid meet">
+    <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.b{font-weight:700;}</style>
+    <rect x="0" y="0" width="1000" height="372" fill="#FFFFFF"/>
+    <g><rect x="18" y="66" width="172" height="176" rx="12" fill="#0E2A47"/>
+<text x="40" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">01</text>
+<text x="40" y="152" font-size="30" class="b">🌐</text>
+<text x="40" y="184" font-size="16" class="b" fill="#FFFFFF">접속·가입</text>
+<rect x="40" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
+<text x="50" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 1–4</text></g><path d="M194 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="216" y="66" width="172" height="176" rx="12" fill="#1B4A78"/>
+<text x="238" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">02</text>
+<text x="238" y="152" font-size="30" class="b">📧</text>
+<text x="238" y="184" font-size="16" class="b" fill="#FFFFFF">이메일 인증</text>
+<rect x="238" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
+<text x="248" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 5</text></g><path d="M392 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="414" y="66" width="172" height="176" rx="12" fill="#2A6EA6"/>
+<text x="436" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">03</text>
+<text x="436" y="152" font-size="30" class="b">🔐</text>
+<text x="436" y="184" font-size="16" class="b" fill="#FFFFFF">2단계 인증</text>
+<rect x="436" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
+<text x="446" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 6</text></g><path d="M590 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="612" y="66" width="172" height="176" rx="12" fill="#E2762A"/>
+<text x="634" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">04</text>
+<text x="634" y="152" font-size="30" class="b">🏠</text>
+<text x="634" y="184" font-size="16" class="b" fill="#FFFFFF">로그인 확인</text>
+<rect x="634" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
+<text x="644" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 7</text></g><path d="M788 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="810" y="66" width="172" height="176" rx="12" fill="#F26B21"/>
+<text x="832" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">05</text>
+<text x="832" y="152" font-size="30" class="b">📦</text>
+<text x="832" y="184" font-size="16" class="b" fill="#FFFFFF">저장소 만들기</text>
+<rect x="832" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
+<text x="842" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 8–10</text></g>
+    <rect x="18" y="282" width="964" height="62" rx="10" fill="#F4F6F9" stroke="#D9E0E8"/>
+    <text x="42" y="308" font-size="13" class="b" fill="#0E2A47">준비물</text>
+    <text x="42" y="330" font-size="12.5" fill="#5B6B7C">인터넷 브라우저(크롬·엣지) · 본인 이메일 주소 · 스마트폰(2단계 인증용) · 약 10분  |  비용 0원(Free 플랜)</text>
+  </svg></div>
+</section>
+
+<section class="slide" data-no="03 / 15">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 1</span><span class="sm">GITHUB · 가입 시작</span></div>
+    <h2>github.com 접속 후 <b>Sign up</b> 누르기</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
+<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
+<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
+<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
+<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://github.com</text>
+<rect x="8" y="72" width="884" height="480" fill="#0D1117"/>
+
+
+<rect x="8" y="72" width="884" height="54" fill="#010409"/>
+<circle cx="44" cy="99" r="14" fill="#FFFFFF"/><circle cx="44" cy="99" r="9.5" fill="#010409"/>
+<circle cx="41" cy="96" r="2" fill="#FFFFFF"/><circle cx="47" cy="96" r="2" fill="#FFFFFF"/>
+<rect x="646" y="88" width="86" height="26" rx="6" fill="#010409" stroke="#30363D"/>
+<text x="689" y="105" text-anchor="middle" font-size="12" fill="#C9D1D9">Sign in</text>
+<rect x="744" y="88" width="88" height="26" rx="6" fill="#238636"/>
+<text x="788" y="105" text-anchor="middle" font-size="12" class="b" fill="#FFFFFF">Sign up</text>
+<text x="450" y="238" text-anchor="middle" font-size="40" class="b" fill="#F0F6FC">Let's build from here</text>
+<text x="450" y="280" text-anchor="middle" font-size="15" fill="#8B949E">세계에서 가장 많이 쓰는 코드 저장·협업 플랫폼</text>
+<rect x="292" y="318" width="240" height="46" rx="8" fill="#FFFFFF"/>
+<text x="312" y="347" font-size="13.5" fill="#57606A">Email address</text>
+<rect x="544" y="318" width="156" height="46" rx="8" fill="#238636"/><text x="622" y="346" text-anchor="middle" font-size="14.5" class="b" fill="#FFFFFF">Sign up for GitHub</text>
+<rect x="118" y="42" width="644" height="30" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="96" cy="57" r="15" fill="#F26B21"/><text x="96" y="63" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="160" y="208" width="580" height="92" rx="12" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="764" cy="254" r="15" fill="#F26B21"/><text x="764" y="260" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="740" y="84" width="96" height="34" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="858" cy="101" r="15" fill="#F26B21"/><text x="858" y="107" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="160" y="430" width="350" height="28" rx="14" fill="#FFF1E7" stroke="#F26B21"/><text x="174" y="449" font-size="13" class="b" fill="#F26B21">① 주소 입력 → ② 첫 화면 확인 → ③ Sign up</text>
+
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>브라우저로 GitHub 홈페이지에 들어가 회원가입 화면을 엽니다.</p></div>
+      <ol class="acts"><li>크롬(또는 엣지)을 열고 주소창에 <b>github.com</b> 을 입력한 뒤 Enter.</li><li>검은 배경에 <b>Let's build from here</b> 가 보이면 제대로 들어온 것입니다.</li><li>오른쪽 위 <b>Sign up</b>(초록 버튼)을 클릭합니다.</li></ol>
+      
+      <div class="tip "><b>용어 정리</b><p>GitHub는 <b>코드와 파일을 온라인에 보관하고 함께 작업하는 창고</b>입니다. 클로드 코드로 만든 프로그램도 여기에 올려 보관·공유합니다.</p></div><div class="tip info"><b>주소를 정확히</b><p><code>github.com</code> 입니다. <code>github.co</code>, <code>gitgub.com</code> 같은 오타 사이트를 조심하세요.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="04 / 15">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 2</span><span class="sm">GITHUB · 가입 정보</span></div>
+    <h2>이메일 주소 입력 → <b>Continue</b></h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
+<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
+<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
+<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
+<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://github.com/signup</text>
+<rect x="8" y="72" width="884" height="480" fill="#0D1117"/>
+
+<text x="450" y="150" text-anchor="middle" font-size="26" class="b" fill="#F0F6FC">Welcome to GitHub!</text>
+<text x="450" y="182" text-anchor="middle" font-size="14" fill="#8B949E">Let's begin the adventure</text>
+
+<text x="300" y="228" font-size="13" fill="#C9D1D9">Enter your email*</text>
+<rect x="300" y="236" width="300" height="40" rx="8" fill="#0D1117" stroke="#30363D" stroke-width="1.4"/>
+<text x="316" y="262" font-size="13.5" class="m" fill="#8B949E">hufs.staff@gmail.com</text>
+<rect x="300" y="312" width="300" height="44" rx="8" fill="#238636"/><text x="450" y="339" text-anchor="middle" font-size="14.5" class="b" fill="#FFFFFF">Continue</text>
+<line x1="300" y1="392" x2="380" y2="392" stroke="#30363D"/><text x="450" y="397" text-anchor="middle" font-size="12" fill="#8B949E">or</text><line x1="520" y1="392" x2="600" y2="392" stroke="#30363D"/>
+<rect x="300" y="416" width="300" height="42" rx="8" fill="#0D1117" stroke="#30363D"/>
+<text x="450" y="442" text-anchor="middle" font-size="13" fill="#C9D1D9">Continue with Google</text>
+<rect x="296" y="232" width="308" height="48" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="628" cy="256" r="15" fill="#F26B21"/><text x="628" y="262" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="296" y="308" width="308" height="52" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="628" cy="334" r="15" fill="#F26B21"/><text x="628" y="340" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="296" y="412" width="308" height="50" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="628" cy="437" r="15" fill="#F26B21"/><text x="628" y="443" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="180" y="480" width="340" height="28" rx="14" fill="#FFF1E7" stroke="#F26B21"/><text x="194" y="499" font-size="13" class="b" fill="#F26B21">① 이메일 → ② Continue  (③ 은 더 빠른 대안)</text>
+
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>가입에 사용할 본인 이메일 주소를 넣습니다.</p></div>
+      <ol class="acts"><li><b>Enter your email</b> 칸에 실제로 <b>메일을 받을 수 있는</b> 주소를 입력합니다.</li><li>초록색 <b>Continue</b> 버튼을 클릭합니다.</li><li>Google 계정이 있다면 아래 <b>Continue with Google</b> 로 더 빠르게 가입할 수도 있습니다.</li></ol>
+      
+      <div class="tip warn"><b>반드시 받는 메일함이 있어야 합니다</b><p>조금 뒤 <b>인증 코드</b>가 이 주소로 옵니다. 회사 메일이 외부 메일을 막는 경우 개인 메일(gmail/naver)을 쓰세요.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="05 / 15">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 3</span><span class="sm">GITHUB · 가입 정보</span></div>
+    <h2>비밀번호 · 아이디 정하기</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
+<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
+<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
+<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
+<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://github.com/signup</text>
+<rect x="8" y="72" width="884" height="480" fill="#0D1117"/>
+
+<text x="450" y="118" text-anchor="middle" font-size="22" class="b" fill="#F0F6FC">Create your account</text>
+
+<text x="300" y="158" font-size="13" fill="#C9D1D9">Password*</text>
+<rect x="300" y="166" width="300" height="40" rx="8" fill="#0D1117" stroke="#30363D" stroke-width="1.4"/>
+<text x="316" y="192" font-size="13.5" class="m" fill="#8B949E">••••••••••••••••</text>
+<circle cx="308" cy="222" r="5.5" fill="#3FB950"/><path d="M304.6 222l2.4 2.4 4.2-4.8" stroke="#0D1117" stroke-width="1.5" fill="none"/>
+<text x="322" y="226" font-size="11.5" fill="#3FB950">Password is strong.</text>
+
+<text x="300" y="248" font-size="13" fill="#C9D1D9">Username*</text>
+<rect x="300" y="256" width="300" height="40" rx="8" fill="#0D1117" stroke="#30363D" stroke-width="1.4"/>
+<text x="316" y="282" font-size="13.5" class="m" fill="#8B949E">hufs-hong</text>
+<circle cx="308" cy="312" r="5.5" fill="#3FB950"/><path d="M304.6 312l2.4 2.4 4.2-4.8" stroke="#0D1117" stroke-width="1.5" fill="none"/>
+<text x="322" y="316" font-size="11.5" fill="#3FB950">Username is available.</text>
+
+<text x="300" y="338" font-size="13" fill="#C9D1D9">Email preferences (y/n)*</text>
+<rect x="300" y="346" width="300" height="40" rx="8" fill="#0D1117" stroke="#30363D" stroke-width="1.4"/>
+<text x="316" y="372" font-size="13.5" class="m" fill="#8B949E">n</text>
+<rect x="300" y="418" width="300" height="44" rx="8" fill="#238636"/><text x="450" y="445" text-anchor="middle" font-size="14.5" class="b" fill="#FFFFFF">Continue</text>
+<rect x="296" y="162" width="308" height="48" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="628" cy="186" r="15" fill="#F26B21"/><text x="628" y="192" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="296" y="252" width="308" height="48" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="628" cy="276" r="15" fill="#F26B21"/><text x="628" y="282" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="296" y="342" width="308" height="48" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="628" cy="366" r="15" fill="#F26B21"/><text x="628" y="372" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="296" y="414" width="308" height="52" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="628" cy="440" r="15" fill="#F26B21"/><text x="628" y="446" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+<rect x="300" y="486" width="300" height="26" rx="6" fill="#0E2A47"/><text x="312" y="504" font-size="12.5" class="b" fill="#FFFFFF">② 는 available 표시를 꼭 확인하세요</text>
+
+    </svg></div>
+    <div class="side dense">
+      <div class="goal"><b>이 단계의 목표</b><p>로그인에 쓸 비밀번호와, 나를 나타내는 아이디(Username)를 정합니다.</p></div>
+      <ol class="acts"><li><b>Password</b> 칸에 비밀번호를 입력합니다. (영문+숫자 15자 이상 권장)</li><li><b>Username</b> 칸에 원하는 아이디를 입력합니다. 초록색 <b>available</b> 이 뜨면 사용 가능합니다.</li><li>광고 수신 칸에는 <b>n</b> 을 입력합니다.</li><li><b>Continue</b> 를 누릅니다.</li></ol>
+      
+      <div class="tip info"><b>아이디는 인터넷 주소가 됩니다</b><p>아이디가 <code>hufs-hong</code> 이면 내 페이지는 <code>github.com/hufs-hong</code> 이 됩니다. <b>영문 소문자·숫자·하이픈(-)</b> 만 쓰세요.</p></div><div class="tip warn"><b>not available 이 뜨면</b><p>이미 쓰는 사람이 있다는 뜻입니다. 예: <code>hong-hufs</code>, <code>hufs-hong2</code></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="06 / 15">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 4</span><span class="sm">GITHUB · 로봇 아님 확인</span></div>
+    <h2>사람 확인(퍼즐) 통과하기</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
+<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
+<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
+<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
+<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://github.com/signup</text>
+<rect x="8" y="72" width="884" height="480" fill="#0D1117"/>
+
+<text x="450" y="120" text-anchor="middle" font-size="20" class="b" fill="#F0F6FC">Verify your account</text>
+<rect x="270" y="146" width="360" height="272" rx="12" fill="#161B22" stroke="#30363D" stroke-width="1.5"/>
+<text x="450" y="180" text-anchor="middle" font-size="13.5" fill="#C9D1D9">화면 안내에 따라 그림을 맞춰 주세요</text>
+<rect x="300" y="198" width="300" height="150" rx="8" fill="#0D1117" stroke="#30363D"/>
+<circle cx="380" cy="274" r="34" fill="#1F6FEB" opacity="0.25"/><text x="380" y="284" text-anchor="middle" font-size="30">🦉</text>
+<path d="M470 274 l52 0 m-14 -12 l14 12 l-14 12" stroke="#F9B27A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+<rect x="300" y="366" width="300" height="30" rx="15" fill="#238636" opacity="0.16"/>
+<text x="450" y="386" text-anchor="middle" font-size="12.5" class="b" fill="#3FB950">✓ 확인 완료 — 잠시 후 넘어갑니다</text>
+<rect x="300" y="442" width="300" height="44" rx="8" fill="#238636"/><text x="450" y="469" text-anchor="middle" font-size="14.5" class="b" fill="#FFFFFF">Create account</text>
+<rect x="296" y="194" width="308" height="158" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="660" cy="273" r="15" fill="#F26B21"/><text x="660" y="279" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="296" y="362" width="308" height="38" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="660" cy="381" r="15" fill="#F26B21"/><text x="660" y="387" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="296" y="438" width="308" height="52" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="660" cy="464" r="15" fill="#F26B21"/><text x="660" y="470" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>자동 가입 프로그램이 아님을 확인하는 간단한 퍼즐을 풉니다.</p></div>
+      <ol class="acts"><li>퍼즐 그림이 나오면 안내대로 <b>동물의 방향을 화살표에 맞춥니다.</b></li><li>초록색 <b>확인 완료</b> 표시가 뜨는지 봅니다.</li><li><b>Create account</b> 버튼을 눌러 가입을 확정합니다.</li></ol>
+      
+      <div class="tip warn"><b>퍼즐이 계속 실패한다면</b><p>① 브라우저 배율을 <b>100%</b>로(Ctrl+0) ② 광고 차단 확장 끄기 ③ 크롬 <b>시크릿 창</b>(Ctrl+Shift+N)에서 재시도.</p></div><div class="tip "><b>천천히 하세요</b><p>실패해도 <b>다시 시도</b>가 무제한입니다. 당황하지 말고 반복하세요.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="07 / 15">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 5</span><span class="sm">GITHUB · 이메일 인증</span></div>
+    <h2>메일로 온 <b>8자리 코드</b> 입력</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
+<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
+<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
+<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
+<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://github.com/signup</text>
+<rect x="8" y="72" width="884" height="480" fill="#0D1117"/>
+
+<text x="450" y="118" text-anchor="middle" font-size="19" class="b" fill="#F0F6FC">이메일로 받은 인증 코드를 입력하세요</text>
+<text x="450" y="146" text-anchor="middle" font-size="13" fill="#8B949E">hufs.staff@gmail.com 으로 코드를 보냈습니다</text>
+<g>
+<rect x="252" y="176" width="40" height="52" rx="8" fill="#0D1117" stroke="#1F6FEB" stroke-width="1.6"/><rect x="302" y="176" width="40" height="52" rx="8" fill="#0D1117" stroke="#1F6FEB" stroke-width="1.6"/><rect x="352" y="176" width="40" height="52" rx="8" fill="#0D1117" stroke="#1F6FEB" stroke-width="1.6"/><rect x="402" y="176" width="40" height="52" rx="8" fill="#0D1117" stroke="#1F6FEB" stroke-width="1.6"/><rect x="452" y="176" width="40" height="52" rx="8" fill="#0D1117" stroke="#1F6FEB" stroke-width="1.6"/><rect x="502" y="176" width="40" height="52" rx="8" fill="#0D1117" stroke="#30363D" stroke-width="1.6"/><rect x="552" y="176" width="40" height="52" rx="8" fill="#0D1117" stroke="#30363D" stroke-width="1.6"/><rect x="602" y="176" width="40" height="52" rx="8" fill="#0D1117" stroke="#30363D" stroke-width="1.6"/>
+<text x="272" y="212" text-anchor="middle" font-size="21" class="b m" fill="#F0F6FC">4</text><text x="322" y="212" text-anchor="middle" font-size="21" class="b m" fill="#F0F6FC">9</text><text x="372" y="212" text-anchor="middle" font-size="21" class="b m" fill="#F0F6FC">2</text><text x="422" y="212" text-anchor="middle" font-size="21" class="b m" fill="#F0F6FC">7</text><text x="472" y="212" text-anchor="middle" font-size="21" class="b m" fill="#F0F6FC">1</text>
+</g>
+<text x="450" y="264" text-anchor="middle" font-size="12.5" fill="#58A6FF">Resend code (코드 다시 받기)</text>
+<rect x="196" y="296" width="508" height="186" rx="10" fill="#161B22" stroke="#30363D"/>
+<text x="220" y="328" font-size="13" class="b" fill="#F0F6FC">📧 GitHub</text>
+<text x="220" y="352" font-size="12" fill="#8B949E">받는 사람: hufs.staff@gmail.com</text>
+<text x="220" y="382" font-size="12.5" fill="#C9D1D9">Your GitHub launch code</text>
+<rect x="220" y="396" width="200" height="46" rx="6" fill="#0D1117" stroke="#30363D"/>
+<text x="320" y="427" text-anchor="middle" font-size="21" class="b m" fill="#F9B27A">49271358</text>
+<text x="220" y="466" font-size="11.5" fill="#8B949E">이 코드를 위 칸에 그대로 입력하세요.</text>
+<rect x="192" y="292" width="516" height="194" rx="12" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="732" cy="389" r="15" fill="#F26B21"/><text x="732" y="395" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="216" y="392" width="208" height="54" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="448" cy="419" r="15" fill="#F26B21"/><text x="448" y="425" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="246" y="170" width="452" height="64" rx="12" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="722" cy="202" r="15" fill="#F26B21"/><text x="722" y="208" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>입력한 이메일이 본인 것임을 증명해 가입을 확정합니다.</p></div>
+      <ol class="acts"><li>가입한 메일함을 열어 <b>GitHub</b> 이 보낸 메일을 찾습니다.</li><li>메일 안의 <b>여덟 자리 숫자 코드</b>를 확인합니다.</li><li>가입 화면의 칸에 코드를 그대로 입력합니다. (자동으로 다음 칸 이동)</li></ol>
+      
+      <div class="tip warn"><b>메일이 안 보일 때</b><p>① <b>스팸함/프로모션함</b> 확인 ② 1~2분 뒤 <b>Resend code</b> 클릭 ③ 그래도 없으면 주소 오타 → 뒤로 가서 이메일 다시 입력.</p></div><div class="tip ok"><b>성공 신호</b><p>코드가 맞으면 <b>화면이 자동으로 넘어갑니다.</b> 설문이 나오면 <b>Skip</b> 해도 됩니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="08 / 15">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 6</span><span class="sm">GITHUB · 보안 설정</span></div>
+    <h2>2단계 인증(2FA) 켜기</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
+<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
+<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
+<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
+<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://github.com/settings/security</text>
+<rect x="8" y="72" width="884" height="480" fill="#0D1117"/>
+
+<rect x="8" y="72" width="884" height="52" fill="#010409"/>
+<text x="34" y="104" font-size="12.5" fill="#8B949E">Settings › Password and authentication</text>
+<circle cx="850" cy="98" r="15" fill="#1F6FEB"/><text x="850" y="104" text-anchor="middle" font-size="13">👤</text>
+<rect x="30" y="140" width="212" height="390" rx="8" fill="#161B22" stroke="#30363D"/>
+<text x="50" y="172" font-size="12.5" fill="#8B949E">Public profile</text>
+<text x="50" y="202" font-size="12.5" fill="#8B949E">Account</text>
+<rect x="38" y="216" width="196" height="30" rx="6" fill="#1F6FEB" opacity="0.22"/>
+<text x="50" y="236" font-size="12" class="b" fill="#F0F6FC">Password and authentication</text>
+<text x="50" y="270" font-size="12.5" fill="#8B949E">SSH and GPG keys</text>
+<rect x="258" y="140" width="610" height="390" rx="8" fill="#161B22" stroke="#30363D"/>
+<text x="282" y="174" font-size="16" class="b" fill="#F0F6FC">Two-factor authentication</text>
+<text x="282" y="198" font-size="12" fill="#8B949E">로그인할 때 비밀번호 + 휴대폰 인증을 함께 사용합니다.</text>
+<rect x="282" y="214" width="140" height="34" rx="8" fill="#238636"/><text x="352" y="236" text-anchor="middle" font-size="14.5" class="b" fill="#FFFFFF">Enable 2FA</text>
+<rect x="282" y="278" width="140" height="140" rx="8" fill="#FFFFFF"/>
+<rect x="291" y="287" width="17" height="17" fill="#0D1117"/><rect x="333" y="287" width="17" height="17" fill="#0D1117"/><rect x="354" y="287" width="17" height="17" fill="#0D1117"/><rect x="396" y="287" width="17" height="17" fill="#0D1117"/><rect x="333" y="308" width="17" height="17" fill="#0D1117"/><rect x="354" y="308" width="17" height="17" fill="#0D1117"/><rect x="396" y="308" width="17" height="17" fill="#0D1117"/><rect x="291" y="329" width="17" height="17" fill="#0D1117"/><rect x="354" y="329" width="17" height="17" fill="#0D1117"/><rect x="396" y="329" width="17" height="17" fill="#0D1117"/><rect x="291" y="350" width="17" height="17" fill="#0D1117"/><rect x="333" y="350" width="17" height="17" fill="#0D1117"/><rect x="375" y="350" width="17" height="17" fill="#0D1117"/><rect x="396" y="350" width="17" height="17" fill="#0D1117"/><rect x="333" y="371" width="17" height="17" fill="#0D1117"/><rect x="375" y="371" width="17" height="17" fill="#0D1117"/><rect x="396" y="371" width="17" height="17" fill="#0D1117"/><rect x="291" y="392" width="17" height="17" fill="#0D1117"/><rect x="354" y="392" width="17" height="17" fill="#0D1117"/><rect x="396" y="392" width="17" height="17" fill="#0D1117"/>
+<text x="282" y="446" font-size="11.5" fill="#8B949E">앱으로 이 QR을 촬영</text>
+<text x="452" y="300" font-size="12.5" class="b" fill="#F0F6FC">앱에 뜬 6자리 숫자 입력</text>
+<rect x="452" y="312" width="176" height="40" rx="8" fill="#0D1117" stroke="#30363D"/>
+<text x="468" y="339" font-size="17" class="b m" fill="#F0F6FC">3 8 4 1 0 2</text>
+<rect x="452" y="378" width="396" height="122" rx="8" fill="#0D1117" stroke="#238636" stroke-width="1.5"/>
+<text x="470" y="404" font-size="12.5" class="b" fill="#3FB950">Recovery codes — 안전한 곳에 저장하세요</text>
+<text x="470" y="432" font-size="12" class="m" fill="#C9D1D9">a1b2c-3d4e5      f6g7h-8i9j0</text>
+<text x="470" y="456" font-size="12" class="m" fill="#C9D1D9">k1l2m-3n4o5      p6q7r-8s9t0</text>
+<text x="470" y="484" font-size="11.5" fill="#8B949E">Download  ·  Print  ·  Copy</text>
+<rect x="278" y="210" width="148" height="42" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="450" cy="231" r="15" fill="#F26B21"/><text x="450" y="237" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="278" y="274" width="148" height="148" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="298" cy="470" r="15" fill="#F26B21"/><text x="298" y="476" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="448" y="308" width="184" height="48" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="656" cy="332" r="15" fill="#F26B21"/><text x="656" y="338" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="448" y="374" width="404" height="130" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="424" cy="439" r="15" fill="#F26B21"/><text x="424" y="445" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>스마트폰 인증 앱을 등록해 계정을 안전하게 잠급니다. (프로필 → Settings → Password and authentication)</p></div>
+      <ol class="acts"><li><b>Enable 2FA</b> 버튼을 누릅니다.</li><li>스마트폰의 <b>Microsoft Authenticator</b>(또는 Google OTP) 앱으로 <b>QR 코드</b>를 찍습니다.</li><li>앱에 나온 <b>6자리 숫자</b>를 화면에 입력합니다.</li><li>마지막에 나오는 <b>복구 코드</b>를 반드시 저장/인쇄해 둡니다.</li></ol>
+      
+      <div class="tip warn"><b>복구 코드는 꼭 보관하세요</b><p>휴대폰을 잃어버리면 <b>복구 코드가 유일한 열쇠</b>입니다. 캡처해 개인 메일로 보내두거나 인쇄해 보관하세요.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="09 / 15">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 7</span><span class="sm">GITHUB · 구동 확인</span></div>
+    <h2>로그인 상태 확인 (이게 "실행"입니다)</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
+<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
+<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
+<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
+<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://github.com</text>
+<rect x="8" y="72" width="884" height="480" fill="#0D1117"/>
+
+
+<rect x="8" y="72" width="884" height="54" fill="#010409"/>
+<circle cx="44" cy="99" r="14" fill="#FFFFFF"/><circle cx="44" cy="99" r="9.5" fill="#010409"/>
+<circle cx="41" cy="96" r="2" fill="#FFFFFF"/><circle cx="47" cy="96" r="2" fill="#FFFFFF"/>
+<rect x="640" y="88" width="120" height="26" rx="6" fill="#0D1117" stroke="#30363D"/><text x="656" y="105" font-size="11.5" fill="#8B949E">Search or jump to…</text>
+<circle cx="850" cy="99" r="15" fill="#1F6FEB"/><text x="850" y="105" text-anchor="middle" font-size="13">👤</text>
+<rect x="30" y="150" width="250" height="366" rx="10" fill="#161B22" stroke="#30363D"/>
+<text x="52" y="182" font-size="14" class="b" fill="#F0F6FC">Top repositories</text>
+<rect x="52" y="196" width="206" height="32" rx="6" fill="#238636"/><text x="155" y="217" text-anchor="middle" font-size="12.5" class="b" fill="#fff">New</text>
+<text x="52" y="256" font-size="12.5" fill="#58A6FF">hufs-hong / my-first-app</text>
+<text x="52" y="284" font-size="12.5" fill="#58A6FF">hufs-hong / hufs-hong.github.io</text>
+<rect x="300" y="150" width="568" height="366" rx="10" fill="#161B22" stroke="#30363D"/>
+<text x="324" y="184" font-size="15" class="b" fill="#F0F6FC">Home</text>
+<text x="324" y="214" font-size="12.5" fill="#8B949E">여기가 로그인 후 첫 화면(대시보드)입니다.</text>
+<rect x="324" y="234" width="520" height="60" rx="8" fill="#0D1117" stroke="#30363D"/>
+<text x="344" y="262" font-size="12.5" fill="#C9D1D9">🎉 Welcome, hufs-hong!</text>
+<text x="344" y="282" font-size="11.5" fill="#8B949E">가입이 완료되었습니다. 이제 저장소를 만들어 보세요.</text>
+<rect x="118" y="42" width="644" height="30" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="96" cy="57" r="15" fill="#F26B21"/><text x="96" y="63" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="832" y="82" width="36" height="36" rx="18" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="800" cy="100" r="15" fill="#F26B21"/><text x="800" y="106" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="296" y="146" width="576" height="374" rx="12" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="846" cy="486" r="15" fill="#F26B21"/><text x="846" y="492" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="324" y="330" width="320" height="28" rx="14" fill="#FFF1E7" stroke="#F26B21"/><text x="338" y="349" font-size="13" class="b" fill="#F26B21">프로필 사진이 보이면 로그인 성공!</text>
+
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>GitHub는 설치 프로그램이 아니라 웹사이트입니다. 로그인된 첫 화면을 여는 것이 곧 실행입니다.</p></div>
+      <ol class="acts"><li>주소창에 <b>github.com</b> 을 입력합니다.</li><li>오른쪽 위에 <b>내 프로필 사진</b>이 보이면 로그인된 상태입니다.</li><li>가운데 활동 화면이 보이면 그것이 <b>내 홈(대시보드)</b> 입니다.</li></ol>
+      
+      <div class="tip ok"><b>다음부터는 이렇게 여세요</b><p>브라우저 즐겨찾기에 <b>github.com</b> 을 추가해 두면 클릭 한 번으로 들어올 수 있습니다. (Ctrl+D)</p></div><div class="tip warn"><b>로그인 화면이 계속 나온다면</b><p>브라우저 <b>쿠키 차단</b> 설정 때문일 수 있습니다. 크롬 설정 → 개인정보 → 쿠키 → <b>타사 쿠키 허용</b> 후 재시도.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="10 / 15">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 8</span><span class="sm">GITHUB · 저장소 만들기</span></div>
+    <h2>초록색 <b>New</b> 버튼 누르기</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
+<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
+<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
+<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
+<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://github.com</text>
+<rect x="8" y="72" width="884" height="480" fill="#0D1117"/>
+
+
+<rect x="8" y="72" width="884" height="54" fill="#010409"/>
+<circle cx="44" cy="99" r="14" fill="#FFFFFF"/><circle cx="44" cy="99" r="9.5" fill="#010409"/>
+<circle cx="41" cy="96" r="2" fill="#FFFFFF"/><circle cx="47" cy="96" r="2" fill="#FFFFFF"/>
+<circle cx="850" cy="99" r="15" fill="#1F6FEB"/><text x="850" y="105" text-anchor="middle" font-size="13">👤</text>
+<rect x="782" y="86" width="34" height="26" rx="6" fill="#0D1117" stroke="#30363D"/><text x="799" y="105" text-anchor="middle" font-size="15" class="b" fill="#C9D1D9">＋</text>
+<rect x="30" y="150" width="250" height="366" rx="10" fill="#161B22" stroke="#30363D"/>
+<text x="52" y="184" font-size="14" class="b" fill="#F0F6FC">Top repositories</text>
+<rect x="176" y="166" width="84" height="30" rx="6" fill="#238636"/>
+<text x="218" y="186" text-anchor="middle" font-size="13" class="b" fill="#FFFFFF">＋ New</text>
+<text x="52" y="230" font-size="12.5" fill="#8B949E">아직 저장소가 없습니다.</text>
+<rect x="300" y="150" width="568" height="366" rx="10" fill="#161B22" stroke="#30363D"/>
+<text x="584" y="320" text-anchor="middle" font-size="15" fill="#8B949E">저장소를 만들면 여기에 목록이 표시됩니다</text>
+<rect x="700" y="122" width="168" height="76" rx="8" fill="#161B22" stroke="#30363D"/>
+<rect x="706" y="128" width="156" height="30" rx="5" fill="#1F6FEB" opacity="0.2"/>
+<text x="718" y="148" font-size="12" class="b" fill="#F0F6FC">New repository</text>
+<text x="718" y="180" font-size="12" fill="#8B949E">Import repository</text>
+<rect x="172" y="162" width="92" height="38" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="292" cy="181" r="15" fill="#F26B21"/><text x="292" y="187" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="778" y="82" width="42" height="34" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="756" cy="99" r="15" fill="#F26B21"/><text x="756" y="105" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="702" y="124" width="164" height="38" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="678" cy="143" r="15" fill="#F26B21"/><text x="678" y="149" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="52" y="420" width="340" height="28" rx="14" fill="#FFF1E7" stroke="#F26B21"/><text x="66" y="439" font-size="13" class="b" fill="#F26B21">① 또는 ②→③ — 어느 쪽이든 결과는 같습니다</text>
+
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>내 프로그램을 담을 새 저장소(Repository) 만들기를 시작합니다.</p></div>
+      <ol class="acts"><li>왼쪽 <b>Top repositories</b> 옆의 초록색 <b>New</b> 버튼을 클릭합니다.</li><li>버튼이 안 보이면 오른쪽 위 <b>＋</b> 를 누릅니다.</li><li>열린 목록에서 <b>New repository</b> 를 선택합니다.</li></ol>
+      
+      <div class="tip "><b>저장소(Repository)란?</b><p>프로젝트 하나당 폴더 하나라고 생각하면 쉽습니다. <b>프로그램 하나 = 저장소 하나</b> 로 만들면 관리가 편합니다.</p></div><div class="tip info"><b>몇 개까지 만들 수 있나요?</b><p>Free 플랜에서도 <b>공개·비공개 저장소를 개수 제한 없이</b> 만들 수 있습니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="11 / 15">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 9</span><span class="sm">GITHUB · 저장소 만들기</span></div>
+    <h2>이름 입력 후 <b>Create repository</b></h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
+<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
+<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
+<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
+<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://github.com/new</text>
+<rect x="8" y="72" width="884" height="480" fill="#0D1117"/>
+
+<text x="60" y="120" font-size="24" class="b" fill="#F0F6FC">Create a new repository</text>
+<line x1="60" y1="140" x2="840" y2="140" stroke="#30363D"/>
+
+<text x="60" y="172" font-size="13" fill="#C9D1D9">Repository name*</text>
+<rect x="60" y="180" width="300" height="40" rx="8" fill="#0D1117" stroke="#30363D" stroke-width="1.4"/>
+<text x="76" y="206" font-size="13.5" class="m" fill="#8B949E">my-first-app</text>
+<circle cx="376" cy="200" r="5.5" fill="#3FB950"/><path d="M372.6 200l2.4 2.4 4.2-4.8" stroke="#0D1117" stroke-width="1.5" fill="none"/>
+<text x="390" y="204" font-size="11.5" fill="#3FB950">my-first-app is available.</text>
+
+<text x="60" y="250" font-size="13" fill="#C9D1D9">Description (선택)</text>
+<rect x="60" y="258" width="500" height="40" rx="8" fill="#0D1117" stroke="#30363D" stroke-width="1.4"/>
+<text x="76" y="284" font-size="13.5" class="m" fill="#8B949E">클로드 코드로 만든 첫 프로그램</text>
+<circle cx="70" cy="336" r="8.5" fill="#0D1117" stroke="#1F6FEB" stroke-width="1.8"/><circle cx="70" cy="336" r="4.5" fill="#1F6FEB"/>
+<text x="90" y="341" font-size="14" class="b" fill="#F0F6FC">Public</text><text x="152" y="341" font-size="12" fill="#8B949E">인터넷의 누구나 볼 수 있습니다</text>
+<circle cx="70" cy="372" r="8.5" fill="#0D1117" stroke="#30363D" stroke-width="1.8"/>
+<text x="90" y="377" font-size="14" fill="#C9D1D9">Private</text><text x="152" y="377" font-size="12" fill="#8B949E">나와 내가 초대한 사람만 볼 수 있습니다</text>
+<rect x="62" y="410" width="17" height="17" rx="3" fill="#0D1117" stroke="#1F6FEB" stroke-width="1.8"/>
+<path d="M65.5 418.6l3.6 3.8 6.6-7.6" stroke="#1F6FEB" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<text x="90" y="424" font-size="13.5" fill="#C9D1D9">Add a README file</text>
+<rect x="620" y="452" width="220" height="44" rx="8" fill="#238636"/><text x="730" y="479" text-anchor="middle" font-size="14.5" class="b" fill="#FFFFFF">Create repository</text>
+<rect x="56" y="176" width="308" height="48" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="590" cy="200" r="15" fill="#F26B21"/><text x="590" y="206" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="56" y="320" width="500" height="70" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="590" cy="355" r="15" fill="#F26B21"/><text x="590" y="361" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="56" y="404" width="260" height="30" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="342" cy="419" r="15" fill="#F26B21"/><text x="342" y="425" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="616" y="448" width="228" height="52" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="592" cy="474" r="15" fill="#F26B21"/><text x="592" y="480" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+
+    </svg></div>
+    <div class="side dense">
+      <div class="goal"><b>이 단계의 목표</b><p>저장소 이름과 공개 여부를 정하고 실제로 만듭니다.</p></div>
+      <ol class="acts"><li><b>Repository name</b> 에 영문 이름을 입력합니다. 예: <code>my-first-app</code></li><li><b>Public</b>(전체 공개) 또는 <b>Private</b>(나만 보기) 중 하나를 고릅니다.</li><li><b>Add a README file</b> 을 체크합니다. (설명 파일이 자동 생성)</li><li>맨 아래 초록색 <b>Create repository</b> 를 클릭합니다.</li></ol>
+      
+      <div class="tip info"><b>이름 규칙</b><p>영문 소문자·숫자·하이픈(-)만 쓰세요. <b>한글·공백은 피하는 것이 안전</b>합니다.</p></div><div class="tip warn"><b>Public / Private 선택</b><p>업무 자료·개인정보가 들어갈 예정이면 반드시 <b>Private</b>. 강의 실습용은 Public 이어도 됩니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="12 / 15">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 10</span><span class="sm">GITHUB · 주소 확인</span></div>
+    <h2>저장소 주소 복사해 두기</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
+<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
+<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
+<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
+<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://github.com/hufs-hong/my-first-app</text>
+<rect x="8" y="72" width="884" height="480" fill="#0D1117"/>
+
+
+<rect x="8" y="72" width="884" height="54" fill="#010409"/>
+<circle cx="44" cy="99" r="14" fill="#FFFFFF"/><circle cx="44" cy="99" r="9.5" fill="#010409"/>
+<circle cx="41" cy="96" r="2" fill="#FFFFFF"/><circle cx="47" cy="96" r="2" fill="#FFFFFF"/>
+<text x="34" y="160" font-size="18" fill="#58A6FF">hufs-hong</text><text x="128" y="160" font-size="18" fill="#8B949E">/</text>
+<text x="144" y="160" font-size="18" class="b" fill="#58A6FF">my-first-app</text>
+<rect x="290" y="142" width="62" height="24" rx="12" fill="#0D1117" stroke="#30363D"/><text x="321" y="159" text-anchor="middle" font-size="11" fill="#8B949E">Public</text>
+<rect x="34" y="190" width="834" height="42" rx="8" fill="#161B22" stroke="#30363D"/>
+<text x="56" y="216" font-size="12.5" fill="#C9D1D9">📁 main   ·   1 commit</text>
+<rect x="700" y="196" width="120" height="30" rx="6" fill="#238636"/>
+<text x="760" y="216" text-anchor="middle" font-size="12.5" class="b" fill="#FFFFFF">&lt;&gt; Code  ▾</text>
+<rect x="540" y="242" width="320" height="164" rx="10" fill="#161B22" stroke="#30363D" stroke-width="1.5"/>
+<rect x="558" y="258" width="80" height="26" rx="6" fill="#1F6FEB" opacity="0.3"/><text x="598" y="276" text-anchor="middle" font-size="12" class="b" fill="#F0F6FC">HTTPS</text>
+<text x="662" y="276" font-size="12" fill="#8B949E">SSH</text><text x="722" y="276" font-size="12" fill="#8B949E">GitHub CLI</text>
+<rect x="558" y="302" width="240" height="34" rx="6" fill="#0D1117" stroke="#30363D"/>
+<text x="570" y="323" class="m" font-size="9.5" fill="#C9D1D9">https://github.com/hufs-hong/my-first-app.git</text>
+<rect x="806" y="302" width="36" height="34" rx="6" fill="#0D1117" stroke="#30363D"/><text x="824" y="325" text-anchor="middle" font-size="15">📋</text>
+<text x="558" y="372" font-size="11.5" fill="#8B949E">Download ZIP</text>
+<rect x="34" y="250" width="480" height="130" rx="8" fill="#161B22" stroke="#30363D"/>
+<text x="56" y="278" font-size="12.5" fill="#C9D1D9">📄 README.md</text>
+<text x="56" y="312" font-size="15" class="b" fill="#F0F6FC"># my-first-app</text>
+<text x="56" y="340" font-size="12" fill="#8B949E">클로드 코드로 만든 첫 프로그램</text>
+<rect x="696" y="192" width="128" height="38" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="676" cy="211" r="15" fill="#F26B21"/><text x="676" y="217" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="554" y="254" width="88" height="34" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="530" cy="271" r="15" fill="#F26B21"/><text x="530" y="277" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="802" y="298" width="44" height="42" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="872" cy="319" r="15" fill="#F26B21"/><text x="872" y="325" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>나중에 클로드 코드/Git에서 쓸 저장소 주소(URL)를 확인하고 복사합니다.</p></div>
+      <ol class="acts"><li>저장소 화면 오른쪽 위 초록색 <b>&lt;&gt; Code</b> 버튼을 클릭합니다.</li><li><b>HTTPS</b> 탭이 선택돼 있는지 확인합니다.</li><li>주소 오른쪽 <b>복사 아이콘</b>을 누릅니다.</li></ol>
+      <div class="cmd">
+  <b class="lbl">내 저장소 주소 형태 (아이디·이름만 바꿔 쓰세요)</b>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="https://github.com/hufs-hong/my-first-app.git">복사</button><pre>https://github.com/hufs-hong/my-first-app.git</pre></div>
+  </div>
+      <div class="tip ok"><b>이 주소를 어디에 쓰나요?</b><p>다음 가이드(Git)에서 <code>git clone &lt;주소&gt;</code> 로 내 컴퓨터에 내려받을 때 사용합니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="13 / 15">
+  <div class="rail acc"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE</span></div>
+    <h2>GitHub 관련 주소·명령어 모음</h2>
+    <p class="lead">오른쪽 위 <b>복사</b> 버튼을 누르면 클립보드에 담깁니다. 붙여넣기는 <b>Ctrl+V</b> (터미널은 마우스 오른쪽 클릭).</p>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="cgrid"><div class="ccard">
+  <div class="ct">① GitHub 홈 (즐겨찾기 추천)</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="https://github.com">복사</button><pre>https://github.com</pre></div>
+  
+  <div class="cd">로그인 후 첫 화면(대시보드)으로 이동합니다.</div>
+</div><div class="ccard">
+  <div class="ct">② 새 저장소 바로 만들기</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="https://github.com/new">복사</button><pre>https://github.com/new</pre></div>
+  
+  <div class="cd">메뉴를 거치지 않고 저장소 생성 화면으로 바로 갑니다.</div>
+</div><div class="ccard">
+  <div class="ct">③ 보안(2단계 인증) 설정</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="https://github.com/settings/security">복사</button><pre>https://github.com/settings/security</pre></div>
+  
+  <div class="cd">2FA 켜기·복구 코드 다시 보기.</div>
+</div><div class="ccard">
+  <div class="ct">④ 내 프로필 페이지</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="https://github.com/아이디">복사</button><pre>https://github.com/아이디</pre></div>
+  
+  <div class="cd"><b>아이디</b> 부분만 본인 것으로 바꾸세요. 예: github.com/hufs-hong</div>
+</div><div class="ccard">
+  <div class="ct">⑤ 내 저장소를 컴퓨터로 내려받기 (다음 Git 가이드에서 사용)</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git clone https://github.com/hufs-hong/my-first-app.git">복사</button><pre>git clone https://github.com/hufs-hong/my-first-app.git</pre></div>
+  
+  <div class="cd">주소의 <b>아이디/저장소이름</b> 을 본인 것으로 바꿔서 사용합니다.</div>
+</div><div class="ccard">
+  <div class="ct">⑥ 로그인 계정 확인 (Git 설치 후)</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git config --global user.name">복사</button><pre>git config --global user.name</pre></div>
+  <div class="out">→ 설정한 이름이 출력되면 정상</div>
+  <div class="cd">Git 가이드에서 설정한 이름이 GitHub 아이디와 달라도 괜찮습니다.</div>
+</div></div>
+</section>
+
+<section class="slide" data-no="14 / 15">
+  <div class="rail acc"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">문제 해결</span><span class="sm">TROUBLESHOOTING</span></div>
+    <h2>GitHub — 문제가 생겼을 때</h2>
+    <p class="lead">자주 나오는 상황과 해결 방법입니다. 위에서부터 순서대로 확인해 보세요.</p>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="tbwrap"><table class="tb">
+    <thead><tr><th style="width:29%">이런 화면·메시지가 나오면</th><th style="width:24%">원인</th><th>이렇게 해결하세요</th></tr></thead>
+    <tbody><tr><td class="s">인증 코드 메일이 오지 않음</td><td class="c">스팸 분류 또는 이메일 오타</td><td>① <b>스팸함·프로모션함</b> 확인 ② 2분 후 <b>Resend code</b> ③ 그래도 없으면 뒤로 가서 이메일 주소를 다시 확인. 회사 메일이 막는 경우가 많으니 <b>개인 메일</b>로 재시도.</td></tr><tr><td class="s"><code>Username is not available</code></td><td class="c">이미 사용 중인 아이디</td><td>뒤에 소속·숫자를 붙여 다시 시도. 예: <code>hong-hufs</code>, <code>hufs-hong2</code>. 영문 소문자·숫자·하이픈만 가능하며 <b>_ 와 공백은 불가</b>.</td></tr><tr><td class="s">사람 확인(퍼즐)이 계속 실패</td><td class="c">확대 배율·광고 차단 확장</td><td>① <b>Ctrl+0</b> 으로 배율 100% ② 광고 차단 확장 끄기 ③ <b>시크릿 창(Ctrl+Shift+N)</b> 에서 재시도 ④ 다른 브라우저(엣지) 사용.</td></tr><tr><td class="s">로그인은 되는데 계속 코드를 물어봄</td><td class="c">2단계 인증(2FA) 정상 동작</td><td>휴대폰 인증 앱의 <b>6자리 숫자</b>를 입력합니다. 폰이 없으면 가입 시 저장한 <b>복구 코드</b> 사용. <b>Remember this device</b> 를 체크하면 다음부터 덜 묻습니다.</td></tr><tr><td class="s">휴대폰을 바꿔 인증 앱이 없어짐</td><td class="c">2FA 기기 분실</td><td>로그인 화면에서 <b>Use a recovery code</b> 클릭 → 저장해 둔 복구 코드 입력 → 들어간 뒤 <b>Settings → Password and authentication</b> 에서 2FA 재등록.</td></tr><tr><td class="s">저장소를 잘못 만들었음 / 지우고 싶음</td><td class="c">이름·공개설정 실수</td><td>해당 저장소 → <b>Settings</b> → 맨 아래 <b>Danger Zone</b> → <b>Delete this repository</b>. 이름 바꾸기는 같은 Settings 상단 <b>Repository name</b> 에서 가능.</td></tr><tr><td class="s">화면이 전부 영어라 어렵다</td><td class="c">한국어 UI 미지원 영역</td><td>크롬에서 페이지 <b>오른쪽 클릭 → 한국어로 번역</b>. 단, 번역하면 버튼 이름이 달라지므로 <b>이 가이드의 그림과 위치</b>로 찾는 편이 빠릅니다.</td></tr></tbody>
+  </table></div>
+</section>
+
+<section class="slide" data-no="15 / 15">
+  <div class="rail acc"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">마무리</span><span class="sm">CHECKLIST &amp; NEXT</span></div>
+    <h2>완료 확인 후 다음 단계로</h2>
+    <p class="lead">아래 항목이 모두 되었다면 GitHub 준비는 끝입니다. 이어서 <b>Git 설치 가이드</b>로 넘어가세요.</p>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="two">
+    <div class="panel"><h3>✅ 완료 체크리스트</h3><ul class="chk"><li><span class="box"></span><span><span class="t">github.com 에 가입했다</span><span class="d">이메일 인증 코드 입력까지 완료</span></span></li><li><span class="box"></span><span><span class="t">내 아이디를 알고 있다</span><span class="d">예: hufs-hong — 앞으로 계속 사용합니다</span></span></li><li><span class="box"></span><span><span class="t">2단계 인증(2FA)을 켰다</span><span class="d">복구 코드를 안전한 곳에 저장했다</span></span></li><li><span class="box"></span><span><span class="t">저장소를 1개 만들어 봤다</span><span class="d">README 체크 후 Create repository</span></span></li><li><span class="box"></span><span><span class="t">저장소 주소를 복사할 줄 안다</span><span class="d">&lt;&gt; Code → HTTPS → 복사 아이콘</span></span></li></ul></div>
+    <div class="panel"><h3>➡️ 다음 단계 &amp; 참고</h3><ul class="nxt"><li><b>② Git 설치 가이드</b><span>내 컴퓨터에서 GitHub와 주고받기 위한 프로그램을 설치합니다. (<b>02-git-guide</b>)</span></li><li><b>③ Node.js LTS 설치</b><span>클로드 코드가 사용하는 실행 엔진을 설치합니다.</span></li><li><b>④ VS Code 설치</b><span>코드를 보고 고칠 편집기를 설치합니다.</span></li><li><b>⑤ Claude Code 설치</b><span>마지막으로 클로드 코드를 설치하고 로그인합니다.</span></li><li><b>기억해 둘 것</b><span>GitHub 아이디 · 비밀번호 · 복구 코드 — 이 세 가지는 꼭 따로 적어 두세요.</span></li></ul></div>
+  </div>
+  <div class="final"><b>다음 가이드</b><span>02-git-guide_v1.0_20260726.html</span></div>
+</section>
+
+</div>
+<script>
+function copyText(t){
+  if(navigator.clipboard && window.isSecureContext){ return navigator.clipboard.writeText(t); }
+  var ta=document.createElement('textarea'); ta.value=t;
+  ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta); return Promise.resolve();
+}
+var toast=document.createElement('div'); toast.className='toast'; toast.textContent='복사되었습니다';
+document.addEventListener('DOMContentLoaded',function(){ document.body.appendChild(toast); });
+document.addEventListener('click',function(e){
+  var b=e.target.closest ? e.target.closest('.cp') : null; if(!b) return;
+  copyText(b.getAttribute('data-c')).then(function(){
+    var old=b.textContent; b.textContent='복사됨'; b.classList.add('done');
+    toast.classList.add('on');
+    setTimeout(function(){ b.textContent=old; b.classList.remove('done'); toast.classList.remove('on'); },1400);
+  });
+});
+</script>
+</body>
+</html>

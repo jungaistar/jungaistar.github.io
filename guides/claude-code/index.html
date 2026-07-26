@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>클로드 코드 설치 따라하기 — 5종 가이드 목차</title>
+<style>
+:root{--navy:#0E2A47;--accent:#F26B21;--line:#D9E0E8;--muted:#5B6B7C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;background:#F4F6F9;color:#16202B;}
+.wrap{max-width:960px;margin:0 auto;padding:24px 24px 80px;}
+.sitebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:22px;padding:10px 4px;font-size:13.5px;}
+.sitebar a{color:var(--navy);text-decoration:none;font-weight:700;}
+.sitebar a:hover{color:var(--accent);text-decoration:underline;}
+.sitebar .sep{color:#B5BEC8;}
+.sitebar .who{margin-left:auto;color:var(--muted);font-size:12.5px;font-weight:400;}
+header{background:var(--navy);color:#fff;padding:52px 40px;border-radius:14px;position:relative;overflow:hidden;}
+header .k{font-size:13px;letter-spacing:.3em;color:#F9B27A;font-weight:700;}
+header h1{font-size:40px;margin-top:18px;line-height:1.25;letter-spacing:-.02em;}
+header h1 em{font-style:normal;color:#F9B27A;}
+header p{margin-top:18px;font-size:16px;color:#B7C7D8;line-height:1.6;max-width:640px;}
+header .bar{width:80px;height:5px;background:var(--accent);margin:26px 0 0;}
+header .st{position:absolute;right:-10px;bottom:-60px;font-size:180px;font-weight:800;color:rgba(255,255,255,.05);}
+.note{margin-top:24px;background:#FFF1E7;border-left:4px solid var(--accent);padding:16px 20px;border-radius:0 8px 8px 0;font-size:14px;line-height:1.65;color:#3A4855;}
+.note b{color:var(--accent);}
+h2.sec{margin:44px 0 18px;font-size:20px;color:var(--navy);padding-bottom:10px;border-bottom:2px solid var(--line);}
+.card{display:flex;gap:22px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;text-decoration:none;color:inherit;
+  transition:.15s;align-items:flex-start;}
+.card:hover{border-color:var(--accent);box-shadow:0 6px 20px rgba(14,42,71,.1);transform:translateY(-2px);}
+.ci{width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:30px;flex:0 0 auto;}
+.cb{flex:1;}
+.cn{font-size:12px;font-weight:800;letter-spacing:.2em;color:var(--accent);}
+.cb h3{font-size:20px;margin:6px 0 8px;color:var(--navy);}
+.cb p{font-size:14px;color:var(--muted);line-height:1.6;}
+.cm{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;}
+.cm span{font-size:12px;background:#F4F6F9;border:1px solid var(--line);border-radius:999px;padding:4px 12px;color:var(--muted);}
+.cm .k{background:#FFF1E7;border-color:#F7C9A8;color:#C1521A;font-weight:700;}
+.cf{margin-top:12px;font-size:12px;color:#8A94A0;}
+.mdrow{margin:6px 0 18px;padding-left:8px;}
+.mdrow a{font-size:12.5px;color:var(--muted);text-decoration:none;}
+.mdrow a:hover{color:var(--accent);text-decoration:underline;}
+.tips{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 26px;}
+.tips ul{list-style:none;display:flex;flex-direction:column;gap:12px;}
+.tips li{font-size:14px;line-height:1.65;color:#3A4855;padding-left:26px;position:relative;}
+.tips li::before{content:"→";position:absolute;left:0;color:var(--accent);font-weight:800;}
+.tips code{font-family:Consolas,monospace;background:#EEF2F6;padding:2px 6px;border-radius:3px;font-size:13px;}
+footer{margin-top:48px;text-align:center;font-size:12.5px;color:#8A94A0;line-height:1.8;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="sitebar">
+  <a href="https://jungaistar.github.io/">← 직업미래연구소</a>
+  <span class="sep">·</span>
+  <a href="https://jungaistar.github.io/teaching/">강의·교육</a>
+  <span class="who">정동엽 직업학박사</span>
+</nav>
+
+<header>
+  <div class="st">CC</div>
+  <div class="k">한국외국어대학교 행정직원 대상 · 바이브 코딩 강의</div>
+  <h1>클로드 코드 설치 따라하기<br><em>5단계 가이드</em></h1>
+  <div class="bar"></div>
+  <p>화면 그림을 보며 번호 순서대로 따라 하는 실습형 가이드입니다. 아래 <b>01번부터 순서대로</b> 진행하세요. 모든 명령어는 <b>복사 버튼</b>으로 바로 붙여넣을 수 있고, 각 가이드 끝에는 <b>문제 해결표</b>가 있습니다.</p>
+</header>
+
+<div class="note">
+  <b>진행 순서를 지켜 주세요.</b> 뒤 단계는 앞 단계가 끝나야 동작합니다. 총 소요 시간은 약 <b>45분</b>이며, 준비물은 인터넷 브라우저·본인 이메일·스마트폰(2단계 인증)·Claude 유료 플랜 계정입니다.
+</div>
+
+<h2 class="sec">📚 설치 가이드 5종</h2>
+<a class="card" href="01-github-guide_v1.0_20260726.html">
+  <div class="ci" style="background:#0E2A47">🐙</div>
+  <div class="cb">
+    <div class="cn">01</div>
+    <h3>GitHub 가입 & 저장소 만들기</h3>
+    <p>코드를 보관·공유할 계정을 만들고 저장소를 엽니다.</p>
+    <div class="cm"><span>약 10분</span><span class="k">설치 없음 · 웹 가입</span></div>
+    <div class="cf">HTML 슬라이드 15장 · 명령어 복사 버튼 · 문제 해결표 포함</div>
+  </div>
+</a>
+<div class="mdrow"><a href="01-github-guide_v1.0_20260726.md">📄 01-github-guide_v1.0_20260726.md (텍스트 버전)</a></div>
+<a class="card" href="02-git-guide_v1.0_20260726.html">
+  <div class="ci" style="background:#1B4A78">🌿</div>
+  <div class="cb">
+    <div class="cn">02</div>
+    <h3>Git 설치 & 사용 시작</h3>
+    <p>내 컴퓨터와 GitHub를 연결하는 프로그램을 설치합니다.</p>
+    <div class="cm"><span>약 10분</span><span class="k">핵심 화면 3개만 확인</span></div>
+    <div class="cf">HTML 슬라이드 17장 · 명령어 복사 버튼 · 문제 해결표 포함</div>
+  </div>
+</a>
+<div class="mdrow"><a href="02-git-guide_v1.0_20260726.md">📄 02-git-guide_v1.0_20260726.md (텍스트 버전)</a></div>
+<a class="card" href="03-nodejs-guide_v1.0_20260726.html">
+  <div class="ci" style="background:#2A6EA6">🟢</div>
+  <div class="cb">
+    <div class="cn">03</div>
+    <h3>Node.js LTS 설치</h3>
+    <p>클로드 코드와 개발 도구를 돌리는 엔진입니다.</p>
+    <div class="cm"><span>약 7분</span><span class="k">반드시 LTS 선택</span></div>
+    <div class="cf">HTML 슬라이드 14장 · 명령어 복사 버튼 · 문제 해결표 포함</div>
+  </div>
+</a>
+<div class="mdrow"><a href="03-nodejs-guide_v1.0_20260726.md">📄 03-nodejs-guide_v1.0_20260726.md (텍스트 버전)</a></div>
+<a class="card" href="04-vscode-guide_v1.0_20260726.html">
+  <div class="ci" style="background:#E2762A">🧩</div>
+  <div class="cb">
+    <div class="cn">04</div>
+    <h3>VS Code 설치 & 실행</h3>
+    <p>코드를 보고 고치는 편집기를 설치합니다.</p>
+    <div class="cm"><span>약 8분</span><span class="k">PATH에 추가 체크</span></div>
+    <div class="cf">HTML 슬라이드 15장 · 명령어 복사 버튼 · 문제 해결표 포함</div>
+  </div>
+</a>
+<div class="mdrow"><a href="04-vscode-guide_v1.0_20260726.md">📄 04-vscode-guide_v1.0_20260726.md (텍스트 버전)</a></div>
+<a class="card" href="05-claude-code-guide_v1.0_20260726.html">
+  <div class="ci" style="background:#F26B21">✨</div>
+  <div class="cb">
+    <div class="cn">05</div>
+    <h3>Claude Code 설치 & 실행</h3>
+    <p>명령 한 줄로 설치하고 한국어로 프로그램을 만듭니다.</p>
+    <div class="cm"><span>약 10분</span><span class="k">유료 플랜 계정 필요</span></div>
+    <div class="cf">HTML 슬라이드 16장 · 명령어 복사 버튼 · 문제 해결표 포함</div>
+  </div>
+</a>
+<div class="mdrow"><a href="05-claude-code-guide_v1.0_20260726.md">📄 05-claude-code-guide_v1.0_20260726.md (텍스트 버전)</a></div>
+
+<h2 class="sec">💡 가이드 사용법</h2>
+<div class="tips">
+<ul>
+  <li><b>HTML 파일</b>을 브라우저(크롬·엣지)로 여세요. 슬라이드 형태로 위에서 아래로 스크롤하며 봅니다.</li>
+  <li>명령어 오른쪽 위 <b>주황색 [복사] 버튼</b>을 누르면 클립보드에 담깁니다. PowerShell에서는 <b>마우스 오른쪽 클릭</b>으로 붙여넣습니다.</li>
+  <li>인쇄하거나 PDF로 저장하려면 <b>Ctrl+P</b> → 용지 <b>가로</b>, 배율 <b>배경 그래픽 켜기</b> 로 설정하세요. (복사 버튼은 인쇄에서 자동으로 빠집니다)</li>
+  <li>화면 그림에 있는 <b>주황색 원 번호</b>는 오른쪽 <b>실행 순서</b> 번호와 같습니다. 그림에서 위치를 찾고, 오른쪽에서 설명을 읽으세요.</li>
+  <li>막히면 각 가이드 뒤쪽의 <b>문제 해결</b> 슬라이드를 먼저 확인하세요. 대부분은 <b>터미널을 새로 열면</b> 해결됩니다.</li>
+  <li><b>.md 파일</b>은 그림 없는 텍스트 버전입니다. 메모장·노션·깃허브에 붙여넣어 배포할 때 사용하세요.</li>
+</ul>
+</div>
+
+<footer>
+클로드 코드 설치 따라하기 가이드 · v1.0 · 2026-07-26<br>
+화면 그림은 실제 스크린샷이 아닌 화면을 재현한 벡터 목업입니다. 버전에 따라 버튼 위치·문구가 다를 수 있습니다.
+</footer>
+</div>
+</body>
+</html>
