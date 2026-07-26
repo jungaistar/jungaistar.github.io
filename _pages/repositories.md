@@ -1,10 +1,10 @@
 ---
 layout: page
 permalink: /repositories/
-title: repositories
-description: Edit the `_data/repositories.yml` and change the `github_users` and `github_repos` lists to include your own GitHub profile and repositories.
+title: 저장소
+description: GitHub에 공개한 프로젝트와 강의 자료 저장소입니다.
 nav: true
-nav_order: 4
+nav_order: 8
 ---
 
 {% if site.data.repositories.github_users %}

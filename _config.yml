@@ -122,8 +122,8 @@ bing_site_verification: # out your bing-site-verification ID (Bing Webmaster)
 # Blog
 # -----------------------------------------------------------------------------
 
-blog_name: al-folio # blog_name will be displayed in your blog page
-blog_description: a simple whitespace theme for academics
+blog_name: 직업미래연구소 블로그 # blog_name will be displayed in your blog page
+blog_description: 미래직업·진로·커리어·AI 시대의 일에 관한 연구와 생각
 permalink: /blog/:year/:title/
 lsi: false # produce an index for related posts
 
@@ -233,6 +233,11 @@ exclude:
   - package.json
   - package-lock.json
   - _pages/about_einstein.md
+  # 아래 4개는 al-folio 샘플 페이지입니다. 본인 내용으로 교체한 뒤 해당 줄을 지우면 다시 노출됩니다.
+  - _pages/profiles.md # 연구실 구성원 샘플(아인슈타인)
+  - _pages/publications.md # _bibliography/papers.bib 가 아직 아인슈타인 논문 상태
+  - _pages/plugins.md # al-folio 플러그인 카탈로그 데모
+  - _pages/dropdown.md # 드롭다운 메뉴 데모
   - purgecss.config.js
   - README.md
   - readme_preview/
@@ -341,11 +346,11 @@ display_categories: ["external-services"] # these categories will be displayed o
 # -----------------------------------------------------------------------------
 
 scholar:
-  last_name: [Einstein]
-  first_name: [Albert, A.]
+  last_name: [Jung, 정동엽]
+  first_name: [Dongyeop, D.]
 
   style: apa
-  locale: en
+  locale: ko
 
   source: /_bibliography/
   bibliography: papers.bib

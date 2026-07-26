@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>② Git 설치 &amp; 사용 시작 — 클로드 코드 준비 가이드</title>
+<style>
+:root{
+  --navy:#0E2A47; --navy-2:#1B4A78; --accent:#F26B21; --accent-soft:#FFF1E7;
+  --paper:#FFFFFF; --surface:#F4F6F9; --line:#D9E0E8; --muted:#5B6B7C; --ink:#16202B; --ok:#1A7F37; --bad:#C4341C;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Malgun Gothic','Nanum Gothic','Apple SD Gothic Neo',sans-serif;background:#8E9AA8;color:var(--ink);
+  -webkit-font-smoothing:antialiased;padding:28px 0;}
+.deck{display:flex;flex-direction:column;align-items:center;gap:24px;}
+.slide{width:1280px;height:720px;background:var(--paper);position:relative;overflow:hidden;
+  box-shadow:0 10px 34px rgba(0,0,0,.22);flex:0 0 auto;}
+.slide::after{content:attr(data-no);position:absolute;right:36px;bottom:22px;font-size:13px;font-weight:700;color:#A8B4C0;letter-spacing:.08em;}
+.rail{position:absolute;left:0;top:0;width:10px;height:100%;background:var(--navy);}
+.rail.acc{background:var(--accent);}
+
+.cover{background:var(--navy);color:#fff;padding:0 90px;display:flex;flex-direction:column;justify-content:center;}
+.cover .kicker{font-size:15px;letter-spacing:.3em;color:#F9B27A;font-weight:700;margin-bottom:24px;}
+.cover h1{font-size:62px;line-height:1.18;letter-spacing:-.02em;font-weight:800;}
+.cover h1 em{font-style:normal;color:#F9B27A;}
+.cover .sub{margin-top:24px;font-size:20px;color:#B7C7D8;line-height:1.55;max-width:940px;}
+.cover .bar{width:96px;height:6px;background:var(--accent);margin:36px 0 32px;}
+.cover .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px;}
+.cover .chip{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:9px 20px;font-size:14px;color:#DCE6EF;}
+.cover .chip.ver{border-color:var(--accent);color:#F9B27A;font-weight:700;letter-spacing:.05em;}
+.cover .stamp{position:absolute;right:-24px;bottom:-84px;font-size:300px;font-weight:800;color:rgba(255,255,255,.055);letter-spacing:-.04em;}
+
+.head{padding:34px 60px 0 70px;}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;margin-bottom:11px;}
+.eyebrow .tag{background:var(--accent);color:#fff;font-size:13px;font-weight:800;letter-spacing:.1em;padding:5px 12px;border-radius:4px;}
+.eyebrow .sm{font-size:12.5px;color:var(--muted);letter-spacing:.14em;font-weight:700;}
+.head h2{font-size:36px;font-weight:800;letter-spacing:-.02em;color:var(--navy);line-height:1.2;}
+.head .lead{margin-top:9px;font-size:15.5px;color:var(--muted);}
+.hr{height:3px;background:var(--navy);margin:15px 70px 0 70px;}
+.hr i{display:block;width:120px;height:3px;background:var(--accent);}
+
+.body{display:grid;grid-template-columns:706px 1fr;gap:32px;padding:22px 70px 0 70px;}
+.shot{border:1px solid var(--line);background:var(--surface);padding:9px;}
+.shot svg{display:block;}
+.side{display:flex;flex-direction:column;gap:12px;overflow:hidden;}
+.goal{background:var(--navy);color:#fff;padding:14px 18px;}
+.goal>b{display:block;font-size:11.5px;letter-spacing:.18em;color:#F9B27A;margin-bottom:6px;}
+.goal p{font-size:15.5px;line-height:1.45;font-weight:700;}
+ol.acts{list-style:none;counter-reset:a;display:flex;flex-direction:column;gap:9px;}
+ol.acts li{counter-increment:a;position:relative;padding-left:34px;font-size:14px;line-height:1.5;color:#25313D;}
+ol.acts li::before{content:counter(a);position:absolute;left:0;top:1px;width:23px;height:23px;border-radius:50%;
+  background:var(--accent);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.tip{border-left:4px solid var(--accent);background:var(--accent-soft);padding:11px 14px;}
+.tip.warn{border-left-color:var(--bad);background:#FDEEEB;}
+.tip.ok{border-left-color:var(--ok);background:#F0F7F1;}
+.tip.info{border-left-color:var(--navy-2);background:#EDF3F9;}
+.tip>b{display:block;font-size:12.5px;color:var(--accent);margin-bottom:5px;font-weight:800;}
+.tip.warn>b{color:var(--bad);} .tip.ok>b{color:var(--ok);} .tip.info>b{color:var(--navy-2);}
+.tip p{font-size:13px;line-height:1.55;color:#3A4855;}
+
+/* 명령어 + 복사 버튼 */
+.cmd .lbl{display:block;font-size:11.5px;font-weight:800;letter-spacing:.1em;color:var(--navy);margin-bottom:5px;}
+.cmdwrap{position:relative;}
+.cmdwrap pre{background:var(--navy);color:#E7EEF6;padding:12px 62px 12px 14px;border-radius:6px;
+  font-family:'Consolas','D2Coding',monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-all;}
+.cp{position:absolute;right:8px;top:8px;background:var(--accent);color:#fff;border:0;border-radius:4px;
+  font-size:11px;font-weight:800;padding:5px 10px;cursor:pointer;font-family:inherit;letter-spacing:.02em;}
+.cp:hover{filter:brightness(1.08);}
+.cp.done{background:var(--ok);}
+.out{margin-top:5px;font-family:'Consolas','D2Coding',monospace;font-size:11.5px;color:var(--muted);}
+
+/* 내용이 많은 슬라이드용 축약 모드 */
+.side.dense{gap:9px;}
+.side.dense .goal{padding:11px 15px;}
+.side.dense .goal>b{font-size:11px;margin-bottom:5px;}
+.side.dense .goal p{font-size:14px;line-height:1.4;}
+.side.dense ol.acts{gap:6px;}
+.side.dense ol.acts li{font-size:13px;line-height:1.45;padding-left:29px;}
+.side.dense ol.acts li::before{width:20px;height:20px;font-size:11px;}
+.side.dense .cmd .lbl{font-size:11px;margin-bottom:4px;}
+.side.dense .cmdwrap pre{font-size:11.5px;line-height:1.5;padding:9px 54px 9px 11px;}
+.side.dense .cp{padding:4px 8px;font-size:10px;top:6px;right:6px;}
+.side.dense .out{font-size:10.5px;margin-top:4px;}
+.side.dense .tip{padding:9px 12px;}
+.side.dense .tip>b{font-size:11.5px;margin-bottom:4px;}
+.side.dense .tip p{font-size:12px;line-height:1.5;}
+
+/* 명령어 모음 슬라이드 */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px;padding:22px 70px 0 70px;}
+.ccard{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);padding:13px 15px;}
+.ccard .ct{font-size:13.5px;font-weight:800;color:var(--navy);margin-bottom:8px;}
+.ccard .cd{margin-top:7px;font-size:12.5px;line-height:1.5;color:var(--muted);}
+
+/* 문제 해결 표 */
+.tbwrap{padding:20px 70px 0 70px;}
+table.tb{width:100%;border-collapse:collapse;}
+table.tb th{background:var(--navy);color:#fff;font-size:13px;text-align:left;padding:10px 13px;font-weight:700;}
+table.tb td{border-bottom:1px solid var(--line);padding:9px 13px;font-size:12.8px;vertical-align:top;line-height:1.5;}
+table.tb tr:nth-child(even) td{background:#FAFBFC;}
+table.tb td.s{font-weight:700;color:var(--bad);}
+table.tb td.c{color:var(--muted);}
+table.tb code{font-family:'Consolas','D2Coding',monospace;background:#EEF2F6;padding:1px 5px;border-radius:3px;font-size:12px;color:#20364C;}
+
+/* 마무리 */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:30px;padding:24px 70px 0 70px;}
+.panel h3{font-size:17px;color:var(--navy);font-weight:800;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--line);}
+ul.chk{list-style:none;display:flex;flex-direction:column;gap:7px;}
+ul.chk li{display:flex;gap:11px;align-items:flex-start;background:var(--surface);padding:8px 12px;}
+ul.chk .box{width:16px;height:16px;border:2px solid var(--accent);flex:0 0 auto;margin-top:2px;}
+ul.chk .t{display:block;font-size:13.5px;font-weight:700;color:#25313D;}
+ul.chk .d{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45;}
+ul.nxt{list-style:none;display:flex;flex-direction:column;gap:9px;}
+ul.nxt li{border-left:3px solid var(--navy-2);padding:6px 0 6px 12px;}
+ul.nxt>li>b{display:block;font-size:13.5px;color:var(--navy);margin-bottom:3px;}
+ul.nxt>li>span{font-size:12.5px;color:var(--muted);line-height:1.5;}
+.final{margin:18px 70px 0 70px;background:var(--navy);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:24px;}
+.final b{font-size:13px;color:#F9B27A;letter-spacing:.14em;flex:0 0 auto;}
+.final span{font-family:'Consolas','D2Coding',monospace;font-size:17px;}
+
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#0E2A47;color:#fff;
+  padding:11px 22px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;transition:.22s;pointer-events:none;z-index:99;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+@media print{
+  body{background:#fff;padding:0;} .deck{gap:0;}
+  .slide{box-shadow:none;page-break-after:always;}
+  .cp,.toast{display:none!important;}
+  .cmdwrap pre{padding-right:14px;}
+  @page{size:1280px 720px;margin:0;}
+}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<section class="slide cover" data-no="01 / 17">
+  <div class="stamp">GIT</div>
+  <div class="kicker">CLAUDE CODE 준비 · 02 GIT</div>
+  <h1>Git 설치하고<br><em>처음 실행하기</em></h1>
+  <div class="bar"></div>
+  <p class="sub">내 컴퓨터와 GitHub를 연결해 주는 프로그램 Git을 설치합니다. 설치 창이 많아 보이지만 실제로 <b>신경 쓸 화면은 단 3개</b>입니다.</p>
+  <div class="meta"><span class="chip">소요 시간 약 10분</span><span class="chip">Windows 10 / 11</span><span class="chip">무료 · 관리자 권한 필요</span><span class="chip">초보자 대상</span><span class="chip ver">v1.0 · 2026-07-26</span></div>
+</section>
+
+<section class="slide" data-no="02 / 17">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">한눈에 보기</span></div>
+    <h2>Git 설치 전체 흐름</h2>
+    <p class="lead">내려받기 → 설치 마법사(중요 화면 3개) → 설치 확인 → 최초 설정 순서입니다.</p>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="flowwrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 372" width="100%" preserveAspectRatio="xMidYMid meet">
+    <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.b{font-weight:700;}</style>
+    <rect x="0" y="0" width="1000" height="372" fill="#FFFFFF"/>
+    <g><rect x="18" y="66" width="172" height="176" rx="12" fill="#0E2A47"/>
+<text x="40" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">01</text>
+<text x="40" y="152" font-size="30" class="b">⬇️</text>
+<text x="40" y="184" font-size="16" class="b" fill="#FFFFFF">내려받기</text>
+<rect x="40" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
+<text x="50" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 1–2</text></g><path d="M194 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="216" y="66" width="172" height="176" rx="12" fill="#1B4A78"/>
+<text x="238" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">02</text>
+<text x="238" y="152" font-size="30" class="b">⚙️</text>
+<text x="238" y="184" font-size="16" class="b" fill="#FFFFFF">설치 마법사</text>
+<rect x="238" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
+<text x="248" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 3–7</text></g><path d="M392 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="414" y="66" width="172" height="176" rx="12" fill="#2A6EA6"/>
+<text x="436" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">03</text>
+<text x="436" y="152" font-size="30" class="b">✅</text>
+<text x="436" y="184" font-size="16" class="b" fill="#FFFFFF">설치 확인</text>
+<rect x="436" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
+<text x="446" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 8–9</text></g><path d="M590 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="612" y="66" width="172" height="176" rx="12" fill="#E2762A"/>
+<text x="634" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">04</text>
+<text x="634" y="152" font-size="30" class="b">🪪</text>
+<text x="634" y="184" font-size="16" class="b" fill="#FFFFFF">최초 설정</text>
+<rect x="634" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
+<text x="644" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 10</text></g><path d="M788 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="810" y="66" width="172" height="176" rx="12" fill="#F26B21"/>
+<text x="832" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">05</text>
+<text x="832" y="152" font-size="30" class="b">🚀</text>
+<text x="832" y="184" font-size="16" class="b" fill="#FFFFFF">실행해 보기</text>
+<rect x="832" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
+<text x="842" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 11</text></g>
+    <rect x="18" y="282" width="964" height="62" rx="10" fill="#F4F6F9" stroke="#D9E0E8"/>
+    <text x="42" y="308" font-size="13" class="b" fill="#0E2A47">꼭 기억할 3개 화면</text>
+    <text x="42" y="330" font-size="12.5" fill="#5B6B7C">① 기본 편집기 → Visual Studio Code   ② 기본 브랜치 이름 → main   ③ PATH 설정 → 가운데(권장) 항목   |  나머지는 전부 Next</text>
+  </svg></div>
+</section>
+
+<section class="slide" data-no="03 / 17">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 1</span><span class="sm">GIT · 내려받기</span></div>
+    <h2>git-scm.com 에서 설치 파일 받기</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
+<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
+<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
+<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
+<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://git-scm.com/download/win</text>
+<rect x="8" y="72" width="884" height="480" fill="#FFFFFF"/>
+
+<rect x="8" y="72" width="884" height="60" fill="#F4F6F9"/>
+<text x="40" y="110" font-size="20" class="b" fill="#F05033">git</text>
+<text x="100" y="110" font-size="13" fill="#5B6B7C">Downloads</text>
+<text x="450" y="196" text-anchor="middle" font-size="26" class="b" fill="#24292F">Download for Windows</text>
+<text x="450" y="228" text-anchor="middle" font-size="14" fill="#5B6B7C">사이트가 내 PC 환경(64-bit)을 자동으로 인식합니다.</text>
+<rect x="290" y="258" width="320" height="118" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
+<text x="450" y="294" text-anchor="middle" font-size="15" class="b" fill="#24292F">Standalone Installer</text>
+<text x="450" y="320" text-anchor="middle" font-size="12.5" class="m" fill="#5B6B7C">Git-2.5x.x-64-bit.exe</text>
+<rect x="330" y="336" width="240" height="30" rx="6" fill="#F05033"/>
+<text x="450" y="356" text-anchor="middle" font-size="13" class="b" fill="#FFFFFF">Click here to download</text>
+<rect x="8" y="496" width="884" height="56" fill="#EDF1F5"/>
+<rect x="30" y="510" width="286" height="32" rx="6" fill="#FFFFFF" stroke="#D9E0E8"/>
+<circle cx="50" cy="526" r="9" fill="#1A7F37"/><path d="M45.5 526l3.2 3.2 5.6-6.4" stroke="#fff" stroke-width="1.8" fill="none"/>
+<text x="66" y="531" class="m" font-size="11.5" fill="#24292F">Git-2.5x.x-64-bit.exe</text>
+<rect x="118" y="42" width="644" height="30" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="96" cy="57" r="15" fill="#F26B21"/><text x="96" y="63" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="326" y="332" width="248" height="38" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="600" cy="351" r="15" fill="#F26B21"/><text x="600" y="357" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="26" y="506" width="294" height="40" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="344" cy="526" r="15" fill="#F26B21"/><text x="344" y="532" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="600" y="420" width="268" height="28" rx="14" fill="#FFF1E7" stroke="#F26B21"/><text x="614" y="439" font-size="13" class="b" fill="#F26B21">파일 크기 약 60MB · 1분 내외</text>
+
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>Git 설치 파일(.exe)을 내 컴퓨터에 내려받습니다.</p></div>
+      <ol class="acts"><li>주소창에 <b>git-scm.com/download/win</b> 을 입력하고 Enter.</li><li><b>Click here to download</b> 를 누릅니다. (몇 초 뒤 자동 시작되기도 합니다)</li><li>화면 아래 다운로드 표시에서 <code>Git-2.5x.x-64-bit.exe</code> 를 확인합니다.</li></ol>
+      <div class="cmd">
+  <b class="lbl">주소 (복사해서 주소창에 붙여넣기)</b>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="https://git-scm.com/download/win">복사</button><pre>https://git-scm.com/download/win</pre></div>
+  </div>
+      <div class="tip info"><b>32비트? 64비트?</b><p>요즘 PC는 거의 <b>64-bit</b> 입니다. 사이트가 알아서 골라 주므로 큰 버튼을 누르면 됩니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="04 / 17">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 2</span><span class="sm">GIT · 설치 시작</span></div>
+    <h2>내려받은 파일 실행 (보안 경고 통과)</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="8" fill="#1B2733"/>
+<rect x="120" y="70" width="660" height="200" rx="8" fill="#F0F0F0" stroke="#C7C7C7"/>
+<rect x="120" y="70" width="660" height="42" rx="8" fill="#1B4A78"/><rect x="120" y="92" width="660" height="20" fill="#1B4A78"/>
+<text x="144" y="98" font-size="14" class="b" fill="#FFFFFF">사용자 계정 컨트롤</text>
+<text x="152" y="152" font-size="15" class="b" fill="#16202B">이 앱이 디바이스를 변경하도록 허용하시겠어요?</text>
+<text x="152" y="182" font-size="12.5" fill="#5B6B7C">확인된 게시자: Johannes Schindelin</text>
+<text x="152" y="204" font-size="12.5" fill="#5B6B7C">파일 원본: 이 컴퓨터의 하드 드라이브</text>
+<rect x="500" y="222" width="120" height="34" rx="4" fill="#0E2A47"/><text x="560" y="245" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">예(Y)</text>
+<rect x="632" y="222" width="120" height="34" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="692" y="245" text-anchor="middle" font-size="13.5" fill="#24292F">아니요(N)</text>
+<rect x="120" y="300" width="660" height="216" rx="8" fill="#0B4A8F"/>
+<text x="152" y="344" font-size="17" class="b" fill="#FFFFFF">Windows의 PC 보호</text>
+<text x="152" y="376" font-size="12.5" fill="#CFE0F2">Microsoft Defender SmartScreen에서 인식할 수 없는 앱의</text>
+<text x="152" y="396" font-size="12.5" fill="#CFE0F2">시작을 차단했습니다.</text>
+<text x="152" y="430" font-size="12.5" class="b" fill="#FFFFFF">추가 정보</text>
+<line x1="152" y1="436" x2="212" y2="436" stroke="#FFFFFF"/>
+<rect x="500" y="452" width="120" height="34" rx="4" fill="#FFFFFF"/><text x="560" y="475" text-anchor="middle" font-size="13.5" class="b" fill="#0B4A8F">실행</text>
+<rect x="632" y="452" width="120" height="34" rx="4" fill="#0B4A8F" stroke="#FFFFFF"/><text x="692" y="475" text-anchor="middle" font-size="13.5" fill="#FFFFFF">실행 안 함</text>
+<rect x="496" y="218" width="128" height="42" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="239" r="15" fill="#F26B21"/><text x="466" y="245" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="146" y="418" width="74" height="26" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="244" cy="431" r="15" fill="#F26B21"/><text x="244" y="437" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="496" y="448" width="128" height="42" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="469" r="15" fill="#F26B21"/><text x="466" y="475" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="120" y="528" width="380" height="28" rx="14" fill="#FFF1E7" stroke="#F26B21"/><text x="134" y="547" font-size="13" class="b" fill="#F26B21">① 예 → ② 추가 정보 → ③ 실행</text>
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>설치 파일을 실행하고 Windows 보안 경고를 정상적으로 넘깁니다.</p></div>
+      <ol class="acts"><li>"이 앱이 디바이스를 변경하도록 허용하시겠어요?" 창이 뜨면 <b>예(Y)</b> 를 누릅니다.</li><li>파란 <b>Windows의 PC 보호</b> 화면이 뜨면 <b>추가 정보</b> 를 누릅니다.</li><li>나타난 <b>실행</b> 버튼을 누릅니다.</li></ol>
+      
+      <div class="tip warn"><b>이 경고는 정상입니다</b><p>Git은 전 세계에서 쓰는 공식 프로그램입니다. 다만 <b>반드시 git-scm.com 에서 직접 받은 파일</b>일 때만 실행하세요.</p></div><div class="tip info"><b>관리자 권한이 막혀 있다면</b><p>기관 PC에서 "관리자에게 문의" 메시지가 나오면 전산 담당 부서에 <b>Git for Windows 설치 승인</b>을 요청하세요.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="05 / 17">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 3</span><span class="sm">GIT · 설치 마법사 (1/5)</span></div>
+    <h2>라이선스 · 설치 위치 · 구성요소 → 모두 <b>Next</b></h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5"/>
+<rect x="8" y="8" width="884" height="44" rx="6" fill="#F05033"/><rect x="8" y="30" width="884" height="22" fill="#F05033"/>
+<text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Git 2.5x.x Setup</text>
+<rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18"/><text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
+<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
+<line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5"/>
+<rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text><rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47"/><text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Next &gt;</text><rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
+
+
+<rect x="8" y="52" width="884" height="72" fill="#FFFFFF"/>
+<text x="38" y="86" font-size="18" class="b" fill="#16202B">Select Components</text>
+<text x="38" y="110" font-size="12.5" fill="#5B6B7C">설치할 구성요소를 선택한 뒤 Next를 누르세요. 기본값 그대로 두면 됩니다.</text>
+<line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB"/>
+<circle cx="836" cy="88" r="22" fill="#F05033" opacity="0.12"/><text x="836" y="97" text-anchor="middle" font-size="22">🌿</text>
+<rect x="60" y="148" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><path d="M63.5 156.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="87" y="162" font-size="13.5" fill="#24292F">Windows Explorer integration</text>
+<rect x="90" y="176" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><path d="M93.5 184.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="117" y="190" font-size="13.5" fill="#24292F">Open Git Bash here  (폴더에서 오른쪽 클릭 → Git Bash)</text>
+<rect x="90" y="204" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><path d="M93.5 212.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="117" y="218" font-size="13.5" fill="#24292F">Open Git GUI here</text>
+<rect x="60" y="238" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><path d="M63.5 246.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="87" y="252" font-size="13.5" fill="#24292F">Git LFS (Large File Support)</text>
+<rect x="60" y="266" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><path d="M63.5 274.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="87" y="280" font-size="13.5" fill="#24292F">Associate .git* configuration files with the default text editor</text>
+<rect x="60" y="294" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><path d="M63.5 302.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="87" y="308" font-size="13.5" fill="#24292F">Associate .sh files to be run with Bash</text>
+<rect x="60" y="322" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#9AA5B1" stroke-width="1.6"/><text x="87" y="336" font-size="13.5" fill="#24292F">Check daily for Git for Windows updates</text>
+<rect x="60" y="350" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><path d="M63.5 358.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="87" y="364" font-size="13.5" fill="#24292F">Add a Git Bash Profile to Windows Terminal</text>
+<rect x="52" y="142" width="560" height="236" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="636" cy="260" r="15" fill="#F26B21"/><text x="636" y="266" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="514" r="15" fill="#F26B21"/><text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="60" y="396" width="420" height="92" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2"/>
+<text x="106" y="426" font-size="13.5" class="b" fill="#C1521A">Next를 누를 화면 4개</text>
+<text x="80" y="452" font-size="12.5" fill="#3A4855">License → 설치 폴더 → 구성요소 → 시작 메뉴</text>
+<text x="80" y="474" font-size="12.5" fill="#3A4855">제목이 달라도 모두 Next만 누르면 됩니다.</text>
+<circle cx="84" cy="420" r="15" fill="#F26B21"/><text x="84" y="426" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>앞쪽 화면은 손대지 않고 그대로 넘어갑니다. 화면 제목이 달라도 Next만 누르면 됩니다.</p></div>
+      <ol class="acts"><li>구성요소 목록은 <b>기본 체크 그대로</b> 둡니다. 아무것도 바꾸지 마세요.</li><li><b>Next</b> 를 누릅니다.</li><li>같은 방식으로 <b>License → 설치 폴더 → 구성요소 → 시작 메뉴</b> 4개 화면을 Next로 넘깁니다.</li></ol>
+      
+      <div class="tip "><b>겁먹지 마세요</b><p>이 4개 화면은 <b>아무것도 바꾸지 않습니다.</b> Next 버튼만 4번 누르면 됩니다.</p></div><div class="tip info"><b>설치 위치는 그대로</b><p><code>C:\Program Files\Git</code> 이 기본값입니다. 바꾸면 나중에 문제가 생길 수 있으니 그대로 두세요.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="06 / 17">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 4</span><span class="sm">GIT · 설치 마법사 (2/5) ★중요</span></div>
+    <h2>기본 편집기 → <b>Use Visual Studio Code</b></h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5"/>
+<rect x="8" y="8" width="884" height="44" rx="6" fill="#F05033"/><rect x="8" y="30" width="884" height="22" fill="#F05033"/>
+<text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Git 2.5x.x Setup</text>
+<rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18"/><text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
+<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
+<line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5"/>
+<rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text><rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47"/><text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Next &gt;</text><rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
+
+
+<rect x="8" y="52" width="884" height="72" fill="#FFFFFF"/>
+<text x="38" y="86" font-size="18" class="b" fill="#16202B">Choosing the default editor used by Git</text>
+<text x="38" y="110" font-size="12.5" fill="#5B6B7C">Git이 메시지를 작성할 때 사용할 편집기를 고릅니다.</text>
+<line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB"/>
+<circle cx="836" cy="88" r="22" fill="#F05033" opacity="0.12"/><text x="836" y="97" text-anchor="middle" font-size="22">🌿</text>
+<rect x="60" y="150" width="600" height="44" rx="4" fill="#FFFFFF" stroke="#0E2A47" stroke-width="2"/>
+<text x="80" y="178" font-size="14" class="b" fill="#16202B">Use Visual Studio Code as Git's default editor</text>
+<rect x="618" y="152" width="40" height="40" fill="#EEF2F6"/><text x="638" y="178" text-anchor="middle" font-size="14" fill="#24292F">▾</text>
+<rect x="60" y="194" width="600" height="150" fill="#FFFFFF" stroke="#C7C7C7"/>
+<text x="80" y="220" font-size="13" fill="#8A94A0">Use Vim (the ubiquitous text editor) as Git's default editor</text>
+<rect x="62" y="230" width="596" height="28" fill="#1F6FEB" opacity="0.14"/>
+<text x="80" y="249" font-size="13" class="b" fill="#0E2A47">Use Visual Studio Code as Git's default editor</text>
+<text x="80" y="278" font-size="13" fill="#8A94A0">Use Notepad++ as Git's default editor</text>
+<text x="80" y="306" font-size="13" fill="#8A94A0">Use Notepad as Git's default editor</text>
+<text x="80" y="334" font-size="13" fill="#8A94A0">Use Sublime Text as Git's default editor</text>
+<rect x="60" y="378" width="500" height="66" rx="6" fill="#F0F7F1" stroke="#1A7F37"/>
+<text x="80" y="404" font-size="13" class="b" fill="#1A7F37">왜 바꾸나요?</text>
+<text x="80" y="428" font-size="12.5" fill="#3A4855">기본값 Vim은 마우스가 통하지 않아 빠져나오기 어렵습니다.</text>
+<rect x="614" y="148" width="48" height="48" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="700" cy="172" r="15" fill="#F26B21"/><text x="700" y="178" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="58" y="226" width="604" height="36" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="700" cy="244" r="15" fill="#F26B21"/><text x="700" y="250" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="56" y="146" width="608" height="52" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="700" cy="112" r="15" fill="#F26B21"/><text x="700" y="118" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="514" r="15" fill="#F26B21"/><text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+
+    </svg></div>
+    <div class="side dense">
+      <div class="goal"><b>이 단계의 목표</b><p>Git이 메모를 띄울 때 쓸 편집기를 VS Code로 지정합니다.</p></div>
+      <ol class="acts"><li><b>Choosing the default editor used by Git</b> 화면에서 <b>드롭다운(▾)</b> 을 클릭합니다.</li><li>목록에서 <b>Use Visual Studio Code as Git's default editor</b> 를 선택합니다.</li><li>선택된 내용이 위 칸에 표시되는지 확인합니다.</li><li><b>Next</b> 를 누릅니다.</li></ol>
+      
+      <div class="tip warn"><b>기본값(Vim)은 피하세요</b><p>기본값 <b>Vim</b> 은 마우스가 안 통하고 종료 방법도 어려워 초보자가 크게 당황합니다. 반드시 바꾸세요.</p></div><div class="tip info"><b>VS Code가 아직 없다면</b><p>나중에 설치해도 됩니다. <b>Use Notepad as Git's default editor</b> 를 골라도 무방합니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="07 / 17">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 5</span><span class="sm">GIT · 설치 마법사 (3/5) ★중요</span></div>
+    <h2>기본 브랜치 이름 → <b>main</b></h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5"/>
+<rect x="8" y="8" width="884" height="44" rx="6" fill="#F05033"/><rect x="8" y="30" width="884" height="22" fill="#F05033"/>
+<text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Git 2.5x.x Setup</text>
+<rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18"/><text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
+<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
+<line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5"/>
+<rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text><rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47"/><text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Next &gt;</text><rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
+
+
+<rect x="8" y="52" width="884" height="72" fill="#FFFFFF"/>
+<text x="38" y="86" font-size="18" class="b" fill="#16202B">Adjusting the name of the initial branch in new repositories</text>
+<text x="38" y="110" font-size="12.5" fill="#5B6B7C">새 저장소를 만들 때 사용할 기본 브랜치 이름을 정합니다.</text>
+<line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB"/>
+<circle cx="836" cy="88" r="22" fill="#F05033" opacity="0.12"/><text x="836" y="97" text-anchor="middle" font-size="22">🌿</text>
+<circle cx="69" cy="167" r="8.5" fill="#FFFFFF" stroke="#9AA5B1" stroke-width="1.6"/><text x="88" y="172" font-size="14" class="" fill="#24292F">Let Git decide</text><text x="88" y="192" font-size="12" fill="#6B7785">기본값 master 를 사용합니다. (GitHub와 이름이 달라 헷갈릴 수 있음)</text>
+<circle cx="69" cy="237" r="8.5" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><circle cx="69" cy="237" r="4.5" fill="#0E2A47"/><text x="88" y="242" font-size="14" class="b" fill="#24292F">Override the default branch name for new repositories</text><text x="88" y="262" font-size="12" fill="#6B7785">아래 칸에 적은 이름을 사용합니다.</text>
+<rect x="90" y="282" width="240" height="38" rx="4" fill="#FFFFFF" stroke="#0E2A47" stroke-width="2"/>
+<text x="108" y="307" font-size="15" class="b m" fill="#16202B">main</text>
+<rect x="60" y="352" width="500" height="82" rx="6" fill="#FFF1E7" stroke="#F26B21"/>
+<text x="80" y="378" font-size="13" class="b" fill="#F26B21">GitHub는 main 을 씁니다</text>
+<text x="80" y="402" font-size="12.5" fill="#3A4855">여기서 맞춰 두면 "master가 없다"는 오류를 겪지 않습니다.</text>
+<text x="80" y="424" font-size="12.5" fill="#3A4855">글자는 반드시 소문자 m-a-i-n 입니다.</text>
+<rect x="56" y="224" width="560" height="62" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="640" cy="255" r="15" fill="#F26B21"/><text x="640" y="261" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="86" y="278" width="248" height="46" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="358" cy="301" r="15" fill="#F26B21"/><text x="358" y="307" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="56" y="152" width="560" height="60" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="640" cy="182" r="15" fill="#F26B21"/><text x="640" y="188" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="514" r="15" fill="#F26B21"/><text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+
+    </svg></div>
+    <div class="side dense">
+      <div class="goal"><b>이 단계의 목표</b><p>GitHub와 이름을 맞추기 위해 기본 브랜치를 main으로 바꿉니다.</p></div>
+      <ol class="acts"><li>아래쪽 <b>Override the default branch name…</b> 를 선택합니다.</li><li>입력칸에 <b>main</b> 이 들어 있는지 확인합니다. (비어 있으면 직접 입력)</li><li>위쪽 <b>Let Git decide</b> 가 선택 해제되었는지 확인합니다.</li><li><b>Next</b> 를 누릅니다.</li></ol>
+      
+      <div class="tip info"><b>브랜치가 뭔가요?</b><p>작업 갈래의 이름입니다. 지금은 <b>기본 폴더 이름</b> 정도로 생각하세요. GitHub가 <code>main</code> 을 쓰므로 맞춰 두면 헷갈리지 않습니다.</p></div><div class="tip "><b>지나쳤어도 괜찮아요</b><p>나중에 명령 한 줄로 바꿀 수 있습니다: <code>git config --global init.defaultBranch main</code></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="08 / 17">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 6</span><span class="sm">GIT · 설치 마법사 (4/5) ★가장 중요</span></div>
+    <h2>PATH 설정 → <b>가운데(Recommended)</b></h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5"/>
+<rect x="8" y="8" width="884" height="44" rx="6" fill="#F05033"/><rect x="8" y="30" width="884" height="22" fill="#F05033"/>
+<text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Git 2.5x.x Setup</text>
+<rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18"/><text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
+<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
+<line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5"/>
+<rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text><rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47"/><text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Next &gt;</text><rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
+
+
+<rect x="8" y="52" width="884" height="72" fill="#FFFFFF"/>
+<text x="38" y="86" font-size="18" class="b" fill="#16202B">Adjusting your PATH environment</text>
+<text x="38" y="110" font-size="12.5" fill="#5B6B7C">Git 명령을 어디에서 사용할 수 있게 할지 정합니다.</text>
+<line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB"/>
+<circle cx="836" cy="88" r="22" fill="#F05033" opacity="0.12"/><text x="836" y="97" text-anchor="middle" font-size="22">🌿</text>
+<circle cx="69" cy="159" r="8.5" fill="#FFFFFF" stroke="#9AA5B1" stroke-width="1.6"/><text x="88" y="164" font-size="14" class="" fill="#24292F">Use Git from Git Bash only</text><text x="88" y="184" font-size="12" fill="#6B7785">가장 보수적인 설정. PowerShell·CMD에서는 git 명령을 쓸 수 없습니다.</text>
+<circle cx="69" cy="233" r="8.5" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><circle cx="69" cy="233" r="4.5" fill="#0E2A47"/><text x="88" y="238" font-size="14" class="b" fill="#24292F">Git from the command line and also from 3rd-party software</text>
+<text x="88" y="258" font-size="12" class="b" fill="#1A7F37">(Recommended)</text>
+<text x="196" y="258" font-size="12" fill="#6B7785">PowerShell·CMD·VS Code 어디서나 git 명령을 쓸 수 있습니다.</text>
+<circle cx="69" cy="307" r="8.5" fill="#FFFFFF" stroke="#9AA5B1" stroke-width="1.6"/><text x="88" y="312" font-size="14" class="" fill="#24292F">Use Git and optional Unix tools from the Command Prompt</text><text x="88" y="332" font-size="12" fill="#6B7785">find, sort 등 Windows 기본 명령이 덮어써져 문제가 생길 수 있습니다.</text>
+<rect x="60" y="368" width="500" height="76" rx="6" fill="#FDEEEB" stroke="#C4341C"/>
+<text x="80" y="394" font-size="13" class="b" fill="#C4341C">여기를 틀리면 생기는 일</text>
+<text x="80" y="418" font-size="12.5" fill="#3A4855">PowerShell에서 git --version 입력 시</text>
+<text x="80" y="438" font-size="12.5" fill="#3A4855">"용어가 인식되지 않습니다" 오류가 납니다.</text>
+<rect x="52" y="216" width="620" height="52" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="696" cy="242" r="15" fill="#F26B21"/><text x="696" y="248" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="84" y="244" width="116" height="24" rx="6" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="224" cy="256" r="15" fill="#F26B21"/><text x="224" y="262" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="514" r="15" fill="#F26B21"/><text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+
+    </svg></div>
+    <div class="side dense">
+      <div class="goal"><b>이 단계의 목표</b><p>어느 창에서나 git 명령을 쓸 수 있도록 등록합니다. 이 화면만 틀리면 나중에 "git을 찾을 수 없다" 오류가 납니다.</p></div>
+      <ol class="acts"><li>세 개 중 <b>가운데</b> 항목(Git from the command line and also from 3rd-party software)을 선택합니다.</li><li>괄호 안에 <b>(Recommended)</b> 라고 적혀 있는지 확인합니다.</li><li><b>Next</b> 를 누릅니다.</li></ol>
+      
+      <div class="tip warn"><b>맨 위를 고르면 안 됩니다</b><p>맨 위(Git Bash only)를 고르면 PowerShell에서 <code>git</code> 이 동작하지 않아 <b>클로드 코드가 Git을 못 찾습니다.</b></p></div><div class="tip ok"><b>기본값이 이미 가운데입니다</b><p>대부분 처음부터 가운데가 선택되어 있습니다. <b>확인만</b> 하고 Next를 누르세요.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="09 / 17">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 7</span><span class="sm">GIT · 설치 마법사 (5/5)</span></div>
+    <h2>나머지는 전부 Next → <b>Install</b> → <b>Finish</b></h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5"/>
+<rect x="8" y="8" width="884" height="44" rx="6" fill="#F05033"/><rect x="8" y="30" width="884" height="22" fill="#F05033"/>
+<text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Git 2.5x.x Setup</text>
+<rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18"/><text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
+<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
+<line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5"/>
+<rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text><rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47"/><text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Finish</text><rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
+
+<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
+<rect x="8" y="52" width="290" height="424" fill="#F5F1EA"/>
+<text x="153" y="204" text-anchor="middle" font-size="64">🌿</text>
+<text x="153" y="256" text-anchor="middle" font-size="15" class="b" fill="#F05033">Git</text>
+<text x="153" y="282" text-anchor="middle" font-size="12" fill="#8A7E6D">for Windows</text>
+<text x="334" y="112" font-size="20" class="b" fill="#16202B">Completing the Git Setup Wizard</text>
+<text x="334" y="146" font-size="13" fill="#5B6B7C">Setup has finished installing Git on your computer.</text>
+<rect x="334" y="186" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#9AA5B1" stroke-width="1.6"/><text x="361" y="200" font-size="13.5" fill="#24292F">Launch Git Bash</text>
+<rect x="334" y="218" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#9AA5B1" stroke-width="1.6"/><text x="361" y="232" font-size="13.5" fill="#24292F">View Release Notes</text>
+<rect x="334" y="266" width="380" height="92" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
+<text x="380" y="296" font-size="13.5" class="b" fill="#F9B27A">여기까지 오는 길</text>
+<text x="354" y="322" font-size="12.5" fill="#DCE6EF">Next 6~7번 → Install → (UAC 예)</text>
+<text x="354" y="344" font-size="12.5" fill="#DCE6EF">1~2분 기다리면 이 화면이 나옵니다.</text>
+<circle cx="358" cy="290" r="15" fill="#F26B21"/><text x="358" y="296" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="330" y="182" width="230" height="68" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="586" cy="216" r="15" fill="#F26B21"/><text x="586" y="222" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="514" r="15" fill="#F26B21"/><text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>남은 화면은 기본값 그대로 두고 설치를 끝냅니다.</p></div>
+      <ol class="acts"><li>SSH · HTTPS · 줄바꿈 · 터미널 · git pull · 자격 증명 관리자 화면 → 모두 <b>Next</b> → <b>Install</b>.</li><li>완료 화면이 나오면 <b>Launch Git Bash</b> 등 체크를 <b>모두 해제</b>합니다.</li><li><b>Finish</b> 를 눌러 창을 닫습니다.</li></ol>
+      
+      <div class="tip "><b>몇 번 더 눌러야 하나요?</b><p>보통 <b>Next 6~7번 → Install → Finish</b> 입니다. 화면 제목이 달라도 그냥 Next를 누르면 됩니다.</p></div><div class="tip ok"><b>설치 완료 신호</b><p>"Completing the Git Setup Wizard" 문구가 보이면 끝입니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="10 / 17">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 8</span><span class="sm">GIT · 설치 확인</span></div>
+    <h2>PowerShell 열고 <b>git --version</b></h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5"/>
+<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
+<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+<text x="34" y="106" class="m " font-size="14" fill="#9FC6EE">Windows PowerShell</text><text x="34" y="128" class="m " font-size="12.5" fill="#7FA8D4">Copyright (C) Microsoft Corporation. All rights reserved.</text><text x="34" y="172" class="m b" font-size="15" fill="#FFFFFF">PS C:\Users\hufs&gt; git --version</text><text x="34" y="212" class="m b" font-size="15" fill="#7EE787">git version 2.51.0.windows.1</text><text x="34" y="260" class="m " font-size="15" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
+<rect x="26" y="86" width="420" height="51" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="470" cy="111.5" r="15" fill="#F26B21"/><text x="470" y="117.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="26" y="151" width="320" height="30" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="370" cy="166" r="15" fill="#F26B21"/><text x="370" y="172" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="26" y="191" width="320" height="30" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="370" cy="206" r="15" fill="#F26B21"/><text x="370" y="212" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="500" y="300" width="372" height="140" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
+<text x="524" y="332" font-size="14" class="b" fill="#F9B27A">③ 이 줄이 나오면 성공!</text>
+<text x="524" y="362" font-size="12.5" fill="#DCE6EF">버전 숫자는 달라도 됩니다.</text>
+<text x="524" y="386" font-size="12.5" fill="#DCE6EF">"git version" 글자만 보이면 정상입니다.</text>
+<text x="524" y="416" font-size="12" fill="#9FC6EE">복사 붙여넣기 = 마우스 오른쪽 클릭</text>
+    </svg></div>
+    <div class="side">
+      <div class="goal"><b>이 단계의 목표</b><p>Git이 제대로 설치되었는지 명령 한 줄로 확인합니다.</p></div>
+      <ol class="acts"><li>키보드 <b>Windows 키</b> → <b>powershell</b> 입력 → <b>Windows PowerShell</b> 실행. (설치 전에 열어 둔 창은 닫으세요)</li><li>아래 명령을 복사해 붙여넣고 <b>Enter</b>. (터미널 붙여넣기는 <b>마우스 오른쪽 클릭</b>)</li><li><b>git version …</b> 이 나오면 설치 성공입니다.</li></ol>
+      <div class="cmd">
+  <b class="lbl">버전 확인</b>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git --version">복사</button><pre>git --version</pre></div>
+  <div class="out">→ git version 2.5x.x.windows.1</div></div>
+      <div class="tip warn"><b>오류가 나면 새 창을 여세요</b><p>PATH 설정은 <b>새로 연 창부터</b> 적용됩니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="11 / 17">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 9</span><span class="sm">GIT · 설치 확인</span></div>
+    <h2>오류가 났을 때 확인하는 법</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5"/>
+<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
+<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+<text x="34" y="106" class="m b" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; git --version</text><text x="34" y="132" class="m " font-size="13" fill="#FF7B72">git : 'git' 용어가 cmdlet, 함수, 스크립트 파일 또는 실행할 수</text><text x="34" y="154" class="m " font-size="13" fill="#FF7B72">있는 프로그램 이름으로 인식되지 않습니다.</text><text x="34" y="198" class="m b" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; Get-Command git | Select-Object Source</text><text x="34" y="232" class="m " font-size="13.5" fill="#9FC6EE">Source</text><text x="34" y="252" class="m " font-size="13.5" fill="#9FC6EE">------</text><text x="34" y="276" class="m b" font-size="14" fill="#7EE787">C:\Program Files\Git\cmd\git.exe</text><text x="34" y="322" class="m " font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
+<rect x="26" y="86" width="470" height="77" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="520" cy="124.5" r="15" fill="#F26B21"/><text x="520" y="130.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="26" y="178" width="470" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="520" cy="192.5" r="15" fill="#F26B21"/><text x="520" y="198.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="26" y="212.5" width="340" height="72.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="390" cy="248.75" r="15" fill="#F26B21"/><text x="390" y="254.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="590" y="330" width="282" height="132" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
+<text x="612" y="360" font-size="13.5" class="b" fill="#F9B27A">해결 순서</text>
+<text x="612" y="388" font-size="12" fill="#DCE6EF">① 터미널 닫고 새로 열기</text>
+<text x="612" y="410" font-size="12" fill="#DCE6EF">② PC 재부팅</text>
+<text x="612" y="432" font-size="12" fill="#DCE6EF">③ 그래도 안 되면 재설치</text>
+<text x="612" y="452" font-size="11.5" fill="#9FC6EE">(STEP 6 가운데 항목 선택)</text>
+    </svg></div>
+    <div class="side dense">
+      <div class="goal"><b>이 단계의 목표</b><p>"git이 인식되지 않습니다" 오류의 원인을 스스로 찾아 해결합니다.</p></div>
+      <ol class="acts"><li><b>빨간 오류</b>가 나면 먼저 PowerShell을 완전히 닫고 새로 엽니다.</li><li>그래도 오류면 아래 <b>설치 경로 확인</b> 명령을 실행합니다.</li><li>경로가 나오면 PATH 문제, 아무것도 안 나오면 설치가 안 된 것입니다.</li></ol>
+      <div class="cmd">
+  <b class="lbl">① Git이 어디 설치됐는지 확인</b>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="Get-Command git | Select-Object Source">복사</button><pre>Get-Command git | Select-Object Source</pre></div>
+  </div><div class="cmd">
+  <b class="lbl">② 경로로 직접 실행해 보기</b>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="&amp; &quot;C:\Program Files\Git\cmd\git.exe&quot; --version">복사</button><pre>&amp; "C:\Program Files\Git\cmd\git.exe" --version</pre></div>
+  </div>
+      <div class="tip warn"><b>②는 되는데 ①이 안 된다면</b><p>PATH 등록 문제입니다. <b>Git을 다시 설치</b>하면서 STEP 6에서 <b>가운데 항목</b>을 선택하세요.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="12 / 17">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 10</span><span class="sm">GIT · 최초 설정</span></div>
+    <h2>이름 · 이메일 등록 (딱 한 번만)</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5"/>
+<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
+<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+<text x="34" y="106" class="m b" font-size="13.5" fill="#FFFFFF">PS C:\Users\hufs&gt; git config --global user.name "Hong Gildong"</text><text x="34" y="136" class="m b" font-size="13.5" fill="#FFFFFF">PS C:\Users\hufs&gt; git config --global user.email "hufs.staff@gmail.com"</text><text x="34" y="178" class="m b" font-size="13.5" fill="#FFFFFF">PS C:\Users\hufs&gt; git config --global --list</text><text x="34" y="218" class="m " font-size="13.5" fill="#7EE787">user.name=Hong Gildong</text><text x="34" y="242" class="m " font-size="13.5" fill="#7EE787">user.email=hufs.staff@gmail.com</text><text x="34" y="266" class="m " font-size="13.5" fill="#7EE787">init.defaultbranch=main</text><text x="34" y="290" class="m " font-size="13.5" fill="#7EE787">core.editor=code --wait</text><text x="34" y="334" class="m " font-size="13.5" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
+<rect x="26" y="86.5" width="560" height="58.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="610" cy="115.75" r="15" fill="#F26B21"/><text x="610" y="121.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="26" y="158.5" width="380" height="28.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="430" cy="172.75" r="15" fill="#F26B21"/><text x="430" y="178.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="26" y="198.5" width="300" height="52.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="350" cy="224.75" r="15" fill="#F26B21"/><text x="350" y="230.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="580" y="330" width="292" height="128" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
+<text x="602" y="360" font-size="13.5" class="b" fill="#F9B27A">--global 의 뜻</text>
+<text x="602" y="388" font-size="12" fill="#DCE6EF">이 컴퓨터 전체에 적용됩니다.</text>
+<text x="602" y="410" font-size="12" fill="#DCE6EF">한 번만 하면 다시 안 해도 됩니다.</text>
+<text x="602" y="440" font-size="12" fill="#9FC6EE">저장 위치: C:\Users\사용자\.gitconfig</text>
+    </svg></div>
+    <div class="side dense">
+      <div class="goal"><b>이 단계의 목표</b><p>누가 작업했는지 기록되도록 이름과 이메일을 등록합니다. 컴퓨터당 한 번만 하면 됩니다.</p></div>
+      <ol class="acts"><li><b>이름</b>과 <b>이메일</b> 명령을 한 줄씩 붙여넣고 Enter. (따옴표 안은 본인 것으로 수정)</li><li><code>git config --global --list</code> 를 실행합니다.</li><li><b>user.name</b> · <b>user.email</b> 이 보이면 저장 완료입니다.</li></ol>
+      <div class="cmd">
+  <b class="lbl">① 이름 등록 (본인 이름으로 수정)</b>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git config --global user.name &quot;Hong Gildong&quot;">복사</button><pre>git config --global user.name "Hong Gildong"</pre></div>
+  </div><div class="cmd">
+  <b class="lbl">② 이메일 등록 (GitHub 가입 메일)</b>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git config --global user.email &quot;hufs.staff@gmail.com&quot;">복사</button><pre>git config --global user.email "hufs.staff@gmail.com"</pre></div>
+  </div>
+      <div class="tip info"><b>이메일은 가입 메일과 같게</b><p>GitHub 가입 메일과 같아야 <b>내 작업으로 인식</b>됩니다. 이름은 영문 권장.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="13 / 17">
+  <div class="rail"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">STEP 11</span><span class="sm">GIT · 실행해 보기</span></div>
+    <h2>GitHub 저장소를 내 컴퓨터로 가져오기</h2>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="body">
+    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
+      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5"/>
+<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
+<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+<text x="34" y="106" class="m b" font-size="13.5" fill="#FFFFFF">PS C:\Users\hufs&gt; cd "$HOME\Desktop\dev"</text><text x="34" y="144" class="m b" font-size="12.5" fill="#FFFFFF">PS ...\dev&gt; git clone https://github.com/hufs-hong/my-first-app.git</text><text x="34" y="174" class="m " font-size="13.5" fill="#E6EDF3">Cloning into 'my-first-app'...</text><text x="34" y="198" class="m " font-size="13" fill="#9FC6EE">remote: Enumerating objects: 3, done.</text><text x="34" y="220" class="m b" font-size="13.5" fill="#7EE787">Receiving objects: 100% (3/3), done.</text><text x="34" y="264" class="m b" font-size="13.5" fill="#FFFFFF">PS ...\dev&gt; dir</text><text x="34" y="294" class="m " font-size="13" fill="#9FC6EE">Mode      LastWriteTime     Name</text><text x="34" y="316" class="m b" font-size="13.5" fill="#7EE787">d-----    2026-07-26 09:12  my-first-app</text>
+<rect x="26" y="86.5" width="400" height="28.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="450" cy="100.75" r="15" fill="#F26B21"/><text x="450" y="106.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+<rect x="26" y="125.5" width="560" height="103.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="610" cy="177.25" r="15" fill="#F26B21"/><text x="610" y="183.25" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+<rect x="26" y="244.5" width="400" height="80.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="450" cy="284.75" r="15" fill="#F26B21"/><text x="450" y="290.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+<rect x="560" y="470" width="310" height="28" rx="14" fill="#FFF1E7" stroke="#F26B21"/><text x="574" y="489" font-size="13" class="b" fill="#F26B21">my-first-app 폴더가 생기면 성공!</text>
+    </svg></div>
+    <div class="side dense">
+      <div class="goal"><b>이 단계의 목표</b><p>앞 가이드에서 만든 저장소를 실제로 내려받아 Git이 동작하는지 확인합니다.</p></div>
+      <ol class="acts"><li>작업 폴더를 만들고 그 안으로 이동합니다.</li><li><b>git clone</b> 뒤에 내 저장소 주소를 붙여 실행합니다.</li><li><code>dir</code> 로 폴더가 생겼는지 확인합니다.</li></ol>
+      <div class="cmd">
+  <b class="lbl">① 작업 폴더 만들고 이동</b>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="mkdir &quot;$HOME\Desktop\dev&quot; -Force; cd &quot;$HOME\Desktop\dev&quot;">복사</button><pre>mkdir "$HOME\Desktop\dev" -Force; cd "$HOME\Desktop\dev"</pre></div>
+  </div><div class="cmd">
+  <b class="lbl">② 저장소 내려받기 (주소는 본인 것으로)</b>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git clone https://github.com/hufs-hong/my-first-app.git">복사</button><pre>git clone https://github.com/hufs-hong/my-first-app.git</pre></div>
+  </div>
+      <div class="tip ok"><b>처음 한 번은 로그인 창이 뜹니다</b><p><b>Sign in with your browser</b> 를 눌러 GitHub에 로그인하면 이후로는 자동 처리됩니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-no="14 / 17">
+  <div class="rail acc"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 1/2</span></div>
+    <h2>Git 명령어 모음 (복사해서 사용) <span style="font-size:22px;color:#8A94A0;font-weight:700">(1/2)</span></h2>
+    <p class="lead">오른쪽 위 <b>복사</b> 버튼을 누른 뒤, PowerShell에서 <b>마우스 오른쪽 클릭</b>으로 붙여넣고 Enter.</p>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="cgrid"><div class="ccard">
+  <div class="ct">① 설치 확인</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git --version">복사</button><pre>git --version</pre></div>
+  <div class="out">→ git version 2.5x.x.windows.1</div>
+  <div class="cd">이 줄이 나오면 설치 성공입니다.</div>
+</div><div class="ccard">
+  <div class="ct">② 이름 등록 (본인 이름으로 수정)</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git config --global user.name &quot;Hong Gildong&quot;">복사</button><pre>git config --global user.name "Hong Gildong"</pre></div>
+  
+  <div class="cd">컴퓨터당 한 번만 실행하면 됩니다.</div>
+</div><div class="ccard">
+  <div class="ct">③ 이메일 등록 (GitHub 가입 메일)</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git config --global user.email &quot;hufs.staff@gmail.com&quot;">복사</button><pre>git config --global user.email "hufs.staff@gmail.com"</pre></div>
+  
+  <div class="cd">GitHub 가입 메일과 <b>동일하게</b> 맞추세요.</div>
+</div><div class="ccard">
+  <div class="ct">④ 설정 전체 확인</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git config --global --list">복사</button><pre>git config --global --list</pre></div>
+  
+  <div class="cd">이름·이메일이 제대로 저장됐는지 확인합니다.</div>
+</div><div class="ccard">
+  <div class="ct">⑤ 기본 브랜치를 main으로 (설치 때 놓쳤다면)</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git config --global init.defaultBranch main">복사</button><pre>git config --global init.defaultBranch main</pre></div>
+  
+  <div class="cd">STEP 5를 지나쳤을 때 이 명령으로 보완합니다.</div>
+</div><div class="ccard">
+  <div class="ct">⑥ 저장소 내려받기</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git clone https://github.com/hufs-hong/my-first-app.git">복사</button><pre>git clone https://github.com/hufs-hong/my-first-app.git</pre></div>
+  
+  <div class="cd">주소는 GitHub의 <b>&lt;&gt; Code → HTTPS</b> 에서 복사한 것으로 바꾸세요.</div>
+</div></div>
+</section>
+
+<section class="slide" data-no="15 / 17">
+  <div class="rail acc"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 2/2</span></div>
+    <h2>Git 명령어 모음 (복사해서 사용) <span style="font-size:22px;color:#8A94A0;font-weight:700">(2/2)</span></h2>
+    <p class="lead">오른쪽 위 <b>복사</b> 버튼을 누른 뒤, PowerShell에서 <b>마우스 오른쪽 클릭</b>으로 붙여넣고 Enter.</p>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="cgrid"><div class="ccard">
+  <div class="ct">⑦ 현재 상태 보기 (저장소 폴더 안에서)</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git status">복사</button><pre>git status</pre></div>
+  
+  <div class="cd">무엇이 바뀌었는지 알려 줍니다. 가장 자주 쓰는 명령입니다.</div>
+</div><div class="ccard">
+  <div class="ct">⑧ Git 설치 위치 확인 (문제 진단용)</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="Get-Command git | Select-Object Source">복사</button><pre>Get-Command git | Select-Object Source</pre></div>
+  
+  <div class="cd">경로가 나오면 설치는 정상, PATH만 확인하면 됩니다.</div>
+</div><div class="ccard">
+  <div class="ct">⑨ 기본 편집기를 VS Code로 (설치 때 놓쳤다면)</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git config --global core.editor &quot;code --wait&quot;">복사</button><pre>git config --global core.editor "code --wait"</pre></div>
+  
+  <div class="cd">Vim 화면에 갇히는 일을 예방합니다.</div>
+</div><div class="ccard">
+  <div class="ct">⑩ 한글 파일명 깨짐 해결</div>
+  <div class="cmdwrap"><button class="cp" type="button" data-c="git config --global core.quotepath false">복사</button><pre>git config --global core.quotepath false</pre></div>
+  
+  <div class="cd">한글 파일 이름이 숫자 코드로 보일 때 실행하세요.</div>
+</div></div>
+</section>
+
+<section class="slide" data-no="16 / 17">
+  <div class="rail acc"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">문제 해결</span><span class="sm">TROUBLESHOOTING</span></div>
+    <h2>Git — 문제가 생겼을 때</h2>
+    <p class="lead">증상별 해결 순서입니다. 대부분 <b>터미널 새로 열기</b> 로 해결됩니다.</p>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="tbwrap"><table class="tb">
+    <thead><tr><th style="width:29%">이런 화면·메시지가 나오면</th><th style="width:24%">원인</th><th>이렇게 해결하세요</th></tr></thead>
+    <tbody><tr><td class="s"><code>'git' 용어가 … 인식되지 않습니다</code></td><td class="c">PATH 미적용 또는 설치 옵션 오류</td><td>① PowerShell을 <b>완전히 닫고 새로 열기</b> ② PC 재부팅 ③ <code>Get-Command git</code> 로 확인 ④ 그래도 없으면 <b>재설치 후 STEP 6에서 가운데 항목</b> 선택.</td></tr><tr><td class="s">설치 파일 실행 시 파란 경고 화면</td><td class="c">SmartScreen 보호</td><td><b>추가 정보 → 실행</b> 순서로 클릭. git-scm.com 에서 직접 받은 파일이면 안전합니다.</td></tr><tr><td class="s">"관리자에게 문의하세요" 로 설치 불가</td><td class="c">기관 PC 권한 제한</td><td>전산 담당 부서에 <b>Git for Windows 설치 승인</b> 요청. 임시로는 <b>Portable 버전</b>(git-scm.com → Portable)으로 사용 가능.</td></tr><tr><td class="s">clone 할 때 아이디/비밀번호를 물어봄</td><td class="c">GitHub는 비밀번호 로그인을 폐지</td><td><b>Sign in with your browser</b> 를 눌러 브라우저로 로그인하세요. 비밀번호를 직접 입력하면 실패합니다. 한 번 성공하면 자동 저장됩니다.</td></tr><tr><td class="s"><code>fatal: repository not found</code></td><td class="c">주소 오타 또는 비공개 저장소</td><td>GitHub 저장소 화면의 <b>&lt;&gt; Code → HTTPS</b> 에서 주소를 다시 복사하세요. Private 저장소는 <b>로그인한 계정에 권한</b>이 있어야 합니다.</td></tr><tr><td class="s">검은 편집기가 떠서 빠져나올 수 없음</td><td class="c">기본 편집기가 Vim으로 설정됨</td><td>키보드로 <b>Esc</b> → <b>:q!</b> → <b>Enter</b> 입력해 탈출. 이후 <code>git config --global core.editor "code --wait"</code> 실행해 VS Code로 변경.</td></tr><tr><td class="s">한글 파일명이 깨져 보임</td><td class="c">기본 인코딩 설정</td><td><code>git config --global core.quotepath false</code> 를 실행하면 한글 파일명이 정상 표시됩니다.</td></tr></tbody>
+  </table></div>
+</section>
+
+<section class="slide" data-no="17 / 17">
+  <div class="rail acc"></div>
+  <div class="head">
+    <div class="eyebrow"><span class="tag">마무리</span><span class="sm">CHECKLIST &amp; NEXT</span></div>
+    <h2>Git 설치 완료 확인</h2>
+    <p class="lead">아래가 모두 되면 Git 준비 완료입니다. 다음은 <b>Node.js LTS 설치</b>입니다.</p>
+  </div>
+  <div class="hr"><i></i></div>
+  <div class="two">
+    <div class="panel"><h3>✅ 완료 체크리스트</h3><ul class="chk"><li><span class="box"></span><span><span class="t">git --version 이 정상 출력된다</span><span class="d">git version 2.5x.x.windows.1</span></span></li><li><span class="box"></span><span><span class="t">설치 중 PATH를 가운데(권장)로 선택했다</span><span class="d">PowerShell에서 git이 동작하는 것이 그 증거</span></span></li><li><span class="box"></span><span><span class="t">기본 편집기를 VS Code로 지정했다</span><span class="d">Vim 탈출 소동을 예방합니다</span></span></li><li><span class="box"></span><span><span class="t">기본 브랜치가 main 이다</span><span class="d">git config --global --list 로 확인</span></span></li><li><span class="box"></span><span><span class="t">이름·이메일을 등록했다</span><span class="d">user.name / user.email</span></span></li><li><span class="box"></span><span><span class="t">git clone 을 한 번 성공했다</span><span class="d">브라우저 로그인 1회 완료</span></span></li></ul></div>
+    <div class="panel"><h3>➡️ 다음 단계 &amp; 참고</h3><ul class="nxt"><li><b>③ Node.js LTS 설치 가이드</b><span>클로드 코드가 사용하는 실행 엔진입니다. (<b>03-nodejs-guide</b>)</span></li><li><b>④ VS Code 설치 가이드</b><span>Git 설치 때 지정한 편집기를 실제로 설치합니다.</span></li><li><b>⑤ Claude Code 설치 가이드</b><span>마지막 단계입니다.</span></li><li><b>자주 쓰는 3개만 기억</b><span><code>git status</code> · <code>git clone</code> · <code>git --version</code> — 나머지는 클로드 코드가 대신 해 줍니다.</span></li></ul></div>
+  </div>
+  <div class="final"><b>최종 확인 명령</b><span>git --version</span></div>
+</section>
+
+</div>
+<script>
+function copyText(t){
+  if(navigator.clipboard && window.isSecureContext){ return navigator.clipboard.writeText(t); }
+  var ta=document.createElement('textarea'); ta.value=t;
+  ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta); return Promise.resolve();
+}
+var toast=document.createElement('div'); toast.className='toast'; toast.textContent='복사되었습니다';
+document.addEventListener('DOMContentLoaded',function(){ document.body.appendChild(toast); });
+document.addEventListener('click',function(e){
+  var b=e.target.closest ? e.target.closest('.cp') : null; if(!b) return;
+  copyText(b.getAttribute('data-c')).then(function(){
+    var old=b.textContent; b.textContent='복사됨'; b.classList.add('done');
+    toast.classList.add('on');
+    setTimeout(function(){ b.textContent=old; b.classList.remove('done'); toast.classList.remove('on'); },1400);
+  });
+});
+</script>
+</body>
+</html>
