@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-직업미래연구소 학술 블로그를 오픈했습니다. 🎉
+AI미래직업연구소 학술 블로그를 오픈했습니다. 🎉

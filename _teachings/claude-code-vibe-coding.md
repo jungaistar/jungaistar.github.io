@@ -2,7 +2,7 @@
 layout: course
 title: 클로드 코드로 시작하는 바이브 코딩 — 행정직원 실무 과정
 description: 코딩을 전혀 몰라도 한국어로 말해서 업무용 프로그램을 만드는 과정입니다. GitHub·Git·Node.js·VS Code·Claude Code 5개 프로그램 설치부터 첫 프로그램 제작까지, 화면을 보며 그대로 따라 합니다.
-instructor: 정동엽 (직업미래연구소 소장)
+instructor: 정동엽 (AI미래직업연구소 소장)
 year: 2026
 term: 하반기
 location: 한국외국어대학교
@@ -68,13 +68,13 @@ schedule:
   </div>
 </div>
 
-| 순서 | 가이드 | 소요 | 핵심 포인트 |
-|:---:|:---|:---:|:---|
-| ① | [GitHub 가입 & 저장소 만들기](/guides/claude-code/01-github-guide_v1.0_20260726.html) | 약 10분 | 설치 없음(웹 가입) · 2단계 인증 필수 |
-| ② | [Git 설치 & 사용 시작](/guides/claude-code/02-git-guide_v1.0_20260726.html) | 약 10분 | 설치 중 확인할 화면은 단 3개 |
-| ③ | [Node.js LTS 설치](/guides/claude-code/03-nodejs-guide_v1.0_20260726.html) | 약 7분 | 반드시 **LTS** 선택 (Current 아님) |
-| ④ | [VS Code 설치 & 실행](/guides/claude-code/04-vscode-guide_v1.0_20260726.html) | 약 8분 | "PATH에 추가" 체크 확인 |
-| ⑤ | [Claude Code 설치 & 실행](/guides/claude-code/05-claude-code-guide_v1.0_20260726.html) | 약 10분 | 명령 한 줄로 설치 · 유료 플랜 필요 |
+| 순서 | 가이드                                                                                 |  소요   | 핵심 포인트                          |
+| :--: | :------------------------------------------------------------------------------------- | :-----: | :----------------------------------- |
+|  ①   | [GitHub 가입 & 저장소 만들기](/guides/claude-code/01-github-guide_v1.0_20260726.html)  | 약 10분 | 설치 없음(웹 가입) · 2단계 인증 필수 |
+|  ②   | [Git 설치 & 사용 시작](/guides/claude-code/02-git-guide_v1.0_20260726.html)            | 약 10분 | 설치 중 확인할 화면은 단 3개         |
+|  ③   | [Node.js LTS 설치](/guides/claude-code/03-nodejs-guide_v1.0_20260726.html)             | 약 7분  | 반드시 **LTS** 선택 (Current 아님)   |
+|  ④   | [VS Code 설치 & 실행](/guides/claude-code/04-vscode-guide_v1.0_20260726.html)          | 약 8분  | "PATH에 추가" 체크 확인              |
+|  ⑤   | [Claude Code 설치 & 실행](/guides/claude-code/05-claude-code-guide_v1.0_20260726.html) | 약 10분 | 명령 한 줄로 설치 · 유료 플랜 필요   |
 
 > 각 가이드에는 **명령어 복사 버튼**과 **문제 해결표**가 들어 있습니다. 강의 중 막히면 해당 가이드 뒤쪽의 문제 해결 슬라이드를 먼저 확인하세요.
 
@@ -94,12 +94,12 @@ schedule:
 
 ## 준비물
 
-| 구분 | 내용 |
-|:---|:---|
-| 장비 | Windows 10 / 11 노트북 (관리자 권한 권장) |
-| 계정 | 본인 이메일 · 스마트폰(2단계 인증용) |
+| 구분 | 내용                                                                      |
+| :--- | :------------------------------------------------------------------------ |
+| 장비 | Windows 10 / 11 노트북 (관리자 권한 권장)                                 |
+| 계정 | 본인 이메일 · 스마트폰(2단계 인증용)                                      |
 | 필수 | **Claude 유료 플랜 계정**(Pro·Max 등) — 무료 플랜은 Claude Code 사용 불가 |
-| 비용 | 설치하는 프로그램 5종은 모두 무료 |
+| 비용 | 설치하는 프로그램 5종은 모두 무료                                         |
 
 ## 진행 방식
 

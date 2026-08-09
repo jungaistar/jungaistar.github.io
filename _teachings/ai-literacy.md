@@ -2,7 +2,7 @@
 layout: course
 title: Gen AI 시대 AI 리터러시 향상 과정
 description: 생성형 AI 도구의 원리를 이해하고 업무·학습·창작에 즉시 활용하는 실전 과정입니다. 프롬프트 작성법, AI 윤리, AI 기반 커리어 전략까지 다룹니다.
-instructor: 정동엽 (직업미래연구소 소장)
+instructor: 정동엽 (AI미래직업연구소 소장)
 year: 2026
 term: 상시
 location: 기업·기관·대학 출강

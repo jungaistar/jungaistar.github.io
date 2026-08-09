@@ -2,7 +2,7 @@
 layout: page
 permalink: /teaching/
 title: 강의·교육
-description: 직업미래연구소가 운영하는 교육 과정입니다. 대상과 목적에 맞게 기업·기관·대학 맞춤형으로 구성합니다.
+description: AI미래직업연구소가 운영하는 교육 과정입니다. 대상과 목적에 맞게 기업·기관·대학 맞춤형으로 구성합니다.
 nav: true
 nav_order: 2
 ---

@@ -2,7 +2,7 @@
 layout: page
 title: 프로그램
 permalink: /projects/
-description: 대상과 목적에 맞게 선택하는 직업미래연구소의 4개 프로그램 영역입니다.
+description: 대상과 목적에 맞게 선택하는 AI미래직업연구소의 4개 프로그램 영역입니다.
 nav: true
 nav_order: 3
 display_categories: [진로·취업·전직, 창업·교육·연구, AI·디지털, 다문화·정착지원]
