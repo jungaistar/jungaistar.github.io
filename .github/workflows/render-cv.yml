@@ -1,14 +1,30 @@
 name: Render a CV
+# 자동 실행(push 트리거)을 꺼 둔 상태입니다.
+#
+# 이 워크플로는 _data/cv.yml을 RenderCV(파이썬 도구)로 PDF 이력서로 변환합니다.
+# 그런데 al-folio의 웹 CV 템플릿(al_folio_cv gem의 render.liquid)은 cv.label /
+# cv.image / cv.summary 를 읽어 "Professional Title"과 "Professional Summary"를
+# 그리는 반면, RenderCV 스키마에는 이 세 필드가 없어 "extra fields not permitted"로
+# 검증에 실패합니다. al-folio가 기본 제공하는 샘플 cv.yml(아인슈타인) 그대로도
+# 동일하게 실패하는, 테마 쪽의 알려진 불일치입니다.
+#
+# 즉 웹 CV 페이지를 온전히 유지하면서 이 워크플로를 통과시킬 수는 없습니다.
+# 웹 CV(/cv/)는 cv.yml에서 직접 렌더링되므로 PDF 생성 없이도 정상 동작합니다.
+#
+# 다시 켜려면: 아래 push 블록의 주석을 해제하고, cv.yml에서 label/image/summary를
+# 제거한 뒤 phone을 E.164 형식(+82-10-...)으로, Publications를 RenderCV의
+# PublicationEntry(title/authors/date) 형식으로 바꿔야 합니다.
+# 수동 실행은 Actions 탭에서 workflow_dispatch로 언제든 가능합니다.
 on:
-  push:
-    branches:
-      - main
-      - master
-    paths:
-      - "_data/cv.yml"
-      - "assets/rendercv/design.yaml"
-      - "assets/rendercv/locale.yaml"
-      - "assets/rendercv/settings.yaml"
+  # push:
+  #   branches:
+  #     - main
+  #     - master
+  #   paths:
+  #     - "_data/cv.yml"
+  #     - "assets/rendercv/design.yaml"
+  #     - "assets/rendercv/locale.yaml"
+  #     - "assets/rendercv/settings.yaml"
   workflow_call:
   workflow_dispatch:
 permissions:
