@@ -20,7 +20,11 @@ jobs:
       - name: Setup Node.js ⚙️
         uses: actions/setup-node@v4
       - name: Install Prettier 💾
-        run: npm install --save-dev --save-exact prettier @shopify/prettier-plugin-liquid
+        # package-lock.json에 고정된 버전을 그대로 설치한다.
+        # 원래는 `npm install --save-dev --save-exact prettier ...`로 매번 최신 버전을
+        # 받았는데, prettier가 올라가면(예: 3.8 → 3.9의 이모지 폭 계산 변경) 코드 변경이
+        # 없어도 갑자기 검사에 실패한다. 로컬(`npm run lint:prettier`)과도 결과가 어긋난다.
+        run: npm ci
       - name: Prettier Check 🔎
         id: prettier
         run: npx prettier . --check
