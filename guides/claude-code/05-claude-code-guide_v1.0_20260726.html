@@ -1,787 +1,1853 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>⑤ Claude Code 설치 &amp; 실행 — 클로드 코드 준비 가이드</title>
-<style>
-:root{
-  --navy:#0E2A47; --navy-2:#1B4A78; --accent:#F26B21; --accent-soft:#FFF1E7;
-  --paper:#FFFFFF; --surface:#F4F6F9; --line:#D9E0E8; --muted:#5B6B7C; --ink:#16202B; --ok:#1A7F37; --bad:#C4341C;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Malgun Gothic','Nanum Gothic','Apple SD Gothic Neo',sans-serif;background:#8E9AA8;color:var(--ink);
-  -webkit-font-smoothing:antialiased;padding:28px 0;}
-.deck{display:flex;flex-direction:column;align-items:center;gap:24px;}
-.slide{width:1280px;height:720px;background:var(--paper);position:relative;overflow:hidden;
-  box-shadow:0 10px 34px rgba(0,0,0,.22);flex:0 0 auto;}
-.slide::after{content:attr(data-no);position:absolute;right:36px;bottom:22px;font-size:13px;font-weight:700;color:#A8B4C0;letter-spacing:.08em;}
-.rail{position:absolute;left:0;top:0;width:10px;height:100%;background:var(--navy);}
-.rail.acc{background:var(--accent);}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>⑤ Claude Code 설치 &amp; 실행 — 클로드 코드 준비 가이드</title>
+    <style>
+      :root {
+        --navy: #0e2a47;
+        --navy-2: #1b4a78;
+        --accent: #f26b21;
+        --accent-soft: #fff1e7;
+        --paper: #ffffff;
+        --surface: #f4f6f9;
+        --line: #d9e0e8;
+        --muted: #5b6b7c;
+        --ink: #16202b;
+        --ok: #1a7f37;
+        --bad: #c4341c;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Malgun Gothic", "Nanum Gothic", "Apple SD Gothic Neo", sans-serif;
+        background: #8e9aa8;
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+        padding: 28px 0;
+      }
+      .deck {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+      }
+      .slide {
+        width: 1280px;
+        height: 720px;
+        background: var(--paper);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 34px rgba(0, 0, 0, 0.22);
+        flex: 0 0 auto;
+      }
+      .slide::after {
+        content: attr(data-no);
+        position: absolute;
+        right: 36px;
+        bottom: 22px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #a8b4c0;
+        letter-spacing: 0.08em;
+      }
+      .rail {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 10px;
+        height: 100%;
+        background: var(--navy);
+      }
+      .rail.acc {
+        background: var(--accent);
+      }
 
-.cover{background:var(--navy);color:#fff;padding:0 90px;display:flex;flex-direction:column;justify-content:center;}
-.cover .kicker{font-size:15px;letter-spacing:.3em;color:#F9B27A;font-weight:700;margin-bottom:24px;}
-.cover h1{font-size:62px;line-height:1.18;letter-spacing:-.02em;font-weight:800;}
-.cover h1 em{font-style:normal;color:#F9B27A;}
-.cover .sub{margin-top:24px;font-size:20px;color:#B7C7D8;line-height:1.55;max-width:940px;}
-.cover .bar{width:96px;height:6px;background:var(--accent);margin:36px 0 32px;}
-.cover .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px;}
-.cover .chip{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:9px 20px;font-size:14px;color:#DCE6EF;}
-.cover .chip.ver{border-color:var(--accent);color:#F9B27A;font-weight:700;letter-spacing:.05em;}
-.cover .stamp{position:absolute;right:-24px;bottom:-84px;font-size:300px;font-weight:800;color:rgba(255,255,255,.055);letter-spacing:-.04em;}
+      .cover {
+        background: var(--navy);
+        color: #fff;
+        padding: 0 90px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .cover .kicker {
+        font-size: 15px;
+        letter-spacing: 0.3em;
+        color: #f9b27a;
+        font-weight: 700;
+        margin-bottom: 24px;
+      }
+      .cover h1 {
+        font-size: 62px;
+        line-height: 1.18;
+        letter-spacing: -0.02em;
+        font-weight: 800;
+      }
+      .cover h1 em {
+        font-style: normal;
+        color: #f9b27a;
+      }
+      .cover .sub {
+        margin-top: 24px;
+        font-size: 20px;
+        color: #b7c7d8;
+        line-height: 1.55;
+        max-width: 940px;
+      }
+      .cover .bar {
+        width: 96px;
+        height: 6px;
+        background: var(--accent);
+        margin: 36px 0 32px;
+      }
+      .cover .meta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 34px;
+      }
+      .cover .chip {
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        border-radius: 999px;
+        padding: 9px 20px;
+        font-size: 14px;
+        color: #dce6ef;
+      }
+      .cover .chip.ver {
+        border-color: var(--accent);
+        color: #f9b27a;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+      .cover .stamp {
+        position: absolute;
+        right: -24px;
+        bottom: -84px;
+        font-size: 300px;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.055);
+        letter-spacing: -0.04em;
+      }
 
-.head{padding:34px 60px 0 70px;}
-.eyebrow{display:inline-flex;align-items:center;gap:12px;margin-bottom:11px;}
-.eyebrow .tag{background:var(--accent);color:#fff;font-size:13px;font-weight:800;letter-spacing:.1em;padding:5px 12px;border-radius:4px;}
-.eyebrow .sm{font-size:12.5px;color:var(--muted);letter-spacing:.14em;font-weight:700;}
-.head h2{font-size:36px;font-weight:800;letter-spacing:-.02em;color:var(--navy);line-height:1.2;}
-.head .lead{margin-top:9px;font-size:15.5px;color:var(--muted);}
-.hr{height:3px;background:var(--navy);margin:15px 70px 0 70px;}
-.hr i{display:block;width:120px;height:3px;background:var(--accent);}
+      .head {
+        padding: 34px 60px 0 70px;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 11px;
+      }
+      .eyebrow .tag {
+        background: var(--accent);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        padding: 5px 12px;
+        border-radius: 4px;
+      }
+      .eyebrow .sm {
+        font-size: 12.5px;
+        color: var(--muted);
+        letter-spacing: 0.14em;
+        font-weight: 700;
+      }
+      .head h2 {
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: var(--navy);
+        line-height: 1.2;
+      }
+      .head .lead {
+        margin-top: 9px;
+        font-size: 15.5px;
+        color: var(--muted);
+      }
+      .hr {
+        height: 3px;
+        background: var(--navy);
+        margin: 15px 70px 0 70px;
+      }
+      .hr i {
+        display: block;
+        width: 120px;
+        height: 3px;
+        background: var(--accent);
+      }
 
-.body{display:grid;grid-template-columns:706px 1fr;gap:32px;padding:22px 70px 0 70px;}
-.shot{border:1px solid var(--line);background:var(--surface);padding:9px;}
-.shot svg{display:block;}
-.side{display:flex;flex-direction:column;gap:12px;overflow:hidden;}
-.goal{background:var(--navy);color:#fff;padding:14px 18px;}
-.goal>b{display:block;font-size:11.5px;letter-spacing:.18em;color:#F9B27A;margin-bottom:6px;}
-.goal p{font-size:15.5px;line-height:1.45;font-weight:700;}
-ol.acts{list-style:none;counter-reset:a;display:flex;flex-direction:column;gap:9px;}
-ol.acts li{counter-increment:a;position:relative;padding-left:34px;font-size:14px;line-height:1.5;color:#25313D;}
-ol.acts li::before{content:counter(a);position:absolute;left:0;top:1px;width:23px;height:23px;border-radius:50%;
-  background:var(--accent);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;}
-.tip{border-left:4px solid var(--accent);background:var(--accent-soft);padding:11px 14px;}
-.tip.warn{border-left-color:var(--bad);background:#FDEEEB;}
-.tip.ok{border-left-color:var(--ok);background:#F0F7F1;}
-.tip.info{border-left-color:var(--navy-2);background:#EDF3F9;}
-.tip>b{display:block;font-size:12.5px;color:var(--accent);margin-bottom:5px;font-weight:800;}
-.tip.warn>b{color:var(--bad);} .tip.ok>b{color:var(--ok);} .tip.info>b{color:var(--navy-2);}
-.tip p{font-size:13px;line-height:1.55;color:#3A4855;}
+      .body {
+        display: grid;
+        grid-template-columns: 706px 1fr;
+        gap: 32px;
+        padding: 22px 70px 0 70px;
+      }
+      .shot {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        padding: 9px;
+      }
+      .shot svg {
+        display: block;
+      }
+      .side {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        overflow: hidden;
+      }
+      .goal {
+        background: var(--navy);
+        color: #fff;
+        padding: 14px 18px;
+      }
+      .goal > b {
+        display: block;
+        font-size: 11.5px;
+        letter-spacing: 0.18em;
+        color: #f9b27a;
+        margin-bottom: 6px;
+      }
+      .goal p {
+        font-size: 15.5px;
+        line-height: 1.45;
+        font-weight: 700;
+      }
+      ol.acts {
+        list-style: none;
+        counter-reset: a;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+      }
+      ol.acts li {
+        counter-increment: a;
+        position: relative;
+        padding-left: 34px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #25313d;
+      }
+      ol.acts li::before {
+        content: counter(a);
+        position: absolute;
+        left: 0;
+        top: 1px;
+        width: 23px;
+        height: 23px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .tip {
+        border-left: 4px solid var(--accent);
+        background: var(--accent-soft);
+        padding: 11px 14px;
+      }
+      .tip.warn {
+        border-left-color: var(--bad);
+        background: #fdeeeb;
+      }
+      .tip.ok {
+        border-left-color: var(--ok);
+        background: #f0f7f1;
+      }
+      .tip.info {
+        border-left-color: var(--navy-2);
+        background: #edf3f9;
+      }
+      .tip > b {
+        display: block;
+        font-size: 12.5px;
+        color: var(--accent);
+        margin-bottom: 5px;
+        font-weight: 800;
+      }
+      .tip.warn > b {
+        color: var(--bad);
+      }
+      .tip.ok > b {
+        color: var(--ok);
+      }
+      .tip.info > b {
+        color: var(--navy-2);
+      }
+      .tip p {
+        font-size: 13px;
+        line-height: 1.55;
+        color: #3a4855;
+      }
 
-/* 명령어 + 복사 버튼 */
-.cmd .lbl{display:block;font-size:11.5px;font-weight:800;letter-spacing:.1em;color:var(--navy);margin-bottom:5px;}
-.cmdwrap{position:relative;}
-.cmdwrap pre{background:var(--navy);color:#E7EEF6;padding:12px 62px 12px 14px;border-radius:6px;
-  font-family:'Consolas','D2Coding',monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-all;}
-.cp{position:absolute;right:8px;top:8px;background:var(--accent);color:#fff;border:0;border-radius:4px;
-  font-size:11px;font-weight:800;padding:5px 10px;cursor:pointer;font-family:inherit;letter-spacing:.02em;}
-.cp:hover{filter:brightness(1.08);}
-.cp.done{background:var(--ok);}
-.out{margin-top:5px;font-family:'Consolas','D2Coding',monospace;font-size:11.5px;color:var(--muted);}
+      /* 명령어 + 복사 버튼 */
+      .cmd .lbl {
+        display: block;
+        font-size: 11.5px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        color: var(--navy);
+        margin-bottom: 5px;
+      }
+      .cmdwrap {
+        position: relative;
+      }
+      .cmdwrap pre {
+        background: var(--navy);
+        color: #e7eef6;
+        padding: 12px 62px 12px 14px;
+        border-radius: 6px;
+        font-family: "Consolas", "D2Coding", monospace;
+        font-size: 12.5px;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      .cp {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        background: var(--accent);
+        color: #fff;
+        border: 0;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-family: inherit;
+        letter-spacing: 0.02em;
+      }
+      .cp:hover {
+        filter: brightness(1.08);
+      }
+      .cp.done {
+        background: var(--ok);
+      }
+      .out {
+        margin-top: 5px;
+        font-family: "Consolas", "D2Coding", monospace;
+        font-size: 11.5px;
+        color: var(--muted);
+      }
 
-/* 내용이 많은 슬라이드용 축약 모드 */
-.side.dense{gap:9px;}
-.side.dense .goal{padding:11px 15px;}
-.side.dense .goal>b{font-size:11px;margin-bottom:5px;}
-.side.dense .goal p{font-size:14px;line-height:1.4;}
-.side.dense ol.acts{gap:6px;}
-.side.dense ol.acts li{font-size:13px;line-height:1.45;padding-left:29px;}
-.side.dense ol.acts li::before{width:20px;height:20px;font-size:11px;}
-.side.dense .cmd .lbl{font-size:11px;margin-bottom:4px;}
-.side.dense .cmdwrap pre{font-size:11.5px;line-height:1.5;padding:9px 54px 9px 11px;}
-.side.dense .cp{padding:4px 8px;font-size:10px;top:6px;right:6px;}
-.side.dense .out{font-size:10.5px;margin-top:4px;}
-.side.dense .tip{padding:9px 12px;}
-.side.dense .tip>b{font-size:11.5px;margin-bottom:4px;}
-.side.dense .tip p{font-size:12px;line-height:1.5;}
+      /* 내용이 많은 슬라이드용 축약 모드 */
+      .side.dense {
+        gap: 9px;
+      }
+      .side.dense .goal {
+        padding: 11px 15px;
+      }
+      .side.dense .goal > b {
+        font-size: 11px;
+        margin-bottom: 5px;
+      }
+      .side.dense .goal p {
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      .side.dense ol.acts {
+        gap: 6px;
+      }
+      .side.dense ol.acts li {
+        font-size: 13px;
+        line-height: 1.45;
+        padding-left: 29px;
+      }
+      .side.dense ol.acts li::before {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
+      }
+      .side.dense .cmd .lbl {
+        font-size: 11px;
+        margin-bottom: 4px;
+      }
+      .side.dense .cmdwrap pre {
+        font-size: 11.5px;
+        line-height: 1.5;
+        padding: 9px 54px 9px 11px;
+      }
+      .side.dense .cp {
+        padding: 4px 8px;
+        font-size: 10px;
+        top: 6px;
+        right: 6px;
+      }
+      .side.dense .out {
+        font-size: 10.5px;
+        margin-top: 4px;
+      }
+      .side.dense .tip {
+        padding: 9px 12px;
+      }
+      .side.dense .tip > b {
+        font-size: 11.5px;
+        margin-bottom: 4px;
+      }
+      .side.dense .tip p {
+        font-size: 12px;
+        line-height: 1.5;
+      }
 
-/* 명령어 모음 슬라이드 */
-.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px;padding:22px 70px 0 70px;}
-.ccard{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);padding:13px 15px;}
-.ccard .ct{font-size:13.5px;font-weight:800;color:var(--navy);margin-bottom:8px;}
-.ccard .cd{margin-top:7px;font-size:12.5px;line-height:1.5;color:var(--muted);}
+      /* 명령어 모음 슬라이드 */
+      .cgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px 26px;
+        padding: 22px 70px 0 70px;
+      }
+      .ccard {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--accent);
+        padding: 13px 15px;
+      }
+      .ccard .ct {
+        font-size: 13.5px;
+        font-weight: 800;
+        color: var(--navy);
+        margin-bottom: 8px;
+      }
+      .ccard .cd {
+        margin-top: 7px;
+        font-size: 12.5px;
+        line-height: 1.5;
+        color: var(--muted);
+      }
 
-/* 문제 해결 표 */
-.tbwrap{padding:20px 70px 0 70px;}
-table.tb{width:100%;border-collapse:collapse;}
-table.tb th{background:var(--navy);color:#fff;font-size:13px;text-align:left;padding:10px 13px;font-weight:700;}
-table.tb td{border-bottom:1px solid var(--line);padding:9px 13px;font-size:12.8px;vertical-align:top;line-height:1.5;}
-table.tb tr:nth-child(even) td{background:#FAFBFC;}
-table.tb td.s{font-weight:700;color:var(--bad);}
-table.tb td.c{color:var(--muted);}
-table.tb code{font-family:'Consolas','D2Coding',monospace;background:#EEF2F6;padding:1px 5px;border-radius:3px;font-size:12px;color:#20364C;}
+      /* 문제 해결 표 */
+      .tbwrap {
+        padding: 20px 70px 0 70px;
+      }
+      table.tb {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      table.tb th {
+        background: var(--navy);
+        color: #fff;
+        font-size: 13px;
+        text-align: left;
+        padding: 10px 13px;
+        font-weight: 700;
+      }
+      table.tb td {
+        border-bottom: 1px solid var(--line);
+        padding: 9px 13px;
+        font-size: 12.8px;
+        vertical-align: top;
+        line-height: 1.5;
+      }
+      table.tb tr:nth-child(even) td {
+        background: #fafbfc;
+      }
+      table.tb td.s {
+        font-weight: 700;
+        color: var(--bad);
+      }
+      table.tb td.c {
+        color: var(--muted);
+      }
+      table.tb code {
+        font-family: "Consolas", "D2Coding", monospace;
+        background: #eef2f6;
+        padding: 1px 5px;
+        border-radius: 3px;
+        font-size: 12px;
+        color: #20364c;
+      }
 
-/* 마무리 */
-.two{display:grid;grid-template-columns:1fr 1fr;gap:30px;padding:24px 70px 0 70px;}
-.panel h3{font-size:17px;color:var(--navy);font-weight:800;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--line);}
-ul.chk{list-style:none;display:flex;flex-direction:column;gap:7px;}
-ul.chk li{display:flex;gap:11px;align-items:flex-start;background:var(--surface);padding:8px 12px;}
-ul.chk .box{width:16px;height:16px;border:2px solid var(--accent);flex:0 0 auto;margin-top:2px;}
-ul.chk .t{display:block;font-size:13.5px;font-weight:700;color:#25313D;}
-ul.chk .d{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45;}
-ul.nxt{list-style:none;display:flex;flex-direction:column;gap:9px;}
-ul.nxt li{border-left:3px solid var(--navy-2);padding:6px 0 6px 12px;}
-ul.nxt>li>b{display:block;font-size:13.5px;color:var(--navy);margin-bottom:3px;}
-ul.nxt>li>span{font-size:12.5px;color:var(--muted);line-height:1.5;}
-.final{margin:18px 70px 0 70px;background:var(--navy);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:24px;}
-.final b{font-size:13px;color:#F9B27A;letter-spacing:.14em;flex:0 0 auto;}
-.final span{font-family:'Consolas','D2Coding',monospace;font-size:17px;}
+      /* 마무리 */
+      .two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        padding: 24px 70px 0 70px;
+      }
+      .panel h3 {
+        font-size: 17px;
+        color: var(--navy);
+        font-weight: 800;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--line);
+      }
+      ul.chk {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      ul.chk li {
+        display: flex;
+        gap: 11px;
+        align-items: flex-start;
+        background: var(--surface);
+        padding: 8px 12px;
+      }
+      ul.chk .box {
+        width: 16px;
+        height: 16px;
+        border: 2px solid var(--accent);
+        flex: 0 0 auto;
+        margin-top: 2px;
+      }
+      ul.chk .t {
+        display: block;
+        font-size: 13.5px;
+        font-weight: 700;
+        color: #25313d;
+      }
+      ul.chk .d {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+        line-height: 1.45;
+      }
+      ul.nxt {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+      }
+      ul.nxt li {
+        border-left: 3px solid var(--navy-2);
+        padding: 6px 0 6px 12px;
+      }
+      ul.nxt > li > b {
+        display: block;
+        font-size: 13.5px;
+        color: var(--navy);
+        margin-bottom: 3px;
+      }
+      ul.nxt > li > span {
+        font-size: 12.5px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .final {
+        margin: 18px 70px 0 70px;
+        background: var(--navy);
+        color: #fff;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .final b {
+        font-size: 13px;
+        color: #f9b27a;
+        letter-spacing: 0.14em;
+        flex: 0 0 auto;
+      }
+      .final span {
+        font-family: "Consolas", "D2Coding", monospace;
+        font-size: 17px;
+      }
 
-.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#0E2A47;color:#fff;
-  padding:11px 22px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;transition:.22s;pointer-events:none;z-index:99;}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 26px;
+        transform: translateX(-50%) translateY(20px);
+        background: #0e2a47;
+        color: #fff;
+        padding: 11px 22px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 700;
+        opacity: 0;
+        transition: 0.22s;
+        pointer-events: none;
+        z-index: 99;
+      }
+      .toast.on {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
 
-@media print{
-  body{background:#fff;padding:0;} .deck{gap:0;}
-  .slide{box-shadow:none;page-break-after:always;}
-  .cp,.toast{display:none!important;}
-  .cmdwrap pre{padding-right:14px;}
-  @page{size:1280px 720px;margin:0;}
-}
-</style>
-</head>
-<body>
-<div class="deck">
+      @media print {
+        body {
+          background: #fff;
+          padding: 0;
+        }
+        .deck {
+          gap: 0;
+        }
+        .slide {
+          box-shadow: none;
+          page-break-after: always;
+        }
+        .cp,
+        .toast {
+          display: none !important;
+        }
+        .cmdwrap pre {
+          padding-right: 14px;
+        }
+        @page {
+          size: 1280px 720px;
+          margin: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="deck">
+      <section class="slide cover" data-no="01 / 16">
+        <div class="stamp">CC</div>
+        <div class="kicker">CLAUDE CODE 준비 · 05 CLAUDE CODE</div>
+        <h1>클로드 코드 설치하고<br /><em>첫 프로그램 만들기</em></h1>
+        <div class="bar"></div>
+        <p class="sub">명령어 한 줄로 클로드 코드를 설치하고, 로그인한 뒤, 한국어로 말해서 프로그램을 만들어 봅니다.</p>
+        <div class="meta">
+          <span class="chip">소요 시간 약 10분</span><span class="chip">Windows 10 / 11</span><span class="chip">유료 플랜 계정 필요</span
+          ><span class="chip">앞의 4개 설치 완료 후</span><span class="chip ver">v1.0 · 2026-07-26</span>
+        </div>
+      </section>
 
-<section class="slide cover" data-no="01 / 16">
-  <div class="stamp">CC</div>
-  <div class="kicker">CLAUDE CODE 준비 · 05 CLAUDE CODE</div>
-  <h1>클로드 코드 설치하고<br><em>첫 프로그램 만들기</em></h1>
-  <div class="bar"></div>
-  <p class="sub">명령어 한 줄로 클로드 코드를 설치하고, 로그인한 뒤, 한국어로 말해서 프로그램을 만들어 봅니다.</p>
-  <div class="meta"><span class="chip">소요 시간 약 10분</span><span class="chip">Windows 10 / 11</span><span class="chip">유료 플랜 계정 필요</span><span class="chip">앞의 4개 설치 완료 후</span><span class="chip ver">v1.0 · 2026-07-26</span></div>
-</section>
+      <section class="slide" data-no="02 / 16">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">한눈에 보기</span></div>
+          <h2>Claude Code 설치 전체 흐름</h2>
+          <p class="lead">사전 점검 → 설치 명령 한 줄 → 로그인 → 첫 실행 순서입니다. 설치 마법사 창은 없습니다.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="flowwrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 372" width="100%" preserveAspectRatio="xMidYMid meet">
+            <style>
+              text {
+                font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+              }
+              .b {
+                font-weight: 700;
+              }
+            </style>
+            <rect x="0" y="0" width="1000" height="372" fill="#FFFFFF" />
+            <g>
+              <rect x="18" y="66" width="172" height="176" rx="12" fill="#0E2A47" />
+              <text x="40" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">01</text>
+              <text x="40" y="152" font-size="30" class="b">🔍</text>
+              <text x="40" y="184" font-size="16" class="b" fill="#FFFFFF">사전 점검</text>
+              <rect x="40" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="50" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 1</text>
+            </g>
+            <path d="M194 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <g>
+              <rect x="216" y="66" width="172" height="176" rx="12" fill="#1B4A78" />
+              <text x="238" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">02</text>
+              <text x="238" y="152" font-size="30" class="b">⌨️</text>
+              <text x="238" y="184" font-size="16" class="b" fill="#FFFFFF">설치 명령</text>
+              <rect x="238" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="248" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 2–4</text>
+            </g>
+            <path d="M392 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <g>
+              <rect x="414" y="66" width="172" height="176" rx="12" fill="#2A6EA6" />
+              <text x="436" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">03</text>
+              <text x="436" y="152" font-size="30" class="b">🔑</text>
+              <text x="436" y="184" font-size="16" class="b" fill="#FFFFFF">로그인</text>
+              <rect x="436" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="446" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 5–6</text>
+            </g>
+            <path d="M590 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <g>
+              <rect x="612" y="66" width="172" height="176" rx="12" fill="#E2762A" />
+              <text x="634" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">04</text>
+              <text x="634" y="152" font-size="30" class="b">💬</text>
+              <text x="634" y="184" font-size="16" class="b" fill="#FFFFFF">첫 대화</text>
+              <rect x="634" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="644" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 7–8</text>
+            </g>
+            <path d="M788 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <g>
+              <rect x="810" y="66" width="172" height="176" rx="12" fill="#F26B21" />
+              <text x="832" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">05</text>
+              <text x="832" y="152" font-size="30" class="b">🛠</text>
+              <text x="832" y="184" font-size="16" class="b" fill="#FFFFFF">점검·활용</text>
+              <rect x="832" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="842" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 9–10</text>
+            </g>
+            <rect x="18" y="282" width="964" height="62" rx="10" fill="#F4F6F9" stroke="#D9E0E8" />
+            <text x="42" y="308" font-size="13" class="b" fill="#0E2A47">필요한 것</text>
+            <text x="42" y="330" font-size="12.5" fill="#5B6B7C">
+              Git · Node.js · VS Code 설치 완료 · Claude 유료 플랜 계정(Pro/Max/Team/Enterprise) · 인터넷 연결 | 무료 플랜은 사용 불가
+            </text>
+          </svg>
+        </div>
+      </section>
 
-<section class="slide" data-no="02 / 16">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">한눈에 보기</span></div>
-    <h2>Claude Code 설치 전체 흐름</h2>
-    <p class="lead">사전 점검 → 설치 명령 한 줄 → 로그인 → 첫 실행 순서입니다. 설치 마법사 창은 없습니다.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="flowwrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 372" width="100%" preserveAspectRatio="xMidYMid meet">
-    <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.b{font-weight:700;}</style>
-    <rect x="0" y="0" width="1000" height="372" fill="#FFFFFF"/>
-    <g><rect x="18" y="66" width="172" height="176" rx="12" fill="#0E2A47"/>
-<text x="40" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">01</text>
-<text x="40" y="152" font-size="30" class="b">🔍</text>
-<text x="40" y="184" font-size="16" class="b" fill="#FFFFFF">사전 점검</text>
-<rect x="40" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="50" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 1</text></g><path d="M194 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="216" y="66" width="172" height="176" rx="12" fill="#1B4A78"/>
-<text x="238" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">02</text>
-<text x="238" y="152" font-size="30" class="b">⌨️</text>
-<text x="238" y="184" font-size="16" class="b" fill="#FFFFFF">설치 명령</text>
-<rect x="238" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="248" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 2–4</text></g><path d="M392 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="414" y="66" width="172" height="176" rx="12" fill="#2A6EA6"/>
-<text x="436" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">03</text>
-<text x="436" y="152" font-size="30" class="b">🔑</text>
-<text x="436" y="184" font-size="16" class="b" fill="#FFFFFF">로그인</text>
-<rect x="436" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="446" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 5–6</text></g><path d="M590 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="612" y="66" width="172" height="176" rx="12" fill="#E2762A"/>
-<text x="634" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">04</text>
-<text x="634" y="152" font-size="30" class="b">💬</text>
-<text x="634" y="184" font-size="16" class="b" fill="#FFFFFF">첫 대화</text>
-<rect x="634" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="644" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 7–8</text></g><path d="M788 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="810" y="66" width="172" height="176" rx="12" fill="#F26B21"/>
-<text x="832" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">05</text>
-<text x="832" y="152" font-size="30" class="b">🛠</text>
-<text x="832" y="184" font-size="16" class="b" fill="#FFFFFF">점검·활용</text>
-<rect x="832" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="842" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 9–10</text></g>
-    <rect x="18" y="282" width="964" height="62" rx="10" fill="#F4F6F9" stroke="#D9E0E8"/>
-    <text x="42" y="308" font-size="13" class="b" fill="#0E2A47">필요한 것</text>
-    <text x="42" y="330" font-size="12.5" fill="#5B6B7C">Git · Node.js · VS Code 설치 완료 · Claude 유료 플랜 계정(Pro/Max/Team/Enterprise) · 인터넷 연결  |  무료 플랜은 사용 불가</text>
-  </svg></div>
-</section>
+      <section class="slide" data-no="03 / 16">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 1</span><span class="sm">CLAUDE CODE · 사전 점검</span></div>
+          <h2>앞의 3개가 잘 설치됐는지 확인</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766" />
+              <rect x="8" y="32" width="884" height="20" fill="#0B3766" />
+              <text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <text x="34" y="106" class="m b" font-size="13" fill="#FFFFFF">PS C:\Users\hufs&gt; git --version; node --version; npm --version</text>
+              <text x="34" y="150" class="m b" font-size="14.5" fill="#7EE787">git version 2.51.0.windows.1</text>
+              <text x="34" y="178" class="m b" font-size="14.5" fill="#7EE787">v24.9.0</text>
+              <text x="34" y="206" class="m b" font-size="14.5" fill="#7EE787">11.6.2</text>
+              <text x="34" y="256" class="m" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
+              <rect x="26" y="87" width="540" height="28" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="590" cy="101" r="15" fill="#F26B21" />
+              <text x="590" y="107" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="26" y="129.5" width="320" height="85.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="370" cy="172.25" r="15" fill="#F26B21" />
+              <text x="370" y="178.25" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="430" y="300" width="442" height="114" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="476" y="330" font-size="13.5" class="b" fill="#F9B27A">빨간 오류가 보이면</text>
+              <text x="450" y="356" font-size="12.5" fill="#DCE6EF">git 오류 → 02-git-guide 로</text>
+              <text x="450" y="378" font-size="12.5" fill="#DCE6EF">node / npm 오류 → 03-nodejs-guide 로</text>
+              <text x="450" y="400" font-size="12.5" fill="#DCE6EF">대부분 터미널을 새로 열면 해결됩니다.</text>
+              <circle cx="454" cy="324" r="15" fill="#F26B21" />
+              <text x="454" y="330" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+            </svg>
+          </div>
+          <div class="side">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>설치를 시작하기 전에 준비물이 모두 갖춰졌는지 확인합니다.</p>
+            </div>
+            <ol class="acts">
+              <li>PowerShell을 <b>새로</b> 열고 아래 한 줄을 붙여넣은 뒤 Enter.</li>
+              <li><b>세 줄이 모두</b> 버전 숫자로 나오면 준비 완료입니다.</li>
+              <li>빨간 오류가 보이면 해당 가이드(02·03번)로 돌아가세요.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">한 번에 확인 (세미콜론으로 3개 연결)</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="git --version; node --version; npm --version">복사</button>
+                <pre>git --version; node --version; npm --version</pre>
+              </div>
+            </div>
+            <div class="tip info">
+              <b>Node.js가 없어도 됩니다</b>
+              <p>다음 <b>방법 A(네이티브 설치)</b>는 Node.js 없이도 동작합니다. 다만 다른 도구를 위해 설치해 두는 편이 좋습니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<section class="slide" data-no="03 / 16">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 1</span><span class="sm">CLAUDE CODE · 사전 점검</span></div>
-    <h2>앞의 3개가 잘 설치됐는지 확인</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
-<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<text x="34" y="106" class="m b" font-size="13" fill="#FFFFFF">PS C:\Users\hufs&gt; git --version; node --version; npm --version</text><text x="34" y="150" class="m b" font-size="14.5" fill="#7EE787">git version 2.51.0.windows.1</text><text x="34" y="178" class="m b" font-size="14.5" fill="#7EE787">v24.9.0</text><text x="34" y="206" class="m b" font-size="14.5" fill="#7EE787">11.6.2</text><text x="34" y="256" class="m " font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
-<rect x="26" y="87" width="540" height="28" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="590" cy="101" r="15" fill="#F26B21"/><text x="590" y="107" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="26" y="129.5" width="320" height="85.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="370" cy="172.25" r="15" fill="#F26B21"/><text x="370" y="178.25" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="430" y="300" width="442" height="114" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="476" y="330" font-size="13.5" class="b" fill="#F9B27A">빨간 오류가 보이면</text>
-<text x="450" y="356" font-size="12.5" fill="#DCE6EF">git 오류 → 02-git-guide 로</text>
-<text x="450" y="378" font-size="12.5" fill="#DCE6EF">node / npm 오류 → 03-nodejs-guide 로</text>
-<text x="450" y="400" font-size="12.5" fill="#DCE6EF">대부분 터미널을 새로 열면 해결됩니다.</text>
-<circle cx="454" cy="324" r="15" fill="#F26B21"/><text x="454" y="330" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-    </svg></div>
-    <div class="side">
-      <div class="goal"><b>이 단계의 목표</b><p>설치를 시작하기 전에 준비물이 모두 갖춰졌는지 확인합니다.</p></div>
-      <ol class="acts"><li>PowerShell을 <b>새로</b> 열고 아래 한 줄을 붙여넣은 뒤 Enter.</li><li><b>세 줄이 모두</b> 버전 숫자로 나오면 준비 완료입니다.</li><li>빨간 오류가 보이면 해당 가이드(02·03번)로 돌아가세요.</li></ol>
-      <div class="cmd">
-  <b class="lbl">한 번에 확인 (세미콜론으로 3개 연결)</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="git --version; node --version; npm --version">복사</button><pre>git --version; node --version; npm --version</pre></div>
-  </div>
-      <div class="tip info"><b>Node.js가 없어도 됩니다</b><p>다음 <b>방법 A(네이티브 설치)</b>는 Node.js 없이도 동작합니다. 다만 다른 도구를 위해 설치해 두는 편이 좋습니다.</p></div>
+      <section class="slide" data-no="04 / 16">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 2</span><span class="sm">CLAUDE CODE · 설치 (방법 A · 권장)</span></div>
+          <h2>네이티브 설치 — 명령 한 줄</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766" />
+              <rect x="8" y="32" width="884" height="20" fill="#0B3766" />
+              <text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <text x="34" y="106" class="m b" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; irm https://claude.ai/install.ps1 | iex</text>
+              <text x="34" y="150" class="m" font-size="13.5" fill="#9FC6EE">Downloading Claude Code…</text>
+              <text x="34" y="176" class="m" font-size="13.5" fill="#9FC6EE">Installing to C:\Users\hufs\.local\bin</text>
+              <text x="34" y="202" class="m b" font-size="14" fill="#F9B27A">████████████████████████ 100%</text>
+              <text x="34" y="240" class="m b" font-size="14.5" fill="#7EE787">✔ Claude Code installed successfully</text>
+              <text x="34" y="266" class="m" font-size="13.5" fill="#7EE787">Run 'claude' to get started.</text>
+              <text x="34" y="316" class="m" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
+              <rect x="26" y="86" width="500" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="550" cy="100.5" r="15" fill="#F26B21" />
+              <text x="550" y="106.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="26" y="219.5" width="340" height="55.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="390" cy="247.25" r="15" fill="#F26B21" />
+              <text x="390" y="253.25" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="26" y="18" width="210" height="28" rx="6" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="260" cy="32" r="15" fill="#F26B21" />
+              <text x="260" y="38" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="470" y="322" width="402" height="150" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="494" y="354" font-size="13.5" class="b" fill="#F9B27A">붙여넣기 방법</text>
+              <text x="494" y="384" font-size="12.5" fill="#DCE6EF">PowerShell에서는 Ctrl+V 대신</text>
+              <text x="494" y="408" font-size="12.5" class="b" fill="#F9B27A">마우스 오른쪽 클릭 = 붙여넣기</text>
+              <text x="494" y="438" font-size="12" fill="#9FC6EE">(Ctrl+V 도 되는 경우가 많습니다)</text>
+              <text x="494" y="460" font-size="12" fill="#9FC6EE">붙여넣은 뒤 Enter 를 누르세요.</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>Node.js 없이도 동작하고 자동 업데이트되는 권장 방식으로 설치합니다.</p>
+            </div>
+            <ol class="acts">
+              <li><b>PowerShell</b> 창인지 확인합니다. (<code>PS C:\…&gt;</code> 로 시작)</li>
+              <li>아래 명령을 복사해 붙여넣고 <b>Enter</b>. (붙여넣기 = 마우스 오른쪽 클릭)</li>
+              <li><b>installed successfully</b> 가 나올 때까지 1~3분 기다립니다.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">방법 A · 네이티브 설치 (권장)</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="irm https://claude.ai/install.ps1 | iex">복사</button>
+                <pre>irm https://claude.ai/install.ps1 | iex</pre>
+              </div>
+            </div>
+            <div class="tip warn">
+              <b>'irm' 용어가 인식되지 않습니다</b>
+              <p>
+                지금 창이 <b>CMD(명령 프롬프트)</b> 입니다. 이 명령은 <b>PowerShell 전용</b>입니다. Windows 키 → <b>powershell</b> 로 다시 여세요.
+              </p>
+            </div>
+            <div class="tip ok">
+              <b>왜 이 방법이 권장인가요?</b>
+              <p>npm 권한 문제를 피할 수 있고, <b>업데이트가 자동</b>으로 이루어집니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="05 / 16">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 3</span><span class="sm">CLAUDE CODE · 설치 (방법 B)</span></div>
+          <h2>npm 설치 — 방법 A가 막혔을 때</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766" />
+              <rect x="8" y="32" width="884" height="20" fill="#0B3766" />
+              <text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <text x="34" y="106" class="m b" font-size="13.5" fill="#FFFFFF">PS C:\Users\hufs&gt; npm install -g @anthropic-ai/claude-code</text>
+              <text x="34" y="150" class="m" font-size="12.5" fill="#E3B341">npm warn deprecated some-package@1.0.0: no longer supported</text>
+              <text x="34" y="176" class="m" font-size="12.5" fill="#E3B341">npm warn deprecated other-package@2.1.0: use v3 instead</text>
+              <text x="34" y="216" class="m b" font-size="14" fill="#7EE787">added 128 packages in 47s</text>
+              <text x="34" y="266" class="m" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
+              <rect x="26" y="86.5" width="500" height="28.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="550" cy="100.75" r="15" fill="#F26B21" />
+              <text x="550" y="106.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="26" y="131.5" width="480" height="53.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="530" cy="158.25" r="15" fill="#F26B21" />
+              <text x="530" y="164.25" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="26" y="196" width="300" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="350" cy="210.5" r="15" fill="#F26B21" />
+              <text x="350" y="216.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="470" y="310" width="402" height="164" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="494" y="342" font-size="13.5" class="b" fill="#F9B27A">노란 warn 은 정상입니다</text>
+              <text x="494" y="372" font-size="12.5" fill="#DCE6EF">npm은 부가 정보를 노란색으로 알립니다.</text>
+              <text x="494" y="406" font-size="13" class="b" fill="#FF9F6B">빨간 npm ERR! 만 실제 오류</text>
+              <text x="494" y="434" font-size="12.5" fill="#DCE6EF">이 경우 방법 A(네이티브)로 다시 시도하거나</text>
+              <text x="494" y="456" font-size="12.5" fill="#DCE6EF">관리자 권한 PowerShell 로 실행하세요.</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>네이티브 설치가 막히는 환경에서 npm으로 설치합니다.</p>
+            </div>
+            <ol class="acts">
+              <li>아래 npm 명령을 복사해 붙여넣고 Enter. (Node.js가 설치돼 있어야 합니다)</li>
+              <li>노란 <b>warn</b> 메시지는 무시해도 됩니다. 2~4분 기다립니다.</li>
+              <li>마지막에 <b>added … packages</b> 가 나오면 성공입니다.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">방법 B · npm 전역 설치</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="npm install -g @anthropic-ai/claude-code">복사</button>
+                <pre>npm install -g @anthropic-ai/claude-code</pre>
+              </div>
+            </div>
+            <div class="tip warn">
+              <b>권한 오류(EACCES/EPERM)가 나면</b>
+              <p>PowerShell을 <b>관리자 권한으로 실행</b>해 재시도하거나 방법 A(네이티브)를 쓰세요.</p>
+            </div>
+            <div class="tip info">
+              <b>둘 다 설치할 필요 없습니다</b>
+              <p>A 또는 B <b>하나만</b> 하면 됩니다. 둘 다 하면 버전이 충돌할 수 있습니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="06 / 16">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 4</span><span class="sm">CLAUDE CODE · 설치 확인</span></div>
+          <h2>터미널 새로 열고 <b>claude --version</b></h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766" />
+              <rect x="8" y="32" width="884" height="20" fill="#0B3766" />
+              <text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell (새 창)</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <text x="34" y="200" class="m b" font-size="14.5" fill="#FFFFFF">PS C:\Users\hufs&gt; claude --version</text>
+              <text x="34" y="232" class="m b" font-size="15.5" fill="#7EE787">2.0.14 (Claude Code)</text>
+              <text x="34" y="278" class="m b" font-size="14.5" fill="#FFFFFF">PS C:\Users\hufs&gt; claude doctor</text>
+              <text x="34" y="312" class="m" font-size="13.5" fill="#7EE787">✔ Installation native (C:\Users\hufs\.local\bin)</text>
+              <text x="34" y="336" class="m" font-size="13.5" fill="#7EE787">✔ Version 2.0.14 (up to date)</text>
+              <text x="34" y="360" class="m" font-size="13.5" fill="#7EE787">✔ Git 2.51.0</text>
+              <text x="34" y="384" class="m" font-size="13.5" fill="#7EE787">✔ Node.js v24.9.0</text>
+              <text x="34" y="408" class="m" font-size="13.5" fill="#7EE787">✔ Auth logged in</text>
+              <text x="34" y="450" class="m" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
+              <rect x="26" y="179.5" width="340" height="61.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="390" cy="210.25" r="15" fill="#F26B21" />
+              <text x="390" y="216.25" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="26" y="292.5" width="470" height="124.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="520" cy="354.75" r="15" fill="#F26B21" />
+              <text x="520" y="360.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="60" y="66" width="500" height="92" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="106" y="96" font-size="13.5" class="b" fill="#F9B27A">먼저 터미널을 새로 여세요</text>
+              <text x="80" y="122" font-size="12.5" fill="#DCE6EF">설치 전에 열어 둔 창에는 PATH가 반영되지 않습니다.</text>
+              <text x="80" y="144" font-size="12.5" fill="#DCE6EF">창을 모두 닫고 Windows 키 → powershell 로 새로 열기.</text>
+              <circle cx="84" cy="90" r="15" fill="#F26B21" />
+              <text x="84" y="96" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="560" y="500" width="320" height="28" rx="14" fill="#FFF1E7" stroke="#F26B21" />
+              <text x="574" y="519" font-size="13" class="b" fill="#F26B21">✔ 가 모두 초록이면 완벽합니다</text>
+            </svg>
+          </div>
+          <div class="side">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>설치가 정상적으로 끝났는지 확인합니다.</p>
+            </div>
+            <ol class="acts">
+              <li>지금 PowerShell 창을 <b>완전히 닫고 새로</b> 엽니다.</li>
+              <li><code>claude --version</code> 을 실행해 <b>2.x.x</b> 가 나오는지 봅니다.</li>
+              <li><code>claude doctor</code> 를 실행해 ✔ 표시가 모두 초록인지 확인합니다.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">버전 확인</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="claude --version">복사</button>
+                <pre>claude --version</pre>
+              </div>
+            </div>
+            <div class="cmd">
+              <b class="lbl">전체 진단 (문제가 있을 때)</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="claude doctor">복사</button>
+                <pre>claude doctor</pre>
+              </div>
+            </div>
+            <div class="tip warn">
+              <b>"claude 용어가 인식되지 않습니다"</b>
+              <p>① 터미널을 <b>새로</b> 열었는지 확인 ② PC 재부팅 ③ 그래도 안 되면 다른 설치 방법(A↔B)으로 재시도.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="07 / 16">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 5</span><span class="sm">CLAUDE CODE · 첫 실행</span></div>
+          <h2>작업 폴더에서 <b>claude</b> 실행</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766" />
+              <rect x="8" y="32" width="884" height="20" fill="#0B3766" />
+              <text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <text x="34" y="106" class="m b" font-size="13.5" fill="#FFFFFF">PS C:\Users\hufs&gt; cd "$HOME\Desktop\dev\hello-claude"</text>
+              <text x="34" y="140" class="m b" font-size="14.5" fill="#FFFFFF">PS ...\hello-claude&gt; claude</text>
+              <rect x="26" y="86.5" width="450" height="28.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="500" cy="100.75" r="15" fill="#F26B21" />
+              <text x="500" y="106.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="26" y="119.5" width="250" height="29.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="300" cy="134.25" r="15" fill="#F26B21" />
+              <text x="300" y="140.25" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="34" y="192" width="820" height="318" rx="10" fill="#0B1F33" stroke="#D97757" stroke-width="1.5" />
+              <text x="60" y="228" font-size="17" class="b" fill="#D97757">✻ Welcome to Claude Code</text>
+              <text x="60" y="258" font-size="13" class="m" fill="#9FC6EE">cwd: C:\Users\hufs\Desktop\dev\hello-claude</text>
+              <text x="60" y="300" font-size="13.5" class="b" fill="#E6EDF3">Choose the text style that looks best with your terminal:</text>
+              <text x="60" y="326" font-size="12" fill="#8FA6BC">To change this later, run /theme</text>
+              <text x="60" y="364" font-size="13.5" class="b" fill="#F9B27A">❯ 1. Dark mode ✔</text>
+              <text x="60" y="392" font-size="13.5" fill="#8FA6BC">2. Light mode</text>
+              <text x="60" y="420" font-size="13.5" fill="#8FA6BC">3. Dark mode (colorblind-friendly)</text>
+              <text x="60" y="448" font-size="13.5" fill="#8FA6BC">4. Light mode (colorblind-friendly)</text>
+              <text x="60" y="488" font-size="12" fill="#8FA6BC">Enter to confirm · ↑↓ to select</text>
+              <rect x="50" y="348" width="400" height="30" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="490" cy="363" r="15" fill="#F26B21" />
+              <text x="490" y="369" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+            </svg>
+          </div>
+          <div class="side">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>클로드 코드를 실제로 켭니다. 실행한 폴더가 곧 작업 대상입니다.</p>
+            </div>
+            <ol class="acts">
+              <li>작업 폴더를 만들고 그 안으로 이동합니다.</li>
+              <li><b>claude</b> 라고 입력하고 Enter.</li>
+              <li>처음이면 <b>테마 선택</b> 화면이 나옵니다. 화살표로 고르고 Enter.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">① 작업 폴더 만들고 이동</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c='mkdir "$HOME\Desktop\dev\hello-claude" -Force; cd "$HOME\Desktop\dev\hello-claude"'>
+                  복사
+                </button>
+                <pre>mkdir "$HOME\Desktop\dev\hello-claude" -Force; cd "$HOME\Desktop\dev\hello-claude"</pre>
+              </div>
+            </div>
+            <div class="cmd">
+              <b class="lbl">② 클로드 코드 실행</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="claude">복사</button>
+                <pre>claude</pre>
+              </div>
+            </div>
+            <div class="tip warn">
+              <b>아무 폴더에서나 켜지 마세요</b>
+              <p>클로드 코드는 <b>실행한 폴더의 파일을 읽고 고칩니다.</b> 반드시 작업용 폴더를 만들어 그 안에서 실행하세요.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="08 / 16">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 6</span><span class="sm">CLAUDE CODE · 로그인</span></div>
+          <h2>브라우저로 로그인하기</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" />
+              <rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766" />
+              <rect x="8" y="32" width="884" height="20" fill="#0B3766" />
+              <text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+              <rect x="30" y="70" width="500" height="230" rx="10" fill="#0B1F33" stroke="#D97757" stroke-width="1.5" />
+              <text x="54" y="104" font-size="15" class="b" fill="#D97757">✻ Select login method</text>
+              <text x="54" y="146" font-size="13.5" class="b" fill="#F9B27A">❯ 1. Claude account with subscription</text>
+              <text x="72" y="170" font-size="12" fill="#8FA6BC">Pro · Max · Team · Enterprise 플랜</text>
+              <text x="54" y="212" font-size="13.5" fill="#8FA6BC">2. Anthropic Console account</text>
+              <text x="72" y="236" font-size="12" fill="#6D8299">API 사용량 과금(개발자용)</text>
+              <text x="54" y="276" font-size="12" fill="#8FA6BC">Enter to confirm · ↑↓ to select</text>
+              <rect x="30" y="316" width="500" height="96" rx="10" fill="#0B1F33" stroke="#2A6EA6" />
+              <text x="54" y="346" font-size="13" fill="#E6EDF3">Opening browser to sign in…</text>
+              <text x="54" y="376" font-size="11.5" class="m" fill="#58A6FF">https://claude.ai/oauth/authorize?code=...</text>
+              <text x="54" y="398" font-size="11.5" fill="#8FA6BC">안 열리면 위 주소를 복사해 직접 붙여넣으세요.</text>
+              <rect x="30" y="428" width="500" height="80" rx="10" fill="#0B1F33" stroke="#1A7F37" />
+              <text x="54" y="462" font-size="14" class="b" fill="#7EE787">✔ Login successful</text>
+              <text x="54" y="490" font-size="12" fill="#8FA6BC">이제 클로드 코드를 사용할 수 있습니다.</text>
+              <rect x="600" y="70" width="272" height="438" rx="10" fill="#FFFFFF" stroke="#D9E0E8" />
+              <rect x="600" y="70" width="272" height="42" rx="10" fill="#EDF1F5" />
+              <rect x="600" y="98" width="272" height="14" fill="#EDF1F5" />
+              <circle cx="620" cy="90" r="5" fill="#FF5F57" />
+              <circle cx="636" cy="90" r="5" fill="#FEBC2E" />
+              <circle cx="652" cy="90" r="5" fill="#28C840" />
+              <rect x="668" y="80" width="188" height="20" rx="10" fill="#FFFFFF" stroke="#D9E0E8" />
+              <text x="678" y="94" class="m" font-size="9" fill="#5B6B7C">claude.ai/oauth/authorize</text>
+              <text x="736" y="164" text-anchor="middle" font-size="30">✻</text>
+              <text x="736" y="204" text-anchor="middle" font-size="16" class="b" fill="#16202B">Claude Code</text>
+              <text x="736" y="234" text-anchor="middle" font-size="12" fill="#5B6B7C">터미널의 Claude Code가</text>
+              <text x="736" y="254" text-anchor="middle" font-size="12" fill="#5B6B7C">계정 접근 권한을 요청합니다.</text>
+              <rect x="628" y="288" width="216" height="64" rx="8" fill="#F4F6F9" stroke="#D9E0E8" />
+              <text x="646" y="314" font-size="11" fill="#5B6B7C">계정: hufs.staff@gmail.com</text>
+              <text x="646" y="338" font-size="11" class="b" fill="#1A7F37">플랜: Claude Pro ✔</text>
+              <rect x="628" y="382" width="216" height="42" rx="8" fill="#D97757" />
+              <text x="736" y="409" text-anchor="middle" font-size="14" class="b" fill="#FFFFFF">Authorize</text>
+              <rect x="628" y="436" width="216" height="38" rx="8" fill="#FFFFFF" stroke="#D9E0E8" />
+              <text x="736" y="460" text-anchor="middle" font-size="13" fill="#5B6B7C">거부</text>
+              <rect x="46" y="130" width="400" height="50" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="486" cy="155" r="15" fill="#F26B21" />
+              <text x="486" y="161" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="46" y="358" width="468" height="52" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="552" cy="384" r="15" fill="#F26B21" />
+              <text x="552" y="390" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="624" y="378" width="224" height="50" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="600" cy="403" r="15" fill="#F26B21" />
+              <text x="600" y="409" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="46" y="440" width="300" height="34" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="386" cy="457" r="15" fill="#F26B21" />
+              <text x="386" y="463" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+            </svg>
+          </div>
+          <div class="side">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>Claude 계정과 연결해 사용 준비를 마칩니다.</p>
+            </div>
+            <ol class="acts">
+              <li><b>Claude account with subscription</b> (구독 계정)을 선택하고 Enter.</li>
+              <li>브라우저가 자동으로 열립니다. 안 열리면 화면의 <b>주소를 복사</b>해 직접 붙여넣습니다.</li>
+              <li>브라우저에서 <b>Authorize</b> 를 누릅니다.</li>
+              <li>터미널로 돌아오면 <b>Login successful</b> 이 뜹니다.</li>
+            </ol>
+
+            <div class="tip warn">
+              <b>유료 플랜이 필요합니다</b>
+              <p>
+                Claude Code는 <b>Pro · Max · Team · Enterprise</b> 유료 플랜에서 사용합니다. <b>무료 플랜으로는 로그인해도 사용할 수 없습니다.</b>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="09 / 16">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 7</span><span class="sm">CLAUDE CODE · 첫 대화</span></div>
+          <h2>한국어로 말해서 프로그램 만들기</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" />
+              <rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766" />
+              <rect x="8" y="32" width="884" height="20" fill="#0B3766" />
+              <text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell — claude</text>
+              <text x="34" y="86" font-size="15" class="b" fill="#D97757">✻ Claude Code v2.0.14</text>
+              <text x="34" y="110" font-size="12" class="m" fill="#8FA6BC">cwd: C:\Users\hufs\Desktop\dev\hello-claude</text>
+              <rect x="34" y="132" width="700" height="52" rx="8" fill="#0B1F33" stroke="#D97757" />
+              <text x="52" y="164" font-size="13.5" class="b" fill="#FFFFFF">&gt; 한국어로 인사하는 간단한 웹페이지를 index.html 로 만들어줘.</text>
+              <text x="52" y="212" font-size="13.5" fill="#E6EDF3">알겠습니다. index.html 파일을 만들겠습니다.</text>
+              <rect x="34" y="230" width="700" height="152" rx="8" fill="#0B1F33" stroke="#2A6EA6" />
+              <text x="54" y="256" font-size="12.5" class="b" fill="#F9B27A">Create index.html</text>
+              <text x="54" y="284" font-size="11.5" class="m" fill="#7EE787">+ &lt;!DOCTYPE html&gt;</text>
+              <text x="54" y="304" font-size="11.5" class="m" fill="#7EE787">+ &lt;html lang="ko"&gt;</text>
+              <text x="54" y="324" font-size="11.5" class="m" fill="#7EE787">+ &lt;h1&gt;안녕하세요 👋&lt;/h1&gt;</text>
+              <text x="54" y="344" font-size="11.5" class="m" fill="#7EE787">+ &lt;button onclick="showDate()"&gt;오늘 날짜 보기&lt;/button&gt;</text>
+              <text x="54" y="368" font-size="11.5" class="m" fill="#8FA6BC">… 12 more lines</text>
+              <rect x="34" y="404" width="440" height="102" rx="8" fill="#0B1F33" stroke="#F26B21" stroke-width="1.5" />
+              <text x="54" y="430" font-size="12.5" class="b" fill="#E6EDF3">Do you want to create index.html?</text>
+              <text x="54" y="460" font-size="13" class="b" fill="#F9B27A">❯ 1. Yes</text>
+              <text x="54" y="486" font-size="12.5" fill="#8FA6BC">2. No, tell Claude what to do differently</text>
+              <rect x="500" y="404" width="360" height="102" rx="8" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="522" y="432" font-size="12.5" class="b" fill="#F9B27A">③ 승인이 안전장치입니다</text>
+              <text x="522" y="460" font-size="11.5" fill="#DCE6EF">내용을 확인하고 Yes를 고르면</text>
+              <text x="522" y="482" font-size="11.5" fill="#DCE6EF">그때 실제로 파일이 만들어집니다.</text>
+              <rect x="30" y="128" width="708" height="60" rx="10" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="762" cy="158" r="15" fill="#F26B21" />
+              <text x="762" y="164" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="30" y="226" width="708" height="160" rx="10" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="762" cy="306" r="15" fill="#F26B21" />
+              <text x="762" y="312" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="46" y="446" width="200" height="26" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="270" cy="459" r="15" fill="#F26B21" />
+              <text x="270" y="465" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+            </svg>
+          </div>
+          <div class="side">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>바이브 코딩을 직접 체험합니다. 코드를 몰라도 한국어로 요청하면 됩니다.</p>
+            </div>
+            <ol class="acts">
+              <li><code>&gt;</code> 표시 옆에 <b>한국어로</b> 원하는 것을 적고 Enter.</li>
+              <li>클로드가 만들 파일 내용을 미리 보여 줍니다. 내용을 확인합니다.</li>
+              <li><b>1. Yes</b> 를 골라 승인하면 실제로 파일이 만들어집니다.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">첫 요청 예시 (그대로 복사해 붙여넣기)</b>
+              <div class="cmdwrap">
+                <button
+                  class="cp"
+                  type="button"
+                  data-c="한국어로 인사하는 간단한 웹페이지를 index.html 로 만들어줘. 버튼을 누르면 오늘 날짜가 표시되게 해줘."
+                >
+                  복사
+                </button>
+                <pre>한국어로 인사하는 간단한 웹페이지를 index.html 로 만들어줘. 버튼을 누르면 오늘 날짜가 표시되게 해줘.</pre>
+              </div>
+            </div>
+            <div class="tip ok">
+              <b>승인(Yes)이 안전장치입니다</b>
+              <p>클로드 코드는 파일을 만들거나 고치기 전에 <b>항상 물어봅니다.</b> 내용을 보고 Yes를 골라야 실행됩니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="10 / 16">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 8</span><span class="sm">CLAUDE CODE · 결과 확인</span></div>
+          <h2>만들어진 파일 확인하고 열어 보기</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" />
+              <rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766" />
+              <rect x="8" y="32" width="884" height="20" fill="#0B3766" />
+              <text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+              <text x="34" y="86" class="m b" font-size="13.5" fill="#FFFFFF">&gt; /exit</text>
+              <text x="34" y="128" class="m b" font-size="13.5" fill="#FFFFFF">PS ...\hello-claude&gt; dir</text>
+              <text x="34" y="158" class="m" font-size="12.5" fill="#9FC6EE">Mode LastWriteTime Length Name</text>
+              <text x="34" y="180" class="m" font-size="12.5" fill="#9FC6EE">---- ------------- ------ ----</text>
+              <text x="34" y="204" class="m b" font-size="12.5" fill="#7EE787">-a---- 2026-07-26 10:24 842 index.html</text>
+              <text x="34" y="248" class="m b" font-size="13.5" fill="#FFFFFF">PS ...\hello-claude&gt; start index.html</text>
+              <rect x="370" y="282" width="494" height="238" rx="10" fill="#FFFFFF" stroke="#D9E0E8" />
+              <rect x="370" y="282" width="494" height="40" rx="10" fill="#EDF1F5" />
+              <rect x="370" y="308" width="494" height="14" fill="#EDF1F5" />
+              <circle cx="392" cy="302" r="5" fill="#FF5F57" />
+              <circle cx="408" cy="302" r="5" fill="#FEBC2E" />
+              <circle cx="424" cy="302" r="5" fill="#28C840" />
+              <rect x="446" y="292" width="300" height="20" rx="10" fill="#FFFFFF" stroke="#D9E0E8" />
+              <text x="458" y="306" class="m" font-size="9.5" fill="#5B6B7C">file:///C:/Users/hufs/.../index.html</text>
+              <text x="617" y="374" text-anchor="middle" font-size="26" class="b" fill="#16202B">안녕하세요 👋</text>
+              <text x="617" y="404" text-anchor="middle" font-size="13" fill="#5B6B7C">클로드 코드로 만든 첫 웹페이지입니다</text>
+              <rect x="527" y="424" width="180" height="42" rx="8" fill="#D97757" />
+              <text x="617" y="451" text-anchor="middle" font-size="14" class="b" fill="#FFFFFF">오늘 날짜 보기</text>
+              <rect x="497" y="478" width="240" height="30" rx="8" fill="#F4F6F9" stroke="#D9E0E8" />
+              <text x="617" y="498" text-anchor="middle" font-size="13" class="b" fill="#16202B">2026년 7월 26일</text>
+              <rect x="26" y="290" width="320" height="160" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="48" y="322" font-size="13.5" class="b" fill="#F9B27A">다시 켜려면</text>
+              <text x="48" y="352" font-size="12.5" fill="#DCE6EF">같은 폴더에서 claude 입력</text>
+              <text x="48" y="382" font-size="13.5" class="b" fill="#F9B27A">이전 대화를 이어서</text>
+              <text x="48" y="412" font-size="12.5" fill="#DCE6EF">claude --continue</text>
+              <text x="48" y="438" font-size="12" fill="#9FC6EE">코드를 보려면 code .</text>
+              <rect x="26" y="68" width="160" height="28" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="210" cy="82" r="15" fill="#F26B21" />
+              <text x="210" y="88" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="26" y="110" width="300" height="108" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="350" cy="164" r="15" fill="#F26B21" />
+              <text x="350" y="170" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="26" y="230" width="340" height="28" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="390" cy="244" r="15" fill="#F26B21" />
+              <text x="390" y="250" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>클로드 코드가 실제로 파일을 만들었는지 확인하고 결과를 봅니다.</p>
+            </div>
+            <ol class="acts">
+              <li><b>/exit</b> 를 입력해 클로드 코드를 빠져나옵니다. (Ctrl+C 두 번도 가능)</li>
+              <li><code>dir</code> 로 <b>index.html</b> 이 생겼는지 확인합니다.</li>
+              <li><code>start index.html</code> 로 브라우저에서 열어 봅니다.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">① 파일 목록 확인</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="dir">복사</button>
+                <pre>dir</pre>
+              </div>
+            </div>
+            <div class="cmd">
+              <b class="lbl">② 브라우저로 열어 보기</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="start index.html">복사</button>
+                <pre>start index.html</pre>
+              </div>
+            </div>
+            <div class="tip ok">
+              <b>이것이 바이브 코딩입니다</b>
+              <p>
+                코드를 한 줄도 쓰지 않고 <b>한국어 요청만으로</b> 동작하는 웹페이지를 만들었습니다. 수정도 <code>claude</code> 를 다시 켜고 말하면
+                됩니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="11 / 16">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 9</span><span class="sm">CLAUDE CODE · 기본 사용법</span></div>
+          <h2>꼭 알아야 할 슬래시 명령</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" />
+              <rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766" />
+              <rect x="8" y="32" width="884" height="20" fill="#0B3766" />
+              <text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell — claude</text>
+              <rect x="34" y="72" width="500" height="46" rx="8" fill="#0B1F33" stroke="#D97757" />
+              <text x="54" y="101" font-size="15" class="b" fill="#FFFFFF">&gt; /</text>
+              <rect x="34" y="132" width="500" height="356" rx="8" fill="#0B1F33" stroke="#2A6EA6" />
+              <rect x="42" y="142" width="484" height="34" rx="6" fill="#1F6FEB" opacity="0.2" />
+              <text x="60" y="165" font-size="13.5" class="b m" fill="#F9B27A">/clear</text>
+              <text x="200" y="165" font-size="12.5" fill="#E6EDF3">대화 기록 지우고 새로 시작</text>
+              <text x="60" y="207" font-size="13.5" class="m" fill="#9FC6EE">/help</text>
+              <text x="200" y="207" font-size="12.5" fill="#8FA6BC">사용법·명령 목록 보기</text>
+              <text x="60" y="249" font-size="13.5" class="m" fill="#9FC6EE">/init</text>
+              <text x="200" y="249" font-size="12.5" fill="#8FA6BC">프로젝트 규칙 파일(CLAUDE.md) 생성</text>
+              <text x="60" y="291" font-size="13.5" class="m" fill="#9FC6EE">/model</text>
+              <text x="200" y="291" font-size="12.5" fill="#8FA6BC">사용할 모델 바꾸기</text>
+              <text x="60" y="333" font-size="13.5" class="m" fill="#9FC6EE">/status</text>
+              <text x="200" y="333" font-size="12.5" fill="#8FA6BC">로그인 계정·버전·사용량 확인</text>
+              <text x="60" y="375" font-size="13.5" class="m" fill="#9FC6EE">/exit</text>
+              <text x="200" y="375" font-size="12.5" fill="#8FA6BC">클로드 코드 종료</text>
+              <text x="60" y="417" font-size="13.5" class="m" fill="#6D8299">/theme</text>
+              <text x="200" y="417" font-size="12.5" fill="#6D8299">화면 색상 테마 변경</text>
+              <text x="60" y="462" font-size="12" fill="#6D8299">↑↓ 로 선택 · Enter 로 실행 · Esc 로 닫기</text>
+              <rect x="560" y="132" width="302" height="356" rx="8" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="582" y="166" font-size="14" class="b" fill="#F9B27A">초보자가 쓰는 5개</text>
+              <text x="582" y="204" font-size="13" class="b m" fill="#FFFFFF">/clear</text>
+              <text x="582" y="226" font-size="11.5" fill="#DCE6EF">주제가 바뀌면 반드시</text>
+              <text x="582" y="260" font-size="13" class="b m" fill="#FFFFFF">/help</text>
+              <text x="582" y="282" font-size="11.5" fill="#DCE6EF">막히면 여기부터</text>
+              <text x="582" y="316" font-size="13" class="b m" fill="#FFFFFF">/init</text>
+              <text x="582" y="338" font-size="11.5" fill="#DCE6EF">새 프로젝트 시작할 때</text>
+              <text x="582" y="372" font-size="13" class="b m" fill="#FFFFFF">/status</text>
+              <text x="582" y="394" font-size="11.5" fill="#DCE6EF">로그인·사용량 확인</text>
+              <text x="582" y="428" font-size="13" class="b m" fill="#FFFFFF">/exit</text>
+              <text x="582" y="450" font-size="11.5" fill="#DCE6EF">끝낼 때 (Ctrl+C 두 번도 가능)</text>
+              <rect x="30" y="68" width="508" height="54" rx="10" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="562" cy="95" r="15" fill="#F26B21" />
+              <text x="562" y="101" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="38" y="138" width="492" height="42" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="20" cy="159" r="15" fill="#F26B21" />
+              <text x="20" y="165" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="556" y="128" width="310" height="364" rx="10" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="534" cy="310" r="15" fill="#F26B21" />
+              <text x="534" y="316" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>클로드 코드 안에서 쓰는 기본 명령을 익힙니다.</p>
+            </div>
+            <ol class="acts">
+              <li>클로드 코드 실행 중에 <b>/</b> 를 입력합니다.</li>
+              <li>명령 목록이 나오면 <b>↑↓</b> 로 고르고 <b>Enter</b>.</li>
+              <li>초보자는 오른쪽의 <b>5개</b>만 알면 충분합니다.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">대화 새로 시작 (맥락 초기화)</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="/clear">복사</button>
+                <pre>/clear</pre>
+              </div>
+            </div>
+            <div class="cmd">
+              <b class="lbl">종료</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="/exit">복사</button>
+                <pre>/exit</pre>
+              </div>
+            </div>
+            <div class="tip info">
+              <b>/clear 를 자주 쓰세요</b>
+              <p>
+                주제가 바뀌면 <b>/clear</b> 로 정리하세요. 이전 대화가 섞여 엉뚱한 답이 나오는 것을 막습니다. 새 프로젝트를 시작할 때는 <b>/init</b>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="12 / 16">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 10</span><span class="sm">CLAUDE CODE · VS Code 연동</span></div>
+          <h2>VS Code 안에서 클로드 코드 쓰기</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#1E1E1E" />
+              <rect x="8" y="8" width="884" height="34" rx="8" fill="#323233" />
+              <rect x="8" y="30" width="884" height="12" fill="#323233" />
+              <text x="30" y="30" font-size="12" fill="#CCCCCC">파일 편집 선택 보기 이동 실행 터미널 도움말</text>
+              <rect x="8" y="42" width="52" height="510" fill="#333333" />
+              <text x="34" y="76" text-anchor="middle" font-size="19" fill="#FFFFFF">🗂</text>
+              <text x="34" y="118" text-anchor="middle" font-size="17" fill="#8A8A8A">🔍</text>
+              <text x="34" y="160" text-anchor="middle" font-size="17" fill="#8A8A8A">⑂</text>
+              <rect x="60" y="42" width="200" height="286" fill="#252526" />
+              <text x="80" y="72" font-size="11.5" class="b" fill="#CCCCCC">탐색기</text>
+              <text x="80" y="102" font-size="11.5" class="b" fill="#CCCCCC">▾ HELLO-CLAUDE</text>
+              <text x="96" y="128" font-size="11.5" fill="#E2C08D">📄 index.html</text>
+              <text x="96" y="152" font-size="11.5" fill="#73C991">📄 style.css</text>
+              <text x="96" y="176" font-size="11.5" fill="#9CDCFE">📄 CLAUDE.md</text>
+              <rect x="260" y="42" width="632" height="286" fill="#1E1E1E" />
+              <rect x="260" y="42" width="632" height="30" fill="#252526" />
+              <rect x="260" y="42" width="120" height="30" fill="#1E1E1E" />
+              <text x="278" y="62" font-size="11" fill="#FFFFFF">index.html</text>
+              <text x="284" y="102" class="m" font-size="11.5" fill="#569CD6">&lt;!DOCTYPE html&gt;</text>
+              <text x="284" y="124" class="m" font-size="11.5" fill="#569CD6">&lt;html lang="ko"&gt;</text>
+              <text x="300" y="146" class="m" font-size="11.5" fill="#569CD6">&lt;body&gt;</text>
+              <text x="316" y="168" class="m" font-size="11.5" fill="#CE9178">&lt;h1&gt;안녕하세요 👋&lt;/h1&gt;</text>
+              <text x="316" y="190" class="m" font-size="11.5" fill="#CE9178">&lt;button onclick="showDate()"&gt;오늘 날짜&lt;/button&gt;</text>
+              <text x="300" y="212" class="m" font-size="11.5" fill="#569CD6">&lt;/body&gt;</text>
+              <text x="284" y="234" class="m" font-size="11.5" fill="#569CD6">&lt;/html&gt;</text>
+              <rect x="60" y="328" width="832" height="200" fill="#181818" />
+              <rect x="60" y="328" width="832" height="28" fill="#252526" />
+              <text x="84" y="347" font-size="11" fill="#FFFFFF">문제 출력 디버그 콘솔 터미널</text>
+              <rect x="228" y="330" width="60" height="24" fill="#181818" />
+              <text x="258" y="347" font-size="11" class="b" fill="#FFFFFF">터미널</text>
+              <text x="84" y="382" class="m b" font-size="12" fill="#D97757">✻ Claude Code v2.0.14</text>
+              <text x="84" y="406" class="m b" font-size="12" fill="#FFFFFF">&gt; 글자를 더 크게 하고 배경색을 연한 하늘색으로 바꿔줘</text>
+              <text x="84" y="434" class="m" font-size="12" fill="#CCCCCC">style.css 를 수정하겠습니다.</text>
+              <text x="84" y="456" class="m" font-size="12" fill="#73C991">✔ Updated style.css (+4 -1)</text>
+              <text x="84" y="484" class="m" font-size="12" fill="#FFFFFF">&gt; _</text>
+              <rect x="8" y="528" width="884" height="24" fill="#007ACC" />
+              <text x="30" y="544" font-size="11" fill="#FFFFFF">⑂ main* ⊗ 0 ⚠ 0</text>
+              <rect x="24" y="12" width="60" height="24" rx="4" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="300" cy="24" r="15" fill="#F26B21" />
+              <text x="300" y="30" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="56" y="324" width="300" height="36" rx="6" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="380" cy="342" r="15" fill="#F26B21" />
+              <text x="380" y="348" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="76" y="368" width="560" height="50" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="660" cy="393" r="15" fill="#F26B21" />
+              <text x="660" y="399" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="72" y="112" width="190" height="76" rx="6" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="286" cy="150" r="15" fill="#F26B21" />
+              <text x="286" y="156" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>편집기와 터미널을 한 화면에서 함께 써 작업 효율을 높입니다.</p>
+            </div>
+            <ol class="acts">
+              <li>VS Code에서 작업 폴더를 엽니다. (우클릭 → Code로 열기)</li>
+              <li><b>Ctrl + `</b> 로 아래쪽 터미널을 엽니다.</li>
+              <li>터미널에 <b>claude</b> 를 입력하고 한국어로 요청합니다.</li>
+              <li>왼쪽 파일 목록에서 결과가 바뀌는 것을 <b>실시간으로</b> 확인합니다.</li>
+            </ol>
+
+            <div class="tip ok">
+              <b>이 조합이 가장 편합니다</b>
+              <p>왼쪽 = 파일 목록·코드, 아래 = 클로드 코드 대화. <b>바뀌는 내용을 눈으로 확인</b>하면서 작업할 수 있습니다.</p>
+            </div>
+            <div class="tip info">
+              <b>VS Code 확장도 있습니다</b>
+              <p>확장 검색에서 <b>Claude Code</b> 를 설치하면 사이드 패널에서도 쓸 수 있습니다. 터미널 방식만으로도 충분합니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="13 / 16">
+        <div class="rail acc"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 1/2</span></div>
+          <h2>Claude Code 명령어 모음 (복사해서 사용) <span style="font-size: 22px; color: #8a94a0; font-weight: 700">(1/2)</span></h2>
+          <p class="lead">터미널 명령(PowerShell)과 클로드 코드 안에서 쓰는 슬래시 명령을 모았습니다.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="cgrid">
+          <div class="ccard">
+            <div class="ct">① 설치 — 방법 A · 네이티브 (권장)</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="irm https://claude.ai/install.ps1 | iex">복사</button>
+              <pre>irm https://claude.ai/install.ps1 | iex</pre>
+            </div>
+
+            <div class="cd"><b>PowerShell 전용</b>입니다. CMD에서는 동작하지 않습니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">② 설치 — 방법 B · npm</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="npm install -g @anthropic-ai/claude-code">복사</button>
+              <pre>npm install -g @anthropic-ai/claude-code</pre>
+            </div>
+
+            <div class="cd">Node.js가 있어야 합니다. A가 막힐 때만 사용하세요.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">③ 버전 확인</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="claude --version">복사</button>
+              <pre>claude --version</pre>
+            </div>
+            <div class="out">→ 2.x.x (Claude Code)</div>
+            <div class="cd">설치가 끝났는지 확인하는 명령입니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">④ 전체 진단 (문제 생기면 가장 먼저)</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="claude doctor">복사</button>
+              <pre>claude doctor</pre>
+            </div>
+
+            <div class="cd">설치·버전·인증 상태를 한 번에 점검합니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">⑤ 실행 (작업 폴더 안에서)</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="claude">복사</button>
+              <pre>claude</pre>
+            </div>
+
+            <div class="cd">실행한 폴더가 곧 작업 대상입니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">⑥ 이전 대화 이어서 실행</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="claude --continue">복사</button>
+              <pre>claude --continue</pre>
+            </div>
+
+            <div class="cd">마지막 대화를 그대로 이어 갑니다.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="14 / 16">
+        <div class="rail acc"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 2/2</span></div>
+          <h2>Claude Code 명령어 모음 (복사해서 사용) <span style="font-size: 22px; color: #8a94a0; font-weight: 700">(2/2)</span></h2>
+          <p class="lead">터미널 명령(PowerShell)과 클로드 코드 안에서 쓰는 슬래시 명령을 모았습니다.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="cgrid">
+          <div class="ccard">
+            <div class="ct">⑦ 업데이트</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="claude update">복사</button>
+              <pre>claude update</pre>
+            </div>
+
+            <div class="cd">네이티브 설치는 보통 자동 업데이트됩니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">⑧ 작업 폴더 만들고 바로 시작 (한 줄)</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c='mkdir "$HOME\Desktop\dev\my-app" -Force; cd "$HOME\Desktop\dev\my-app"; claude'>복사</button>
+              <pre>mkdir "$HOME\Desktop\dev\my-app" -Force; cd "$HOME\Desktop\dev\my-app"; claude</pre>
+            </div>
+
+            <div class="cd">폴더 생성 → 이동 → 실행을 한 번에 합니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">⑨ 실행 정책 오류가 날 때</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="Set-ExecutionPolicy -Scope CurrentUser RemoteSigned">복사</button>
+              <pre>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</pre>
+            </div>
+
+            <div class="cd">"스크립트를 실행할 수 없으므로" 오류에 사용. 물어보면 <b>Y</b>.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">⑩ 한글이 깨질 때</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="chcp 65001">복사</button>
+              <pre>chcp 65001</pre>
+            </div>
+
+            <div class="cd">터미널 인코딩을 UTF-8로 바꿉니다.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="15 / 16">
+        <div class="rail acc"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">문제 해결</span><span class="sm">TROUBLESHOOTING</span></div>
+          <h2>Claude Code — 문제가 생겼을 때</h2>
+          <p class="lead">무엇을 해도 안 되면 <code>claude doctor</code> 부터 실행하세요.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="tbwrap">
+          <table class="tb">
+            <thead>
+              <tr>
+                <th style="width: 29%">이런 화면·메시지가 나오면</th>
+                <th style="width: 24%">원인</th>
+                <th>이렇게 해결하세요</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="s"><code>'irm' 용어가 … 인식되지 않습니다</code></td>
+                <td class="c">지금 창이 CMD(명령 프롬프트)</td>
+                <td>
+                  <code>irm</code> 은 PowerShell 전용 명령입니다. Windows 키 → <b>powershell</b> 입력 → <b>Windows PowerShell</b> 실행 후 다시
+                  시도하세요.
+                </td>
+              </tr>
+              <tr>
+                <td class="s"><code>'claude' 용어가 … 인식되지 않습니다</code></td>
+                <td class="c">PATH 미반영</td>
+                <td>
+                  ① 터미널 <b>완전히 닫고 새로 열기</b> ② PC 재부팅 ③ <code>claude doctor</code> ④ 그래도 안 되면 다른 설치 방식(A↔B)으로 재시도.
+                </td>
+              </tr>
+              <tr>
+                <td class="s"><code>이 시스템에서 스크립트를 실행할 수 없으므로</code></td>
+                <td class="c">PowerShell 실행 정책 제한</td>
+                <td><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> 실행 → <b>Y</b> 입력 → 터미널 새로 열기.</td>
+              </tr>
+              <tr>
+                <td class="s">로그인은 되는데 사용이 막힘</td>
+                <td class="c">무료 플랜 계정</td>
+                <td>
+                  Claude Code는 <b>Pro·Max·Team·Enterprise</b> 유료 플랜이 필요합니다. claude.ai에서 플랜을 확인하세요. 결제 후
+                  <code>/status</code> 로 재확인.
+                </td>
+              </tr>
+              <tr>
+                <td class="s">브라우저가 안 열려 로그인 불가</td>
+                <td class="c">기본 브라우저 설정·보안 정책</td>
+                <td>터미널에 표시된 <code>https://claude.ai/oauth/…</code> 주소를 <b>드래그해 복사</b>한 뒤 브라우저 주소창에 직접 붙여넣으세요.</td>
+              </tr>
+              <tr>
+                <td class="s"><code>npm ERR! EACCES</code> 권한 오류</td>
+                <td class="c">npm 전역 설치 권한</td>
+                <td>관리자 PowerShell로 재시도하거나, <b>방법 A(네이티브 설치)</b>로 바꾸세요. <b>권한을 강제로 바꾸지 마세요.</b></td>
+              </tr>
+              <tr>
+                <td class="s">한글이 깨져 보임</td>
+                <td class="c">터미널 인코딩</td>
+                <td>
+                  PowerShell에서 <code>chcp 65001</code> 실행. 또는 <b>Windows Terminal</b>(Microsoft Store 무료)을 설치해 사용하면 한글이 깔끔합니다.
+                </td>
+              </tr>
+              <tr>
+                <td class="s">엉뚱한 폴더의 파일을 고침</td>
+                <td class="c">잘못된 위치에서 실행</td>
+                <td>
+                  <code>/exit</code> 후 <code>cd</code> 로 <b>작업 폴더로 이동</b>한 뒤 다시 <code>claude</code> 실행. 실행 위치가 곧 작업 범위입니다.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="slide" data-no="16 / 16">
+        <div class="rail acc"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">마무리</span><span class="sm">CHECKLIST &amp; NEXT</span></div>
+          <h2>전체 설치 완료 — 이제 시작입니다</h2>
+          <p class="lead">5개 프로그램이 모두 준비됐습니다. 아래 명령으로 최종 점검하세요.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="two">
+          <div class="panel">
+            <h3>✅ 완료 체크리스트</h3>
+            <ul class="chk">
+              <li>
+                <span class="box"></span
+                ><span><span class="t">GitHub 계정을 만들었다</span><span class="d">아이디·비밀번호·복구 코드 보관</span></span>
+              </li>
+              <li>
+                <span class="box"></span><span><span class="t">git --version 이 나온다</span><span class="d">이름·이메일 설정 완료</span></span>
+              </li>
+              <li>
+                <span class="box"></span><span><span class="t">node --version / npm --version 이 나온다</span><span class="d">LTS 버전</span></span>
+              </li>
+              <li>
+                <span class="box"></span><span><span class="t">code --version 이 나온다</span><span class="d">VS Code PATH 등록 완료</span></span>
+              </li>
+              <li>
+                <span class="box"></span><span><span class="t">claude --version 이 나온다</span><span class="d">2.x.x (Claude Code)</span></span>
+              </li>
+              <li>
+                <span class="box"></span
+                ><span><span class="t">로그인하고 첫 파일을 만들어 봤다</span><span class="d">index.html 생성 성공</span></span>
+              </li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>➡️ 다음 단계 &amp; 참고</h3>
+            <ul class="nxt">
+              <li>
+                <b>앞으로의 작업 루틴</b
+                ><span>① 작업 폴더 우클릭 → <b>Code로 열기</b> ② <code>Ctrl + `</code> 터미널 ③ <code>claude</code> ④ 한국어로 요청</span>
+              </li>
+              <li>
+                <b>좋은 요청 쓰는 법</b
+                ><span><b>무엇을</b>(기능) · <b>어떤 파일로</b> · <b>어떻게 동작하게</b> 를 함께 적으면 결과가 훨씬 좋아집니다.</span>
+              </li>
+              <li><b>주제가 바뀌면 /clear</b><span>이전 대화가 섞이면 엉뚱한 결과가 나옵니다.</span></li>
+              <li><b>문제가 생기면 claude doctor</b><span>설치·인증·버전을 한 번에 진단합니다.</span></li>
+              <li>
+                <b>만든 결과를 GitHub에 올리기</b><span>클로드 코드에게 <b>"이 폴더를 GitHub에 올려줘"</b> 라고 말하면 됩니다.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="final"><b>최종 점검 (한 줄로 전부)</b><span>git --version; node --version; code --version; claude --version</span></div>
+      </section>
     </div>
-  </div>
-</section>
-
-<section class="slide" data-no="04 / 16">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 2</span><span class="sm">CLAUDE CODE · 설치 (방법 A · 권장)</span></div>
-    <h2>네이티브 설치 — 명령 한 줄</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
-<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<text x="34" y="106" class="m b" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; irm https://claude.ai/install.ps1 | iex</text><text x="34" y="150" class="m " font-size="13.5" fill="#9FC6EE">Downloading Claude Code…</text><text x="34" y="176" class="m " font-size="13.5" fill="#9FC6EE">Installing to C:\Users\hufs\.local\bin</text><text x="34" y="202" class="m b" font-size="14" fill="#F9B27A">████████████████████████  100%</text><text x="34" y="240" class="m b" font-size="14.5" fill="#7EE787">✔ Claude Code installed successfully</text><text x="34" y="266" class="m " font-size="13.5" fill="#7EE787">  Run 'claude' to get started.</text><text x="34" y="316" class="m " font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
-<rect x="26" y="86" width="500" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="550" cy="100.5" r="15" fill="#F26B21"/><text x="550" y="106.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="26" y="219.5" width="340" height="55.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="390" cy="247.25" r="15" fill="#F26B21"/><text x="390" y="253.25" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="26" y="18" width="210" height="28" rx="6" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="260" cy="32" r="15" fill="#F26B21"/><text x="260" y="38" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="470" y="322" width="402" height="150" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="494" y="354" font-size="13.5" class="b" fill="#F9B27A">붙여넣기 방법</text>
-<text x="494" y="384" font-size="12.5" fill="#DCE6EF">PowerShell에서는 Ctrl+V 대신</text>
-<text x="494" y="408" font-size="12.5" class="b" fill="#F9B27A">마우스 오른쪽 클릭 = 붙여넣기</text>
-<text x="494" y="438" font-size="12" fill="#9FC6EE">(Ctrl+V 도 되는 경우가 많습니다)</text>
-<text x="494" y="460" font-size="12" fill="#9FC6EE">붙여넣은 뒤 Enter 를 누르세요.</text>
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>Node.js 없이도 동작하고 자동 업데이트되는 권장 방식으로 설치합니다.</p></div>
-      <ol class="acts"><li><b>PowerShell</b> 창인지 확인합니다. (<code>PS C:\…&gt;</code> 로 시작)</li><li>아래 명령을 복사해 붙여넣고 <b>Enter</b>. (붙여넣기 = 마우스 오른쪽 클릭)</li><li><b>installed successfully</b> 가 나올 때까지 1~3분 기다립니다.</li></ol>
-      <div class="cmd">
-  <b class="lbl">방법 A · 네이티브 설치 (권장)</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="irm https://claude.ai/install.ps1 | iex">복사</button><pre>irm https://claude.ai/install.ps1 | iex</pre></div>
-  </div>
-      <div class="tip warn"><b>'irm' 용어가 인식되지 않습니다</b><p>지금 창이 <b>CMD(명령 프롬프트)</b> 입니다. 이 명령은 <b>PowerShell 전용</b>입니다. Windows 키 → <b>powershell</b> 로 다시 여세요.</p></div><div class="tip ok"><b>왜 이 방법이 권장인가요?</b><p>npm 권한 문제를 피할 수 있고, <b>업데이트가 자동</b>으로 이루어집니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="05 / 16">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 3</span><span class="sm">CLAUDE CODE · 설치 (방법 B)</span></div>
-    <h2>npm 설치 — 방법 A가 막혔을 때</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
-<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<text x="34" y="106" class="m b" font-size="13.5" fill="#FFFFFF">PS C:\Users\hufs&gt; npm install -g @anthropic-ai/claude-code</text><text x="34" y="150" class="m " font-size="12.5" fill="#E3B341">npm warn deprecated some-package@1.0.0: no longer supported</text><text x="34" y="176" class="m " font-size="12.5" fill="#E3B341">npm warn deprecated other-package@2.1.0: use v3 instead</text><text x="34" y="216" class="m b" font-size="14" fill="#7EE787">added 128 packages in 47s</text><text x="34" y="266" class="m " font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
-<rect x="26" y="86.5" width="500" height="28.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="550" cy="100.75" r="15" fill="#F26B21"/><text x="550" y="106.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="26" y="131.5" width="480" height="53.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="530" cy="158.25" r="15" fill="#F26B21"/><text x="530" y="164.25" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="26" y="196" width="300" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="350" cy="210.5" r="15" fill="#F26B21"/><text x="350" y="216.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="470" y="310" width="402" height="164" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="494" y="342" font-size="13.5" class="b" fill="#F9B27A">노란 warn 은 정상입니다</text>
-<text x="494" y="372" font-size="12.5" fill="#DCE6EF">npm은 부가 정보를 노란색으로 알립니다.</text>
-<text x="494" y="406" font-size="13" class="b" fill="#FF9F6B">빨간 npm ERR! 만 실제 오류</text>
-<text x="494" y="434" font-size="12.5" fill="#DCE6EF">이 경우 방법 A(네이티브)로 다시 시도하거나</text>
-<text x="494" y="456" font-size="12.5" fill="#DCE6EF">관리자 권한 PowerShell 로 실행하세요.</text>
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>네이티브 설치가 막히는 환경에서 npm으로 설치합니다.</p></div>
-      <ol class="acts"><li>아래 npm 명령을 복사해 붙여넣고 Enter. (Node.js가 설치돼 있어야 합니다)</li><li>노란 <b>warn</b> 메시지는 무시해도 됩니다. 2~4분 기다립니다.</li><li>마지막에 <b>added … packages</b> 가 나오면 성공입니다.</li></ol>
-      <div class="cmd">
-  <b class="lbl">방법 B · npm 전역 설치</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="npm install -g @anthropic-ai/claude-code">복사</button><pre>npm install -g @anthropic-ai/claude-code</pre></div>
-  </div>
-      <div class="tip warn"><b>권한 오류(EACCES/EPERM)가 나면</b><p>PowerShell을 <b>관리자 권한으로 실행</b>해 재시도하거나 방법 A(네이티브)를 쓰세요.</p></div><div class="tip info"><b>둘 다 설치할 필요 없습니다</b><p>A 또는 B <b>하나만</b> 하면 됩니다. 둘 다 하면 버전이 충돌할 수 있습니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="06 / 16">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 4</span><span class="sm">CLAUDE CODE · 설치 확인</span></div>
-    <h2>터미널 새로 열고 <b>claude --version</b></h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
-<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell (새 창)</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<text x="34" y="200" class="m b" font-size="14.5" fill="#FFFFFF">PS C:\Users\hufs&gt; claude --version</text><text x="34" y="232" class="m b" font-size="15.5" fill="#7EE787">2.0.14 (Claude Code)</text><text x="34" y="278" class="m b" font-size="14.5" fill="#FFFFFF">PS C:\Users\hufs&gt; claude doctor</text><text x="34" y="312" class="m " font-size="13.5" fill="#7EE787">✔ Installation      native (C:\Users\hufs\.local\bin)</text><text x="34" y="336" class="m " font-size="13.5" fill="#7EE787">✔ Version           2.0.14 (up to date)</text><text x="34" y="360" class="m " font-size="13.5" fill="#7EE787">✔ Git               2.51.0</text><text x="34" y="384" class="m " font-size="13.5" fill="#7EE787">✔ Node.js           v24.9.0</text><text x="34" y="408" class="m " font-size="13.5" fill="#7EE787">✔ Auth              logged in</text><text x="34" y="450" class="m " font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
-<rect x="26" y="179.5" width="340" height="61.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="390" cy="210.25" r="15" fill="#F26B21"/><text x="390" y="216.25" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="26" y="292.5" width="470" height="124.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="520" cy="354.75" r="15" fill="#F26B21"/><text x="520" y="360.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="60" y="66" width="500" height="92" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="106" y="96" font-size="13.5" class="b" fill="#F9B27A">먼저 터미널을 새로 여세요</text>
-<text x="80" y="122" font-size="12.5" fill="#DCE6EF">설치 전에 열어 둔 창에는 PATH가 반영되지 않습니다.</text>
-<text x="80" y="144" font-size="12.5" fill="#DCE6EF">창을 모두 닫고 Windows 키 → powershell 로 새로 열기.</text>
-<circle cx="84" cy="90" r="15" fill="#F26B21"/><text x="84" y="96" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="560" y="500" width="320" height="28" rx="14" fill="#FFF1E7" stroke="#F26B21"/><text x="574" y="519" font-size="13" class="b" fill="#F26B21">✔ 가 모두 초록이면 완벽합니다</text>
-    </svg></div>
-    <div class="side">
-      <div class="goal"><b>이 단계의 목표</b><p>설치가 정상적으로 끝났는지 확인합니다.</p></div>
-      <ol class="acts"><li>지금 PowerShell 창을 <b>완전히 닫고 새로</b> 엽니다.</li><li><code>claude --version</code> 을 실행해 <b>2.x.x</b> 가 나오는지 봅니다.</li><li><code>claude doctor</code> 를 실행해 ✔ 표시가 모두 초록인지 확인합니다.</li></ol>
-      <div class="cmd">
-  <b class="lbl">버전 확인</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="claude --version">복사</button><pre>claude --version</pre></div>
-  </div><div class="cmd">
-  <b class="lbl">전체 진단 (문제가 있을 때)</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="claude doctor">복사</button><pre>claude doctor</pre></div>
-  </div>
-      <div class="tip warn"><b>"claude 용어가 인식되지 않습니다"</b><p>① 터미널을 <b>새로</b> 열었는지 확인 ② PC 재부팅 ③ 그래도 안 되면 다른 설치 방법(A↔B)으로 재시도.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="07 / 16">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 5</span><span class="sm">CLAUDE CODE · 첫 실행</span></div>
-    <h2>작업 폴더에서 <b>claude</b> 실행</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
-<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<text x="34" y="106" class="m b" font-size="13.5" fill="#FFFFFF">PS C:\Users\hufs&gt; cd "$HOME\Desktop\dev\hello-claude"</text><text x="34" y="140" class="m b" font-size="14.5" fill="#FFFFFF">PS ...\hello-claude&gt; claude</text>
-<rect x="26" y="86.5" width="450" height="28.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="500" cy="100.75" r="15" fill="#F26B21"/><text x="500" y="106.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="26" y="119.5" width="250" height="29.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="300" cy="134.25" r="15" fill="#F26B21"/><text x="300" y="140.25" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="34" y="192" width="820" height="318" rx="10" fill="#0B1F33" stroke="#D97757" stroke-width="1.5"/>
-<text x="60" y="228" font-size="17" class="b" fill="#D97757">✻ Welcome to Claude Code</text>
-<text x="60" y="258" font-size="13" class="m" fill="#9FC6EE">cwd: C:\Users\hufs\Desktop\dev\hello-claude</text>
-<text x="60" y="300" font-size="13.5" class="b" fill="#E6EDF3">Choose the text style that looks best with your terminal:</text>
-<text x="60" y="326" font-size="12" fill="#8FA6BC">To change this later, run /theme</text>
-<text x="60" y="364" font-size="13.5" class="b" fill="#F9B27A">❯ 1. Dark mode ✔</text>
-<text x="60" y="392" font-size="13.5" fill="#8FA6BC">  2. Light mode</text>
-<text x="60" y="420" font-size="13.5" fill="#8FA6BC">  3. Dark mode (colorblind-friendly)</text>
-<text x="60" y="448" font-size="13.5" fill="#8FA6BC">  4. Light mode (colorblind-friendly)</text>
-<text x="60" y="488" font-size="12" fill="#8FA6BC">Enter to confirm · ↑↓ to select</text>
-<rect x="50" y="348" width="400" height="30" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="490" cy="363" r="15" fill="#F26B21"/><text x="490" y="369" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-    </svg></div>
-    <div class="side">
-      <div class="goal"><b>이 단계의 목표</b><p>클로드 코드를 실제로 켭니다. 실행한 폴더가 곧 작업 대상입니다.</p></div>
-      <ol class="acts"><li>작업 폴더를 만들고 그 안으로 이동합니다.</li><li><b>claude</b> 라고 입력하고 Enter.</li><li>처음이면 <b>테마 선택</b> 화면이 나옵니다. 화살표로 고르고 Enter.</li></ol>
-      <div class="cmd">
-  <b class="lbl">① 작업 폴더 만들고 이동</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="mkdir &quot;$HOME\Desktop\dev\hello-claude&quot; -Force; cd &quot;$HOME\Desktop\dev\hello-claude&quot;">복사</button><pre>mkdir "$HOME\Desktop\dev\hello-claude" -Force; cd "$HOME\Desktop\dev\hello-claude"</pre></div>
-  </div><div class="cmd">
-  <b class="lbl">② 클로드 코드 실행</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="claude">복사</button><pre>claude</pre></div>
-  </div>
-      <div class="tip warn"><b>아무 폴더에서나 켜지 마세요</b><p>클로드 코드는 <b>실행한 폴더의 파일을 읽고 고칩니다.</b> 반드시 작업용 폴더를 만들어 그 안에서 실행하세요.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="08 / 16">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 6</span><span class="sm">CLAUDE CODE · 로그인</span></div>
-    <h2>브라우저로 로그인하기</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B"/>
-<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
-<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
-<rect x="30" y="70" width="500" height="230" rx="10" fill="#0B1F33" stroke="#D97757" stroke-width="1.5"/>
-<text x="54" y="104" font-size="15" class="b" fill="#D97757">✻ Select login method</text>
-<text x="54" y="146" font-size="13.5" class="b" fill="#F9B27A">❯ 1. Claude account with subscription</text>
-<text x="72" y="170" font-size="12" fill="#8FA6BC">Pro · Max · Team · Enterprise 플랜</text>
-<text x="54" y="212" font-size="13.5" fill="#8FA6BC">  2. Anthropic Console account</text>
-<text x="72" y="236" font-size="12" fill="#6D8299">API 사용량 과금(개발자용)</text>
-<text x="54" y="276" font-size="12" fill="#8FA6BC">Enter to confirm · ↑↓ to select</text>
-<rect x="30" y="316" width="500" height="96" rx="10" fill="#0B1F33" stroke="#2A6EA6"/>
-<text x="54" y="346" font-size="13" fill="#E6EDF3">Opening browser to sign in…</text>
-<text x="54" y="376" font-size="11.5" class="m" fill="#58A6FF">https://claude.ai/oauth/authorize?code=...</text>
-<text x="54" y="398" font-size="11.5" fill="#8FA6BC">안 열리면 위 주소를 복사해 직접 붙여넣으세요.</text>
-<rect x="30" y="428" width="500" height="80" rx="10" fill="#0B1F33" stroke="#1A7F37"/>
-<text x="54" y="462" font-size="14" class="b" fill="#7EE787">✔ Login successful</text>
-<text x="54" y="490" font-size="12" fill="#8FA6BC">이제 클로드 코드를 사용할 수 있습니다.</text>
-<rect x="600" y="70" width="272" height="438" rx="10" fill="#FFFFFF" stroke="#D9E0E8"/>
-<rect x="600" y="70" width="272" height="42" rx="10" fill="#EDF1F5"/><rect x="600" y="98" width="272" height="14" fill="#EDF1F5"/>
-<circle cx="620" cy="90" r="5" fill="#FF5F57"/><circle cx="636" cy="90" r="5" fill="#FEBC2E"/><circle cx="652" cy="90" r="5" fill="#28C840"/>
-<rect x="668" y="80" width="188" height="20" rx="10" fill="#FFFFFF" stroke="#D9E0E8"/>
-<text x="678" y="94" class="m" font-size="9" fill="#5B6B7C">claude.ai/oauth/authorize</text>
-<text x="736" y="164" text-anchor="middle" font-size="30">✻</text>
-<text x="736" y="204" text-anchor="middle" font-size="16" class="b" fill="#16202B">Claude Code</text>
-<text x="736" y="234" text-anchor="middle" font-size="12" fill="#5B6B7C">터미널의 Claude Code가</text>
-<text x="736" y="254" text-anchor="middle" font-size="12" fill="#5B6B7C">계정 접근 권한을 요청합니다.</text>
-<rect x="628" y="288" width="216" height="64" rx="8" fill="#F4F6F9" stroke="#D9E0E8"/>
-<text x="646" y="314" font-size="11" fill="#5B6B7C">계정: hufs.staff@gmail.com</text>
-<text x="646" y="338" font-size="11" class="b" fill="#1A7F37">플랜: Claude Pro ✔</text>
-<rect x="628" y="382" width="216" height="42" rx="8" fill="#D97757"/>
-<text x="736" y="409" text-anchor="middle" font-size="14" class="b" fill="#FFFFFF">Authorize</text>
-<rect x="628" y="436" width="216" height="38" rx="8" fill="#FFFFFF" stroke="#D9E0E8"/>
-<text x="736" y="460" text-anchor="middle" font-size="13" fill="#5B6B7C">거부</text>
-<rect x="46" y="130" width="400" height="50" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="486" cy="155" r="15" fill="#F26B21"/><text x="486" y="161" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="46" y="358" width="468" height="52" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="552" cy="384" r="15" fill="#F26B21"/><text x="552" y="390" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="624" y="378" width="224" height="50" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="600" cy="403" r="15" fill="#F26B21"/><text x="600" y="409" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="46" y="440" width="300" height="34" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="386" cy="457" r="15" fill="#F26B21"/><text x="386" y="463" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
-    </svg></div>
-    <div class="side">
-      <div class="goal"><b>이 단계의 목표</b><p>Claude 계정과 연결해 사용 준비를 마칩니다.</p></div>
-      <ol class="acts"><li><b>Claude account with subscription</b> (구독 계정)을 선택하고 Enter.</li><li>브라우저가 자동으로 열립니다. 안 열리면 화면의 <b>주소를 복사</b>해 직접 붙여넣습니다.</li><li>브라우저에서 <b>Authorize</b> 를 누릅니다.</li><li>터미널로 돌아오면 <b>Login successful</b> 이 뜹니다.</li></ol>
-      
-      <div class="tip warn"><b>유료 플랜이 필요합니다</b><p>Claude Code는 <b>Pro · Max · Team · Enterprise</b> 유료 플랜에서 사용합니다. <b>무료 플랜으로는 로그인해도 사용할 수 없습니다.</b></p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="09 / 16">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 7</span><span class="sm">CLAUDE CODE · 첫 대화</span></div>
-    <h2>한국어로 말해서 프로그램 만들기</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B"/>
-<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
-<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell — claude</text>
-<text x="34" y="86" font-size="15" class="b" fill="#D97757">✻ Claude Code v2.0.14</text>
-<text x="34" y="110" font-size="12" class="m" fill="#8FA6BC">cwd: C:\Users\hufs\Desktop\dev\hello-claude</text>
-<rect x="34" y="132" width="700" height="52" rx="8" fill="#0B1F33" stroke="#D97757"/>
-<text x="52" y="164" font-size="13.5" class="b" fill="#FFFFFF">&gt; 한국어로 인사하는 간단한 웹페이지를 index.html 로 만들어줘.</text>
-<text x="52" y="212" font-size="13.5" fill="#E6EDF3">알겠습니다. index.html 파일을 만들겠습니다.</text>
-<rect x="34" y="230" width="700" height="152" rx="8" fill="#0B1F33" stroke="#2A6EA6"/>
-<text x="54" y="256" font-size="12.5" class="b" fill="#F9B27A">Create  index.html</text>
-<text x="54" y="284" font-size="11.5" class="m" fill="#7EE787">+ &lt;!DOCTYPE html&gt;</text>
-<text x="54" y="304" font-size="11.5" class="m" fill="#7EE787">+ &lt;html lang="ko"&gt;</text>
-<text x="54" y="324" font-size="11.5" class="m" fill="#7EE787">+   &lt;h1&gt;안녕하세요 👋&lt;/h1&gt;</text>
-<text x="54" y="344" font-size="11.5" class="m" fill="#7EE787">+   &lt;button onclick="showDate()"&gt;오늘 날짜 보기&lt;/button&gt;</text>
-<text x="54" y="368" font-size="11.5" class="m" fill="#8FA6BC">… 12 more lines</text>
-<rect x="34" y="404" width="440" height="102" rx="8" fill="#0B1F33" stroke="#F26B21" stroke-width="1.5"/>
-<text x="54" y="430" font-size="12.5" class="b" fill="#E6EDF3">Do you want to create index.html?</text>
-<text x="54" y="460" font-size="13" class="b" fill="#F9B27A">❯ 1. Yes</text>
-<text x="54" y="486" font-size="12.5" fill="#8FA6BC">  2. No, tell Claude what to do differently</text>
-<rect x="500" y="404" width="360" height="102" rx="8" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="522" y="432" font-size="12.5" class="b" fill="#F9B27A">③ 승인이 안전장치입니다</text>
-<text x="522" y="460" font-size="11.5" fill="#DCE6EF">내용을 확인하고 Yes를 고르면</text>
-<text x="522" y="482" font-size="11.5" fill="#DCE6EF">그때 실제로 파일이 만들어집니다.</text>
-<rect x="30" y="128" width="708" height="60" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="762" cy="158" r="15" fill="#F26B21"/><text x="762" y="164" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="30" y="226" width="708" height="160" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="762" cy="306" r="15" fill="#F26B21"/><text x="762" y="312" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="46" y="446" width="200" height="26" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="270" cy="459" r="15" fill="#F26B21"/><text x="270" y="465" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-    </svg></div>
-    <div class="side">
-      <div class="goal"><b>이 단계의 목표</b><p>바이브 코딩을 직접 체험합니다. 코드를 몰라도 한국어로 요청하면 됩니다.</p></div>
-      <ol class="acts"><li><code>&gt;</code> 표시 옆에 <b>한국어로</b> 원하는 것을 적고 Enter.</li><li>클로드가 만들 파일 내용을 미리 보여 줍니다. 내용을 확인합니다.</li><li><b>1. Yes</b> 를 골라 승인하면 실제로 파일이 만들어집니다.</li></ol>
-      <div class="cmd">
-  <b class="lbl">첫 요청 예시 (그대로 복사해 붙여넣기)</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="한국어로 인사하는 간단한 웹페이지를 index.html 로 만들어줘. 버튼을 누르면 오늘 날짜가 표시되게 해줘.">복사</button><pre>한국어로 인사하는 간단한 웹페이지를 index.html 로 만들어줘. 버튼을 누르면 오늘 날짜가 표시되게 해줘.</pre></div>
-  </div>
-      <div class="tip ok"><b>승인(Yes)이 안전장치입니다</b><p>클로드 코드는 파일을 만들거나 고치기 전에 <b>항상 물어봅니다.</b> 내용을 보고 Yes를 골라야 실행됩니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="10 / 16">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 8</span><span class="sm">CLAUDE CODE · 결과 확인</span></div>
-    <h2>만들어진 파일 확인하고 열어 보기</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B"/>
-<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
-<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
-<text x="34" y="86" class="m b" font-size="13.5" fill="#FFFFFF">&gt; /exit</text>
-<text x="34" y="128" class="m b" font-size="13.5" fill="#FFFFFF">PS ...\hello-claude&gt; dir</text>
-<text x="34" y="158" class="m" font-size="12.5" fill="#9FC6EE">Mode      LastWriteTime      Length  Name</text>
-<text x="34" y="180" class="m" font-size="12.5" fill="#9FC6EE">----      -------------      ------  ----</text>
-<text x="34" y="204" class="m b" font-size="12.5" fill="#7EE787">-a----    2026-07-26 10:24      842  index.html</text>
-<text x="34" y="248" class="m b" font-size="13.5" fill="#FFFFFF">PS ...\hello-claude&gt; start index.html</text>
-<rect x="370" y="282" width="494" height="238" rx="10" fill="#FFFFFF" stroke="#D9E0E8"/>
-<rect x="370" y="282" width="494" height="40" rx="10" fill="#EDF1F5"/><rect x="370" y="308" width="494" height="14" fill="#EDF1F5"/>
-<circle cx="392" cy="302" r="5" fill="#FF5F57"/><circle cx="408" cy="302" r="5" fill="#FEBC2E"/><circle cx="424" cy="302" r="5" fill="#28C840"/>
-<rect x="446" y="292" width="300" height="20" rx="10" fill="#FFFFFF" stroke="#D9E0E8"/>
-<text x="458" y="306" class="m" font-size="9.5" fill="#5B6B7C">file:///C:/Users/hufs/.../index.html</text>
-<text x="617" y="374" text-anchor="middle" font-size="26" class="b" fill="#16202B">안녕하세요 👋</text>
-<text x="617" y="404" text-anchor="middle" font-size="13" fill="#5B6B7C">클로드 코드로 만든 첫 웹페이지입니다</text>
-<rect x="527" y="424" width="180" height="42" rx="8" fill="#D97757"/>
-<text x="617" y="451" text-anchor="middle" font-size="14" class="b" fill="#FFFFFF">오늘 날짜 보기</text>
-<rect x="497" y="478" width="240" height="30" rx="8" fill="#F4F6F9" stroke="#D9E0E8"/>
-<text x="617" y="498" text-anchor="middle" font-size="13" class="b" fill="#16202B">2026년 7월 26일</text>
-<rect x="26" y="290" width="320" height="160" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="48" y="322" font-size="13.5" class="b" fill="#F9B27A">다시 켜려면</text>
-<text x="48" y="352" font-size="12.5" fill="#DCE6EF">같은 폴더에서  claude  입력</text>
-<text x="48" y="382" font-size="13.5" class="b" fill="#F9B27A">이전 대화를 이어서</text>
-<text x="48" y="412" font-size="12.5" fill="#DCE6EF">claude --continue</text>
-<text x="48" y="438" font-size="12" fill="#9FC6EE">코드를 보려면  code .</text>
-<rect x="26" y="68" width="160" height="28" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="210" cy="82" r="15" fill="#F26B21"/><text x="210" y="88" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="26" y="110" width="300" height="108" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="350" cy="164" r="15" fill="#F26B21"/><text x="350" y="170" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="26" y="230" width="340" height="28" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="390" cy="244" r="15" fill="#F26B21"/><text x="390" y="250" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>클로드 코드가 실제로 파일을 만들었는지 확인하고 결과를 봅니다.</p></div>
-      <ol class="acts"><li><b>/exit</b> 를 입력해 클로드 코드를 빠져나옵니다. (Ctrl+C 두 번도 가능)</li><li><code>dir</code> 로 <b>index.html</b> 이 생겼는지 확인합니다.</li><li><code>start index.html</code> 로 브라우저에서 열어 봅니다.</li></ol>
-      <div class="cmd">
-  <b class="lbl">① 파일 목록 확인</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="dir">복사</button><pre>dir</pre></div>
-  </div><div class="cmd">
-  <b class="lbl">② 브라우저로 열어 보기</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="start index.html">복사</button><pre>start index.html</pre></div>
-  </div>
-      <div class="tip ok"><b>이것이 바이브 코딩입니다</b><p>코드를 한 줄도 쓰지 않고 <b>한국어 요청만으로</b> 동작하는 웹페이지를 만들었습니다. 수정도 <code>claude</code> 를 다시 켜고 말하면 됩니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="11 / 16">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 9</span><span class="sm">CLAUDE CODE · 기본 사용법</span></div>
-    <h2>꼭 알아야 할 슬래시 명령</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B"/>
-<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
-<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell — claude</text>
-<rect x="34" y="72" width="500" height="46" rx="8" fill="#0B1F33" stroke="#D97757"/>
-<text x="54" y="101" font-size="15" class="b" fill="#FFFFFF">&gt; /</text>
-<rect x="34" y="132" width="500" height="356" rx="8" fill="#0B1F33" stroke="#2A6EA6"/>
-<rect x="42" y="142" width="484" height="34" rx="6" fill="#1F6FEB" opacity="0.2"/>
-<text x="60" y="165" font-size="13.5" class="b m" fill="#F9B27A">/clear</text>
-<text x="200" y="165" font-size="12.5" fill="#E6EDF3">대화 기록 지우고 새로 시작</text>
-<text x="60" y="207" font-size="13.5" class="m" fill="#9FC6EE">/help</text>
-<text x="200" y="207" font-size="12.5" fill="#8FA6BC">사용법·명령 목록 보기</text>
-<text x="60" y="249" font-size="13.5" class="m" fill="#9FC6EE">/init</text>
-<text x="200" y="249" font-size="12.5" fill="#8FA6BC">프로젝트 규칙 파일(CLAUDE.md) 생성</text>
-<text x="60" y="291" font-size="13.5" class="m" fill="#9FC6EE">/model</text>
-<text x="200" y="291" font-size="12.5" fill="#8FA6BC">사용할 모델 바꾸기</text>
-<text x="60" y="333" font-size="13.5" class="m" fill="#9FC6EE">/status</text>
-<text x="200" y="333" font-size="12.5" fill="#8FA6BC">로그인 계정·버전·사용량 확인</text>
-<text x="60" y="375" font-size="13.5" class="m" fill="#9FC6EE">/exit</text>
-<text x="200" y="375" font-size="12.5" fill="#8FA6BC">클로드 코드 종료</text>
-<text x="60" y="417" font-size="13.5" class="m" fill="#6D8299">/theme</text>
-<text x="200" y="417" font-size="12.5" fill="#6D8299">화면 색상 테마 변경</text>
-<text x="60" y="462" font-size="12" fill="#6D8299">↑↓ 로 선택 · Enter 로 실행 · Esc 로 닫기</text>
-<rect x="560" y="132" width="302" height="356" rx="8" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="582" y="166" font-size="14" class="b" fill="#F9B27A">초보자가 쓰는 5개</text>
-<text x="582" y="204" font-size="13" class="b m" fill="#FFFFFF">/clear</text>
-<text x="582" y="226" font-size="11.5" fill="#DCE6EF">주제가 바뀌면 반드시</text>
-<text x="582" y="260" font-size="13" class="b m" fill="#FFFFFF">/help</text>
-<text x="582" y="282" font-size="11.5" fill="#DCE6EF">막히면 여기부터</text>
-<text x="582" y="316" font-size="13" class="b m" fill="#FFFFFF">/init</text>
-<text x="582" y="338" font-size="11.5" fill="#DCE6EF">새 프로젝트 시작할 때</text>
-<text x="582" y="372" font-size="13" class="b m" fill="#FFFFFF">/status</text>
-<text x="582" y="394" font-size="11.5" fill="#DCE6EF">로그인·사용량 확인</text>
-<text x="582" y="428" font-size="13" class="b m" fill="#FFFFFF">/exit</text>
-<text x="582" y="450" font-size="11.5" fill="#DCE6EF">끝낼 때 (Ctrl+C 두 번도 가능)</text>
-<rect x="30" y="68" width="508" height="54" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="562" cy="95" r="15" fill="#F26B21"/><text x="562" y="101" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="38" y="138" width="492" height="42" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="20" cy="159" r="15" fill="#F26B21"/><text x="20" y="165" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="556" y="128" width="310" height="364" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="534" cy="310" r="15" fill="#F26B21"/><text x="534" y="316" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>클로드 코드 안에서 쓰는 기본 명령을 익힙니다.</p></div>
-      <ol class="acts"><li>클로드 코드 실행 중에 <b>/</b> 를 입력합니다.</li><li>명령 목록이 나오면 <b>↑↓</b> 로 고르고 <b>Enter</b>.</li><li>초보자는 오른쪽의 <b>5개</b>만 알면 충분합니다.</li></ol>
-      <div class="cmd">
-  <b class="lbl">대화 새로 시작 (맥락 초기화)</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="/clear">복사</button><pre>/clear</pre></div>
-  </div><div class="cmd">
-  <b class="lbl">종료</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="/exit">복사</button><pre>/exit</pre></div>
-  </div>
-      <div class="tip info"><b>/clear 를 자주 쓰세요</b><p>주제가 바뀌면 <b>/clear</b> 로 정리하세요. 이전 대화가 섞여 엉뚱한 답이 나오는 것을 막습니다. 새 프로젝트를 시작할 때는 <b>/init</b>.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="12 / 16">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 10</span><span class="sm">CLAUDE CODE · VS Code 연동</span></div>
-    <h2>VS Code 안에서 클로드 코드 쓰기</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#1E1E1E"/>
-<rect x="8" y="8" width="884" height="34" rx="8" fill="#323233"/><rect x="8" y="30" width="884" height="12" fill="#323233"/>
-<text x="30" y="30" font-size="12" fill="#CCCCCC">파일  편집  선택  보기  이동  실행  터미널  도움말</text>
-<rect x="8" y="42" width="52" height="510" fill="#333333"/>
-<text x="34" y="76" text-anchor="middle" font-size="19" fill="#FFFFFF">🗂</text>
-<text x="34" y="118" text-anchor="middle" font-size="17" fill="#8A8A8A">🔍</text>
-<text x="34" y="160" text-anchor="middle" font-size="17" fill="#8A8A8A">⑂</text>
-<rect x="60" y="42" width="200" height="286" fill="#252526"/>
-<text x="80" y="72" font-size="11.5" class="b" fill="#CCCCCC">탐색기</text>
-<text x="80" y="102" font-size="11.5" class="b" fill="#CCCCCC">▾ HELLO-CLAUDE</text>
-<text x="96" y="128" font-size="11.5" fill="#E2C08D">📄 index.html</text>
-<text x="96" y="152" font-size="11.5" fill="#73C991">📄 style.css</text>
-<text x="96" y="176" font-size="11.5" fill="#9CDCFE">📄 CLAUDE.md</text>
-<rect x="260" y="42" width="632" height="286" fill="#1E1E1E"/>
-<rect x="260" y="42" width="632" height="30" fill="#252526"/>
-<rect x="260" y="42" width="120" height="30" fill="#1E1E1E"/>
-<text x="278" y="62" font-size="11" fill="#FFFFFF">index.html</text>
-<text x="284" y="102" class="m" font-size="11.5" fill="#569CD6">&lt;!DOCTYPE html&gt;</text>
-<text x="284" y="124" class="m" font-size="11.5" fill="#569CD6">&lt;html lang="ko"&gt;</text>
-<text x="300" y="146" class="m" font-size="11.5" fill="#569CD6">&lt;body&gt;</text>
-<text x="316" y="168" class="m" font-size="11.5" fill="#CE9178">&lt;h1&gt;안녕하세요 👋&lt;/h1&gt;</text>
-<text x="316" y="190" class="m" font-size="11.5" fill="#CE9178">&lt;button onclick="showDate()"&gt;오늘 날짜&lt;/button&gt;</text>
-<text x="300" y="212" class="m" font-size="11.5" fill="#569CD6">&lt;/body&gt;</text>
-<text x="284" y="234" class="m" font-size="11.5" fill="#569CD6">&lt;/html&gt;</text>
-<rect x="60" y="328" width="832" height="200" fill="#181818"/>
-<rect x="60" y="328" width="832" height="28" fill="#252526"/>
-<text x="84" y="347" font-size="11" fill="#FFFFFF">문제   출력   디버그 콘솔   터미널</text>
-<rect x="228" y="330" width="60" height="24" fill="#181818"/><text x="258" y="347" font-size="11" class="b" fill="#FFFFFF">터미널</text>
-<text x="84" y="382" class="m b" font-size="12" fill="#D97757">✻ Claude Code v2.0.14</text>
-<text x="84" y="406" class="m b" font-size="12" fill="#FFFFFF">&gt; 글자를 더 크게 하고 배경색을 연한 하늘색으로 바꿔줘</text>
-<text x="84" y="434" class="m" font-size="12" fill="#CCCCCC">style.css 를 수정하겠습니다.</text>
-<text x="84" y="456" class="m" font-size="12" fill="#73C991">✔ Updated style.css (+4 -1)</text>
-<text x="84" y="484" class="m" font-size="12" fill="#FFFFFF">&gt; _</text>
-<rect x="8" y="528" width="884" height="24" fill="#007ACC"/>
-<text x="30" y="544" font-size="11" fill="#FFFFFF">⑂ main*    ⊗ 0  ⚠ 0</text>
-<rect x="24" y="12" width="60" height="24" rx="4" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="300" cy="24" r="15" fill="#F26B21"/><text x="300" y="30" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="56" y="324" width="300" height="36" rx="6" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="380" cy="342" r="15" fill="#F26B21"/><text x="380" y="348" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="76" y="368" width="560" height="50" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="660" cy="393" r="15" fill="#F26B21"/><text x="660" y="399" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="72" y="112" width="190" height="76" rx="6" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="286" cy="150" r="15" fill="#F26B21"/><text x="286" y="156" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>편집기와 터미널을 한 화면에서 함께 써 작업 효율을 높입니다.</p></div>
-      <ol class="acts"><li>VS Code에서 작업 폴더를 엽니다. (우클릭 → Code로 열기)</li><li><b>Ctrl + `</b> 로 아래쪽 터미널을 엽니다.</li><li>터미널에 <b>claude</b> 를 입력하고 한국어로 요청합니다.</li><li>왼쪽 파일 목록에서 결과가 바뀌는 것을 <b>실시간으로</b> 확인합니다.</li></ol>
-      
-      <div class="tip ok"><b>이 조합이 가장 편합니다</b><p>왼쪽 = 파일 목록·코드, 아래 = 클로드 코드 대화. <b>바뀌는 내용을 눈으로 확인</b>하면서 작업할 수 있습니다.</p></div><div class="tip info"><b>VS Code 확장도 있습니다</b><p>확장 검색에서 <b>Claude Code</b> 를 설치하면 사이드 패널에서도 쓸 수 있습니다. 터미널 방식만으로도 충분합니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="13 / 16">
-  <div class="rail acc"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 1/2</span></div>
-    <h2>Claude Code 명령어 모음 (복사해서 사용) <span style="font-size:22px;color:#8A94A0;font-weight:700">(1/2)</span></h2>
-    <p class="lead">터미널 명령(PowerShell)과 클로드 코드 안에서 쓰는 슬래시 명령을 모았습니다.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="cgrid"><div class="ccard">
-  <div class="ct">① 설치 — 방법 A · 네이티브 (권장)</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="irm https://claude.ai/install.ps1 | iex">복사</button><pre>irm https://claude.ai/install.ps1 | iex</pre></div>
-  
-  <div class="cd"><b>PowerShell 전용</b>입니다. CMD에서는 동작하지 않습니다.</div>
-</div><div class="ccard">
-  <div class="ct">② 설치 — 방법 B · npm</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="npm install -g @anthropic-ai/claude-code">복사</button><pre>npm install -g @anthropic-ai/claude-code</pre></div>
-  
-  <div class="cd">Node.js가 있어야 합니다. A가 막힐 때만 사용하세요.</div>
-</div><div class="ccard">
-  <div class="ct">③ 버전 확인</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="claude --version">복사</button><pre>claude --version</pre></div>
-  <div class="out">→ 2.x.x (Claude Code)</div>
-  <div class="cd">설치가 끝났는지 확인하는 명령입니다.</div>
-</div><div class="ccard">
-  <div class="ct">④ 전체 진단 (문제 생기면 가장 먼저)</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="claude doctor">복사</button><pre>claude doctor</pre></div>
-  
-  <div class="cd">설치·버전·인증 상태를 한 번에 점검합니다.</div>
-</div><div class="ccard">
-  <div class="ct">⑤ 실행 (작업 폴더 안에서)</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="claude">복사</button><pre>claude</pre></div>
-  
-  <div class="cd">실행한 폴더가 곧 작업 대상입니다.</div>
-</div><div class="ccard">
-  <div class="ct">⑥ 이전 대화 이어서 실행</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="claude --continue">복사</button><pre>claude --continue</pre></div>
-  
-  <div class="cd">마지막 대화를 그대로 이어 갑니다.</div>
-</div></div>
-</section>
-
-<section class="slide" data-no="14 / 16">
-  <div class="rail acc"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 2/2</span></div>
-    <h2>Claude Code 명령어 모음 (복사해서 사용) <span style="font-size:22px;color:#8A94A0;font-weight:700">(2/2)</span></h2>
-    <p class="lead">터미널 명령(PowerShell)과 클로드 코드 안에서 쓰는 슬래시 명령을 모았습니다.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="cgrid"><div class="ccard">
-  <div class="ct">⑦ 업데이트</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="claude update">복사</button><pre>claude update</pre></div>
-  
-  <div class="cd">네이티브 설치는 보통 자동 업데이트됩니다.</div>
-</div><div class="ccard">
-  <div class="ct">⑧ 작업 폴더 만들고 바로 시작 (한 줄)</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="mkdir &quot;$HOME\Desktop\dev\my-app&quot; -Force; cd &quot;$HOME\Desktop\dev\my-app&quot;; claude">복사</button><pre>mkdir "$HOME\Desktop\dev\my-app" -Force; cd "$HOME\Desktop\dev\my-app"; claude</pre></div>
-  
-  <div class="cd">폴더 생성 → 이동 → 실행을 한 번에 합니다.</div>
-</div><div class="ccard">
-  <div class="ct">⑨ 실행 정책 오류가 날 때</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="Set-ExecutionPolicy -Scope CurrentUser RemoteSigned">복사</button><pre>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</pre></div>
-  
-  <div class="cd">"스크립트를 실행할 수 없으므로" 오류에 사용. 물어보면 <b>Y</b>.</div>
-</div><div class="ccard">
-  <div class="ct">⑩ 한글이 깨질 때</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="chcp 65001">복사</button><pre>chcp 65001</pre></div>
-  
-  <div class="cd">터미널 인코딩을 UTF-8로 바꿉니다.</div>
-</div></div>
-</section>
-
-<section class="slide" data-no="15 / 16">
-  <div class="rail acc"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">문제 해결</span><span class="sm">TROUBLESHOOTING</span></div>
-    <h2>Claude Code — 문제가 생겼을 때</h2>
-    <p class="lead">무엇을 해도 안 되면 <code>claude doctor</code> 부터 실행하세요.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="tbwrap"><table class="tb">
-    <thead><tr><th style="width:29%">이런 화면·메시지가 나오면</th><th style="width:24%">원인</th><th>이렇게 해결하세요</th></tr></thead>
-    <tbody><tr><td class="s"><code>'irm' 용어가 … 인식되지 않습니다</code></td><td class="c">지금 창이 CMD(명령 프롬프트)</td><td><code>irm</code> 은 PowerShell 전용 명령입니다. Windows 키 → <b>powershell</b> 입력 → <b>Windows PowerShell</b> 실행 후 다시 시도하세요.</td></tr><tr><td class="s"><code>'claude' 용어가 … 인식되지 않습니다</code></td><td class="c">PATH 미반영</td><td>① 터미널 <b>완전히 닫고 새로 열기</b> ② PC 재부팅 ③ <code>claude doctor</code> ④ 그래도 안 되면 다른 설치 방식(A↔B)으로 재시도.</td></tr><tr><td class="s"><code>이 시스템에서 스크립트를 실행할 수 없으므로</code></td><td class="c">PowerShell 실행 정책 제한</td><td><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> 실행 → <b>Y</b> 입력 → 터미널 새로 열기.</td></tr><tr><td class="s">로그인은 되는데 사용이 막힘</td><td class="c">무료 플랜 계정</td><td>Claude Code는 <b>Pro·Max·Team·Enterprise</b> 유료 플랜이 필요합니다. claude.ai에서 플랜을 확인하세요. 결제 후 <code>/status</code> 로 재확인.</td></tr><tr><td class="s">브라우저가 안 열려 로그인 불가</td><td class="c">기본 브라우저 설정·보안 정책</td><td>터미널에 표시된 <code>https://claude.ai/oauth/…</code> 주소를 <b>드래그해 복사</b>한 뒤 브라우저 주소창에 직접 붙여넣으세요.</td></tr><tr><td class="s"><code>npm ERR! EACCES</code> 권한 오류</td><td class="c">npm 전역 설치 권한</td><td>관리자 PowerShell로 재시도하거나, <b>방법 A(네이티브 설치)</b>로 바꾸세요. <b>권한을 강제로 바꾸지 마세요.</b></td></tr><tr><td class="s">한글이 깨져 보임</td><td class="c">터미널 인코딩</td><td>PowerShell에서 <code>chcp 65001</code> 실행. 또는 <b>Windows Terminal</b>(Microsoft Store 무료)을 설치해 사용하면 한글이 깔끔합니다.</td></tr><tr><td class="s">엉뚱한 폴더의 파일을 고침</td><td class="c">잘못된 위치에서 실행</td><td><code>/exit</code> 후 <code>cd</code> 로 <b>작업 폴더로 이동</b>한 뒤 다시 <code>claude</code> 실행. 실행 위치가 곧 작업 범위입니다.</td></tr></tbody>
-  </table></div>
-</section>
-
-<section class="slide" data-no="16 / 16">
-  <div class="rail acc"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">마무리</span><span class="sm">CHECKLIST &amp; NEXT</span></div>
-    <h2>전체 설치 완료 — 이제 시작입니다</h2>
-    <p class="lead">5개 프로그램이 모두 준비됐습니다. 아래 명령으로 최종 점검하세요.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="two">
-    <div class="panel"><h3>✅ 완료 체크리스트</h3><ul class="chk"><li><span class="box"></span><span><span class="t">GitHub 계정을 만들었다</span><span class="d">아이디·비밀번호·복구 코드 보관</span></span></li><li><span class="box"></span><span><span class="t">git --version 이 나온다</span><span class="d">이름·이메일 설정 완료</span></span></li><li><span class="box"></span><span><span class="t">node --version / npm --version 이 나온다</span><span class="d">LTS 버전</span></span></li><li><span class="box"></span><span><span class="t">code --version 이 나온다</span><span class="d">VS Code PATH 등록 완료</span></span></li><li><span class="box"></span><span><span class="t">claude --version 이 나온다</span><span class="d">2.x.x (Claude Code)</span></span></li><li><span class="box"></span><span><span class="t">로그인하고 첫 파일을 만들어 봤다</span><span class="d">index.html 생성 성공</span></span></li></ul></div>
-    <div class="panel"><h3>➡️ 다음 단계 &amp; 참고</h3><ul class="nxt"><li><b>앞으로의 작업 루틴</b><span>① 작업 폴더 우클릭 → <b>Code로 열기</b> ② <code>Ctrl + `</code> 터미널 ③ <code>claude</code> ④ 한국어로 요청</span></li><li><b>좋은 요청 쓰는 법</b><span><b>무엇을</b>(기능) · <b>어떤 파일로</b> · <b>어떻게 동작하게</b> 를 함께 적으면 결과가 훨씬 좋아집니다.</span></li><li><b>주제가 바뀌면 /clear</b><span>이전 대화가 섞이면 엉뚱한 결과가 나옵니다.</span></li><li><b>문제가 생기면 claude doctor</b><span>설치·인증·버전을 한 번에 진단합니다.</span></li><li><b>만든 결과를 GitHub에 올리기</b><span>클로드 코드에게 <b>"이 폴더를 GitHub에 올려줘"</b> 라고 말하면 됩니다.</span></li></ul></div>
-  </div>
-  <div class="final"><b>최종 점검 (한 줄로 전부)</b><span>git --version; node --version; code --version; claude --version</span></div>
-</section>
-
-</div>
-<script>
-function copyText(t){
-  if(navigator.clipboard && window.isSecureContext){ return navigator.clipboard.writeText(t); }
-  var ta=document.createElement('textarea'); ta.value=t;
-  ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta);
-  ta.focus(); ta.select();
-  try{ document.execCommand('copy'); }catch(e){}
-  document.body.removeChild(ta); return Promise.resolve();
-}
-var toast=document.createElement('div'); toast.className='toast'; toast.textContent='복사되었습니다';
-document.addEventListener('DOMContentLoaded',function(){ document.body.appendChild(toast); });
-document.addEventListener('click',function(e){
-  var b=e.target.closest ? e.target.closest('.cp') : null; if(!b) return;
-  copyText(b.getAttribute('data-c')).then(function(){
-    var old=b.textContent; b.textContent='복사됨'; b.classList.add('done');
-    toast.classList.add('on');
-    setTimeout(function(){ b.textContent=old; b.classList.remove('done'); toast.classList.remove('on'); },1400);
-  });
-});
-</script>
-</body>
+    <script>
+      function copyText(t) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(t);
+        }
+        var ta = document.createElement("textarea");
+        ta.value = t;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand("copy");
+        } catch (e) {}
+        document.body.removeChild(ta);
+        return Promise.resolve();
+      }
+      var toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = "복사되었습니다";
+      document.addEventListener("DOMContentLoaded", function () {
+        document.body.appendChild(toast);
+      });
+      document.addEventListener("click", function (e) {
+        var b = e.target.closest ? e.target.closest(".cp") : null;
+        if (!b) return;
+        copyText(b.getAttribute("data-c")).then(function () {
+          var old = b.textContent;
+          b.textContent = "복사됨";
+          b.classList.add("done");
+          toast.classList.add("on");
+          setTimeout(function () {
+            b.textContent = old;
+            b.classList.remove("done");
+            toast.classList.remove("on");
+          }, 1400);
+        });
+      });
+    </script>
+  </body>
 </html>
