@@ -12,3 +12,6 @@ https://www.linkedin.com/
 https://www.reddit.com/
 README.md
 SEO.md
+# 강의 가이드의 SVG 목업 안에 그려 넣은 브라우저 주소창 텍스트다.
+# 실제 링크가 아니라 화면 설명용 그림인데 lychee가 <text> 내용을 URL로 파싱한다.
+^file:///
