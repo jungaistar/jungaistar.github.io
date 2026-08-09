@@ -1,780 +1,1774 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>④ VS Code 설치 &amp; 실행 — 클로드 코드 준비 가이드</title>
-<style>
-:root{
-  --navy:#0E2A47; --navy-2:#1B4A78; --accent:#F26B21; --accent-soft:#FFF1E7;
-  --paper:#FFFFFF; --surface:#F4F6F9; --line:#D9E0E8; --muted:#5B6B7C; --ink:#16202B; --ok:#1A7F37; --bad:#C4341C;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Malgun Gothic','Nanum Gothic','Apple SD Gothic Neo',sans-serif;background:#8E9AA8;color:var(--ink);
-  -webkit-font-smoothing:antialiased;padding:28px 0;}
-.deck{display:flex;flex-direction:column;align-items:center;gap:24px;}
-.slide{width:1280px;height:720px;background:var(--paper);position:relative;overflow:hidden;
-  box-shadow:0 10px 34px rgba(0,0,0,.22);flex:0 0 auto;}
-.slide::after{content:attr(data-no);position:absolute;right:36px;bottom:22px;font-size:13px;font-weight:700;color:#A8B4C0;letter-spacing:.08em;}
-.rail{position:absolute;left:0;top:0;width:10px;height:100%;background:var(--navy);}
-.rail.acc{background:var(--accent);}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>④ VS Code 설치 &amp; 실행 — 클로드 코드 준비 가이드</title>
+    <style>
+      :root {
+        --navy: #0e2a47;
+        --navy-2: #1b4a78;
+        --accent: #f26b21;
+        --accent-soft: #fff1e7;
+        --paper: #ffffff;
+        --surface: #f4f6f9;
+        --line: #d9e0e8;
+        --muted: #5b6b7c;
+        --ink: #16202b;
+        --ok: #1a7f37;
+        --bad: #c4341c;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Malgun Gothic", "Nanum Gothic", "Apple SD Gothic Neo", sans-serif;
+        background: #8e9aa8;
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+        padding: 28px 0;
+      }
+      .deck {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+      }
+      .slide {
+        width: 1280px;
+        height: 720px;
+        background: var(--paper);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 34px rgba(0, 0, 0, 0.22);
+        flex: 0 0 auto;
+      }
+      .slide::after {
+        content: attr(data-no);
+        position: absolute;
+        right: 36px;
+        bottom: 22px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #a8b4c0;
+        letter-spacing: 0.08em;
+      }
+      .rail {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 10px;
+        height: 100%;
+        background: var(--navy);
+      }
+      .rail.acc {
+        background: var(--accent);
+      }
 
-.cover{background:var(--navy);color:#fff;padding:0 90px;display:flex;flex-direction:column;justify-content:center;}
-.cover .kicker{font-size:15px;letter-spacing:.3em;color:#F9B27A;font-weight:700;margin-bottom:24px;}
-.cover h1{font-size:62px;line-height:1.18;letter-spacing:-.02em;font-weight:800;}
-.cover h1 em{font-style:normal;color:#F9B27A;}
-.cover .sub{margin-top:24px;font-size:20px;color:#B7C7D8;line-height:1.55;max-width:940px;}
-.cover .bar{width:96px;height:6px;background:var(--accent);margin:36px 0 32px;}
-.cover .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px;}
-.cover .chip{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:9px 20px;font-size:14px;color:#DCE6EF;}
-.cover .chip.ver{border-color:var(--accent);color:#F9B27A;font-weight:700;letter-spacing:.05em;}
-.cover .stamp{position:absolute;right:-24px;bottom:-84px;font-size:300px;font-weight:800;color:rgba(255,255,255,.055);letter-spacing:-.04em;}
+      .cover {
+        background: var(--navy);
+        color: #fff;
+        padding: 0 90px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .cover .kicker {
+        font-size: 15px;
+        letter-spacing: 0.3em;
+        color: #f9b27a;
+        font-weight: 700;
+        margin-bottom: 24px;
+      }
+      .cover h1 {
+        font-size: 62px;
+        line-height: 1.18;
+        letter-spacing: -0.02em;
+        font-weight: 800;
+      }
+      .cover h1 em {
+        font-style: normal;
+        color: #f9b27a;
+      }
+      .cover .sub {
+        margin-top: 24px;
+        font-size: 20px;
+        color: #b7c7d8;
+        line-height: 1.55;
+        max-width: 940px;
+      }
+      .cover .bar {
+        width: 96px;
+        height: 6px;
+        background: var(--accent);
+        margin: 36px 0 32px;
+      }
+      .cover .meta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 34px;
+      }
+      .cover .chip {
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        border-radius: 999px;
+        padding: 9px 20px;
+        font-size: 14px;
+        color: #dce6ef;
+      }
+      .cover .chip.ver {
+        border-color: var(--accent);
+        color: #f9b27a;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+      .cover .stamp {
+        position: absolute;
+        right: -24px;
+        bottom: -84px;
+        font-size: 300px;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.055);
+        letter-spacing: -0.04em;
+      }
 
-.head{padding:34px 60px 0 70px;}
-.eyebrow{display:inline-flex;align-items:center;gap:12px;margin-bottom:11px;}
-.eyebrow .tag{background:var(--accent);color:#fff;font-size:13px;font-weight:800;letter-spacing:.1em;padding:5px 12px;border-radius:4px;}
-.eyebrow .sm{font-size:12.5px;color:var(--muted);letter-spacing:.14em;font-weight:700;}
-.head h2{font-size:36px;font-weight:800;letter-spacing:-.02em;color:var(--navy);line-height:1.2;}
-.head .lead{margin-top:9px;font-size:15.5px;color:var(--muted);}
-.hr{height:3px;background:var(--navy);margin:15px 70px 0 70px;}
-.hr i{display:block;width:120px;height:3px;background:var(--accent);}
+      .head {
+        padding: 34px 60px 0 70px;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 11px;
+      }
+      .eyebrow .tag {
+        background: var(--accent);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        padding: 5px 12px;
+        border-radius: 4px;
+      }
+      .eyebrow .sm {
+        font-size: 12.5px;
+        color: var(--muted);
+        letter-spacing: 0.14em;
+        font-weight: 700;
+      }
+      .head h2 {
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: var(--navy);
+        line-height: 1.2;
+      }
+      .head .lead {
+        margin-top: 9px;
+        font-size: 15.5px;
+        color: var(--muted);
+      }
+      .hr {
+        height: 3px;
+        background: var(--navy);
+        margin: 15px 70px 0 70px;
+      }
+      .hr i {
+        display: block;
+        width: 120px;
+        height: 3px;
+        background: var(--accent);
+      }
 
-.body{display:grid;grid-template-columns:706px 1fr;gap:32px;padding:22px 70px 0 70px;}
-.shot{border:1px solid var(--line);background:var(--surface);padding:9px;}
-.shot svg{display:block;}
-.side{display:flex;flex-direction:column;gap:12px;overflow:hidden;}
-.goal{background:var(--navy);color:#fff;padding:14px 18px;}
-.goal>b{display:block;font-size:11.5px;letter-spacing:.18em;color:#F9B27A;margin-bottom:6px;}
-.goal p{font-size:15.5px;line-height:1.45;font-weight:700;}
-ol.acts{list-style:none;counter-reset:a;display:flex;flex-direction:column;gap:9px;}
-ol.acts li{counter-increment:a;position:relative;padding-left:34px;font-size:14px;line-height:1.5;color:#25313D;}
-ol.acts li::before{content:counter(a);position:absolute;left:0;top:1px;width:23px;height:23px;border-radius:50%;
-  background:var(--accent);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;}
-.tip{border-left:4px solid var(--accent);background:var(--accent-soft);padding:11px 14px;}
-.tip.warn{border-left-color:var(--bad);background:#FDEEEB;}
-.tip.ok{border-left-color:var(--ok);background:#F0F7F1;}
-.tip.info{border-left-color:var(--navy-2);background:#EDF3F9;}
-.tip>b{display:block;font-size:12.5px;color:var(--accent);margin-bottom:5px;font-weight:800;}
-.tip.warn>b{color:var(--bad);} .tip.ok>b{color:var(--ok);} .tip.info>b{color:var(--navy-2);}
-.tip p{font-size:13px;line-height:1.55;color:#3A4855;}
+      .body {
+        display: grid;
+        grid-template-columns: 706px 1fr;
+        gap: 32px;
+        padding: 22px 70px 0 70px;
+      }
+      .shot {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        padding: 9px;
+      }
+      .shot svg {
+        display: block;
+      }
+      .side {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        overflow: hidden;
+      }
+      .goal {
+        background: var(--navy);
+        color: #fff;
+        padding: 14px 18px;
+      }
+      .goal > b {
+        display: block;
+        font-size: 11.5px;
+        letter-spacing: 0.18em;
+        color: #f9b27a;
+        margin-bottom: 6px;
+      }
+      .goal p {
+        font-size: 15.5px;
+        line-height: 1.45;
+        font-weight: 700;
+      }
+      ol.acts {
+        list-style: none;
+        counter-reset: a;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+      }
+      ol.acts li {
+        counter-increment: a;
+        position: relative;
+        padding-left: 34px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #25313d;
+      }
+      ol.acts li::before {
+        content: counter(a);
+        position: absolute;
+        left: 0;
+        top: 1px;
+        width: 23px;
+        height: 23px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .tip {
+        border-left: 4px solid var(--accent);
+        background: var(--accent-soft);
+        padding: 11px 14px;
+      }
+      .tip.warn {
+        border-left-color: var(--bad);
+        background: #fdeeeb;
+      }
+      .tip.ok {
+        border-left-color: var(--ok);
+        background: #f0f7f1;
+      }
+      .tip.info {
+        border-left-color: var(--navy-2);
+        background: #edf3f9;
+      }
+      .tip > b {
+        display: block;
+        font-size: 12.5px;
+        color: var(--accent);
+        margin-bottom: 5px;
+        font-weight: 800;
+      }
+      .tip.warn > b {
+        color: var(--bad);
+      }
+      .tip.ok > b {
+        color: var(--ok);
+      }
+      .tip.info > b {
+        color: var(--navy-2);
+      }
+      .tip p {
+        font-size: 13px;
+        line-height: 1.55;
+        color: #3a4855;
+      }
 
-/* 명령어 + 복사 버튼 */
-.cmd .lbl{display:block;font-size:11.5px;font-weight:800;letter-spacing:.1em;color:var(--navy);margin-bottom:5px;}
-.cmdwrap{position:relative;}
-.cmdwrap pre{background:var(--navy);color:#E7EEF6;padding:12px 62px 12px 14px;border-radius:6px;
-  font-family:'Consolas','D2Coding',monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-all;}
-.cp{position:absolute;right:8px;top:8px;background:var(--accent);color:#fff;border:0;border-radius:4px;
-  font-size:11px;font-weight:800;padding:5px 10px;cursor:pointer;font-family:inherit;letter-spacing:.02em;}
-.cp:hover{filter:brightness(1.08);}
-.cp.done{background:var(--ok);}
-.out{margin-top:5px;font-family:'Consolas','D2Coding',monospace;font-size:11.5px;color:var(--muted);}
+      /* 명령어 + 복사 버튼 */
+      .cmd .lbl {
+        display: block;
+        font-size: 11.5px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        color: var(--navy);
+        margin-bottom: 5px;
+      }
+      .cmdwrap {
+        position: relative;
+      }
+      .cmdwrap pre {
+        background: var(--navy);
+        color: #e7eef6;
+        padding: 12px 62px 12px 14px;
+        border-radius: 6px;
+        font-family: "Consolas", "D2Coding", monospace;
+        font-size: 12.5px;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      .cp {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        background: var(--accent);
+        color: #fff;
+        border: 0;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-family: inherit;
+        letter-spacing: 0.02em;
+      }
+      .cp:hover {
+        filter: brightness(1.08);
+      }
+      .cp.done {
+        background: var(--ok);
+      }
+      .out {
+        margin-top: 5px;
+        font-family: "Consolas", "D2Coding", monospace;
+        font-size: 11.5px;
+        color: var(--muted);
+      }
 
-/* 내용이 많은 슬라이드용 축약 모드 */
-.side.dense{gap:9px;}
-.side.dense .goal{padding:11px 15px;}
-.side.dense .goal>b{font-size:11px;margin-bottom:5px;}
-.side.dense .goal p{font-size:14px;line-height:1.4;}
-.side.dense ol.acts{gap:6px;}
-.side.dense ol.acts li{font-size:13px;line-height:1.45;padding-left:29px;}
-.side.dense ol.acts li::before{width:20px;height:20px;font-size:11px;}
-.side.dense .cmd .lbl{font-size:11px;margin-bottom:4px;}
-.side.dense .cmdwrap pre{font-size:11.5px;line-height:1.5;padding:9px 54px 9px 11px;}
-.side.dense .cp{padding:4px 8px;font-size:10px;top:6px;right:6px;}
-.side.dense .out{font-size:10.5px;margin-top:4px;}
-.side.dense .tip{padding:9px 12px;}
-.side.dense .tip>b{font-size:11.5px;margin-bottom:4px;}
-.side.dense .tip p{font-size:12px;line-height:1.5;}
+      /* 내용이 많은 슬라이드용 축약 모드 */
+      .side.dense {
+        gap: 9px;
+      }
+      .side.dense .goal {
+        padding: 11px 15px;
+      }
+      .side.dense .goal > b {
+        font-size: 11px;
+        margin-bottom: 5px;
+      }
+      .side.dense .goal p {
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      .side.dense ol.acts {
+        gap: 6px;
+      }
+      .side.dense ol.acts li {
+        font-size: 13px;
+        line-height: 1.45;
+        padding-left: 29px;
+      }
+      .side.dense ol.acts li::before {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
+      }
+      .side.dense .cmd .lbl {
+        font-size: 11px;
+        margin-bottom: 4px;
+      }
+      .side.dense .cmdwrap pre {
+        font-size: 11.5px;
+        line-height: 1.5;
+        padding: 9px 54px 9px 11px;
+      }
+      .side.dense .cp {
+        padding: 4px 8px;
+        font-size: 10px;
+        top: 6px;
+        right: 6px;
+      }
+      .side.dense .out {
+        font-size: 10.5px;
+        margin-top: 4px;
+      }
+      .side.dense .tip {
+        padding: 9px 12px;
+      }
+      .side.dense .tip > b {
+        font-size: 11.5px;
+        margin-bottom: 4px;
+      }
+      .side.dense .tip p {
+        font-size: 12px;
+        line-height: 1.5;
+      }
 
-/* 명령어 모음 슬라이드 */
-.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px;padding:22px 70px 0 70px;}
-.ccard{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);padding:13px 15px;}
-.ccard .ct{font-size:13.5px;font-weight:800;color:var(--navy);margin-bottom:8px;}
-.ccard .cd{margin-top:7px;font-size:12.5px;line-height:1.5;color:var(--muted);}
+      /* 명령어 모음 슬라이드 */
+      .cgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px 26px;
+        padding: 22px 70px 0 70px;
+      }
+      .ccard {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--accent);
+        padding: 13px 15px;
+      }
+      .ccard .ct {
+        font-size: 13.5px;
+        font-weight: 800;
+        color: var(--navy);
+        margin-bottom: 8px;
+      }
+      .ccard .cd {
+        margin-top: 7px;
+        font-size: 12.5px;
+        line-height: 1.5;
+        color: var(--muted);
+      }
 
-/* 문제 해결 표 */
-.tbwrap{padding:20px 70px 0 70px;}
-table.tb{width:100%;border-collapse:collapse;}
-table.tb th{background:var(--navy);color:#fff;font-size:13px;text-align:left;padding:10px 13px;font-weight:700;}
-table.tb td{border-bottom:1px solid var(--line);padding:9px 13px;font-size:12.8px;vertical-align:top;line-height:1.5;}
-table.tb tr:nth-child(even) td{background:#FAFBFC;}
-table.tb td.s{font-weight:700;color:var(--bad);}
-table.tb td.c{color:var(--muted);}
-table.tb code{font-family:'Consolas','D2Coding',monospace;background:#EEF2F6;padding:1px 5px;border-radius:3px;font-size:12px;color:#20364C;}
+      /* 문제 해결 표 */
+      .tbwrap {
+        padding: 20px 70px 0 70px;
+      }
+      table.tb {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      table.tb th {
+        background: var(--navy);
+        color: #fff;
+        font-size: 13px;
+        text-align: left;
+        padding: 10px 13px;
+        font-weight: 700;
+      }
+      table.tb td {
+        border-bottom: 1px solid var(--line);
+        padding: 9px 13px;
+        font-size: 12.8px;
+        vertical-align: top;
+        line-height: 1.5;
+      }
+      table.tb tr:nth-child(even) td {
+        background: #fafbfc;
+      }
+      table.tb td.s {
+        font-weight: 700;
+        color: var(--bad);
+      }
+      table.tb td.c {
+        color: var(--muted);
+      }
+      table.tb code {
+        font-family: "Consolas", "D2Coding", monospace;
+        background: #eef2f6;
+        padding: 1px 5px;
+        border-radius: 3px;
+        font-size: 12px;
+        color: #20364c;
+      }
 
-/* 마무리 */
-.two{display:grid;grid-template-columns:1fr 1fr;gap:30px;padding:24px 70px 0 70px;}
-.panel h3{font-size:17px;color:var(--navy);font-weight:800;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--line);}
-ul.chk{list-style:none;display:flex;flex-direction:column;gap:7px;}
-ul.chk li{display:flex;gap:11px;align-items:flex-start;background:var(--surface);padding:8px 12px;}
-ul.chk .box{width:16px;height:16px;border:2px solid var(--accent);flex:0 0 auto;margin-top:2px;}
-ul.chk .t{display:block;font-size:13.5px;font-weight:700;color:#25313D;}
-ul.chk .d{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45;}
-ul.nxt{list-style:none;display:flex;flex-direction:column;gap:9px;}
-ul.nxt li{border-left:3px solid var(--navy-2);padding:6px 0 6px 12px;}
-ul.nxt>li>b{display:block;font-size:13.5px;color:var(--navy);margin-bottom:3px;}
-ul.nxt>li>span{font-size:12.5px;color:var(--muted);line-height:1.5;}
-.final{margin:18px 70px 0 70px;background:var(--navy);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:24px;}
-.final b{font-size:13px;color:#F9B27A;letter-spacing:.14em;flex:0 0 auto;}
-.final span{font-family:'Consolas','D2Coding',monospace;font-size:17px;}
+      /* 마무리 */
+      .two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        padding: 24px 70px 0 70px;
+      }
+      .panel h3 {
+        font-size: 17px;
+        color: var(--navy);
+        font-weight: 800;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--line);
+      }
+      ul.chk {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      ul.chk li {
+        display: flex;
+        gap: 11px;
+        align-items: flex-start;
+        background: var(--surface);
+        padding: 8px 12px;
+      }
+      ul.chk .box {
+        width: 16px;
+        height: 16px;
+        border: 2px solid var(--accent);
+        flex: 0 0 auto;
+        margin-top: 2px;
+      }
+      ul.chk .t {
+        display: block;
+        font-size: 13.5px;
+        font-weight: 700;
+        color: #25313d;
+      }
+      ul.chk .d {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+        line-height: 1.45;
+      }
+      ul.nxt {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+      }
+      ul.nxt li {
+        border-left: 3px solid var(--navy-2);
+        padding: 6px 0 6px 12px;
+      }
+      ul.nxt > li > b {
+        display: block;
+        font-size: 13.5px;
+        color: var(--navy);
+        margin-bottom: 3px;
+      }
+      ul.nxt > li > span {
+        font-size: 12.5px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .final {
+        margin: 18px 70px 0 70px;
+        background: var(--navy);
+        color: #fff;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .final b {
+        font-size: 13px;
+        color: #f9b27a;
+        letter-spacing: 0.14em;
+        flex: 0 0 auto;
+      }
+      .final span {
+        font-family: "Consolas", "D2Coding", monospace;
+        font-size: 17px;
+      }
 
-.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#0E2A47;color:#fff;
-  padding:11px 22px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;transition:.22s;pointer-events:none;z-index:99;}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 26px;
+        transform: translateX(-50%) translateY(20px);
+        background: #0e2a47;
+        color: #fff;
+        padding: 11px 22px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 700;
+        opacity: 0;
+        transition: 0.22s;
+        pointer-events: none;
+        z-index: 99;
+      }
+      .toast.on {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
 
-@media print{
-  body{background:#fff;padding:0;} .deck{gap:0;}
-  .slide{box-shadow:none;page-break-after:always;}
-  .cp,.toast{display:none!important;}
-  .cmdwrap pre{padding-right:14px;}
-  @page{size:1280px 720px;margin:0;}
-}
-</style>
-</head>
-<body>
-<div class="deck">
+      @media print {
+        body {
+          background: #fff;
+          padding: 0;
+        }
+        .deck {
+          gap: 0;
+        }
+        .slide {
+          box-shadow: none;
+          page-break-after: always;
+        }
+        .cp,
+        .toast {
+          display: none !important;
+        }
+        .cmdwrap pre {
+          padding-right: 14px;
+        }
+        @page {
+          size: 1280px 720px;
+          margin: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="deck">
+      <section class="slide cover" data-no="01 / 15">
+        <div class="stamp">VS</div>
+        <div class="kicker">CLAUDE CODE 준비 · 04 VS CODE</div>
+        <h1>VS Code 설치하고<br /><em>작업 폴더 열기</em></h1>
+        <div class="bar"></div>
+        <p class="sub">코드를 보고 고치는 편집기 VS Code를 설치합니다. 설치 중 <b>"PATH에 추가"</b> 체크 하나만 확인하면 됩니다.</p>
+        <div class="meta">
+          <span class="chip">소요 시간 약 8분</span><span class="chip">Windows 10 / 11</span><span class="chip">무료 · 사용자 설치 가능</span
+          ><span class="chip">초보자 대상</span><span class="chip ver">v1.0 · 2026-07-26</span>
+        </div>
+      </section>
 
-<section class="slide cover" data-no="01 / 15">
-  <div class="stamp">VS</div>
-  <div class="kicker">CLAUDE CODE 준비 · 04 VS CODE</div>
-  <h1>VS Code 설치하고<br><em>작업 폴더 열기</em></h1>
-  <div class="bar"></div>
-  <p class="sub">코드를 보고 고치는 편집기 VS Code를 설치합니다. 설치 중 <b>"PATH에 추가"</b> 체크 하나만 확인하면 됩니다.</p>
-  <div class="meta"><span class="chip">소요 시간 약 8분</span><span class="chip">Windows 10 / 11</span><span class="chip">무료 · 사용자 설치 가능</span><span class="chip">초보자 대상</span><span class="chip ver">v1.0 · 2026-07-26</span></div>
-</section>
+      <section class="slide" data-no="02 / 15">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">한눈에 보기</span></div>
+          <h2>VS Code 설치 전체 흐름</h2>
+          <p class="lead">내려받기 → 설치(체크 1개 확인) → 한국어 설정 → 폴더 열기 → 터미널 열기 순서입니다.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="flowwrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 372" width="100%" preserveAspectRatio="xMidYMid meet">
+            <style>
+              text {
+                font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+              }
+              .b {
+                font-weight: 700;
+              }
+            </style>
+            <rect x="0" y="0" width="1000" height="372" fill="#FFFFFF" />
+            <g>
+              <rect x="18" y="66" width="172" height="176" rx="12" fill="#0E2A47" />
+              <text x="40" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">01</text>
+              <text x="40" y="152" font-size="30" class="b">⬇️</text>
+              <text x="40" y="184" font-size="16" class="b" fill="#FFFFFF">내려받기</text>
+              <rect x="40" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="50" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 1</text>
+            </g>
+            <path d="M194 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <g>
+              <rect x="216" y="66" width="172" height="176" rx="12" fill="#1B4A78" />
+              <text x="238" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">02</text>
+              <text x="238" y="152" font-size="30" class="b">⚙️</text>
+              <text x="238" y="184" font-size="16" class="b" fill="#FFFFFF">설치 마법사</text>
+              <rect x="238" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="248" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 2–4</text>
+            </g>
+            <path d="M392 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <g>
+              <rect x="414" y="66" width="172" height="176" rx="12" fill="#2A6EA6" />
+              <text x="436" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">03</text>
+              <text x="436" y="152" font-size="30" class="b">🇰🇷</text>
+              <text x="436" y="184" font-size="16" class="b" fill="#FFFFFF">한국어 설정</text>
+              <rect x="436" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="446" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 5</text>
+            </g>
+            <path d="M590 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <g>
+              <rect x="612" y="66" width="172" height="176" rx="12" fill="#E2762A" />
+              <text x="634" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">04</text>
+              <text x="634" y="152" font-size="30" class="b">📁</text>
+              <text x="634" y="184" font-size="16" class="b" fill="#FFFFFF">폴더 열기</text>
+              <rect x="634" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="644" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 6–7</text>
+            </g>
+            <path d="M788 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <g>
+              <rect x="810" y="66" width="172" height="176" rx="12" fill="#F26B21" />
+              <text x="832" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">05</text>
+              <text x="832" y="152" font-size="30" class="b">⌨️</text>
+              <text x="832" y="184" font-size="16" class="b" fill="#FFFFFF">터미널 열기</text>
+              <rect x="832" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="842" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 8–9</text>
+            </g>
+            <rect x="18" y="282" width="964" height="62" rx="10" fill="#F4F6F9" stroke="#D9E0E8" />
+            <text x="42" y="308" font-size="13" class="b" fill="#0E2A47">꼭 확인할 한 가지</text>
+            <text x="42" y="330" font-size="12.5" fill="#5B6B7C">
+              설치 중 "추가 작업 선택" 화면에서 PATH에 추가 체크박스가 켜져 있는지 확인 (기본값은 켜져 있음)
+            </text>
+          </svg>
+        </div>
+      </section>
 
-<section class="slide" data-no="02 / 15">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">한눈에 보기</span></div>
-    <h2>VS Code 설치 전체 흐름</h2>
-    <p class="lead">내려받기 → 설치(체크 1개 확인) → 한국어 설정 → 폴더 열기 → 터미널 열기 순서입니다.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="flowwrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 372" width="100%" preserveAspectRatio="xMidYMid meet">
-    <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.b{font-weight:700;}</style>
-    <rect x="0" y="0" width="1000" height="372" fill="#FFFFFF"/>
-    <g><rect x="18" y="66" width="172" height="176" rx="12" fill="#0E2A47"/>
-<text x="40" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">01</text>
-<text x="40" y="152" font-size="30" class="b">⬇️</text>
-<text x="40" y="184" font-size="16" class="b" fill="#FFFFFF">내려받기</text>
-<rect x="40" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="50" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 1</text></g><path d="M194 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="216" y="66" width="172" height="176" rx="12" fill="#1B4A78"/>
-<text x="238" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">02</text>
-<text x="238" y="152" font-size="30" class="b">⚙️</text>
-<text x="238" y="184" font-size="16" class="b" fill="#FFFFFF">설치 마법사</text>
-<rect x="238" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="248" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 2–4</text></g><path d="M392 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="414" y="66" width="172" height="176" rx="12" fill="#2A6EA6"/>
-<text x="436" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">03</text>
-<text x="436" y="152" font-size="30" class="b">🇰🇷</text>
-<text x="436" y="184" font-size="16" class="b" fill="#FFFFFF">한국어 설정</text>
-<rect x="436" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="446" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 5</text></g><path d="M590 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="612" y="66" width="172" height="176" rx="12" fill="#E2762A"/>
-<text x="634" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">04</text>
-<text x="634" y="152" font-size="30" class="b">📁</text>
-<text x="634" y="184" font-size="16" class="b" fill="#FFFFFF">폴더 열기</text>
-<rect x="634" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="644" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 6–7</text></g><path d="M788 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="810" y="66" width="172" height="176" rx="12" fill="#F26B21"/>
-<text x="832" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">05</text>
-<text x="832" y="152" font-size="30" class="b">⌨️</text>
-<text x="832" y="184" font-size="16" class="b" fill="#FFFFFF">터미널 열기</text>
-<rect x="832" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="842" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 8–9</text></g>
-    <rect x="18" y="282" width="964" height="62" rx="10" fill="#F4F6F9" stroke="#D9E0E8"/>
-    <text x="42" y="308" font-size="13" class="b" fill="#0E2A47">꼭 확인할 한 가지</text>
-    <text x="42" y="330" font-size="12.5" fill="#5B6B7C">설치 중 "추가 작업 선택" 화면에서 PATH에 추가 체크박스가 켜져 있는지 확인 (기본값은 켜져 있음)</text>
-  </svg></div>
-</section>
+      <section class="slide" data-no="03 / 15">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 1</span><span class="sm">VS CODE · 내려받기</span></div>
+          <h2>code.visualstudio.com 에서 받기</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5" />
+              <path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5" />
+              <circle cx="34" cy="30" r="6" fill="#FF5F57" />
+              <circle cx="54" cy="30" r="6" fill="#FEBC2E" />
+              <circle cx="74" cy="30" r="6" fill="#28C840" />
+              <rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8" />
+              <text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://code.visualstudio.com</text>
+              <rect x="8" y="72" width="884" height="480" fill="#FFFFFF" />
 
-<section class="slide" data-no="03 / 15">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 1</span><span class="sm">VS CODE · 내려받기</span></div>
-    <h2>code.visualstudio.com 에서 받기</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
-<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
-<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
-<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
-<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://code.visualstudio.com</text>
-<rect x="8" y="72" width="884" height="480" fill="#FFFFFF"/>
+              <rect x="8" y="72" width="884" height="56" fill="#FFFFFF" />
+              <text x="40" y="108" font-size="17" class="b" fill="#0065A9">Visual Studio Code</text>
+              <text x="240" y="108" font-size="13" fill="#5B6B7C">Docs Updates Blog Extensions</text>
+              <text x="450" y="188" text-anchor="middle" font-size="30" class="b" fill="#16202B">Your code editor.</text>
+              <text x="450" y="224" text-anchor="middle" font-size="15" fill="#5B6B7C">무료로 제공되는 코드 편집기입니다.</text>
+              <rect x="300" y="262" width="300" height="54" rx="8" fill="#0065A9" />
+              <text x="450" y="290" text-anchor="middle" font-size="16" class="b" fill="#FFFFFF">⬇ Download for Windows</text>
+              <text x="450" y="308" text-anchor="middle" font-size="10.5" fill="#CFE4F5">Stable Build</text>
+              <text x="450" y="348" text-anchor="middle" font-size="12" fill="#5B6B7C">Other platforms · Insiders · All downloads</text>
+              <rect x="8" y="496" width="884" height="56" fill="#EDF1F5" />
+              <rect x="30" y="510" width="286" height="32" rx="6" fill="#FFFFFF" stroke="#D9E0E8" />
+              <circle cx="50" cy="526" r="9" fill="#1A7F37" />
+              <path d="M45.5 526l3.2 3.2 5.6-6.4" stroke="#fff" stroke-width="1.8" fill="none" />
+              <text x="66" y="531" class="m" font-size="11.5" fill="#24292F">VSCodeUserSetup-x64-1.9x.x.exe</text>
+              <rect x="118" y="42" width="644" height="30" rx="10" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="96" cy="57" r="15" fill="#F26B21" />
+              <text x="96" y="63" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="294" y="256" width="312" height="66" rx="10" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="638" cy="289" r="15" fill="#F26B21" />
+              <text x="638" y="295" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="26" y="506" width="294" height="40" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="344" cy="526" r="15" fill="#F26B21" />
+              <text x="344" y="532" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>VS Code 설치 파일을 내려받습니다.</p>
+            </div>
+            <ol class="acts">
+              <li>주소창에 <b>code.visualstudio.com</b> 을 입력해 접속합니다.</li>
+              <li>파란색 <b>Download for Windows</b> 버튼을 누릅니다.</li>
+              <li>화면 아래에서 <code>VSCodeUserSetup-x64-1.9x.x.exe</code> 를 확인합니다.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">주소</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="https://code.visualstudio.com">복사</button>
+                <pre>https://code.visualstudio.com</pre>
+              </div>
+            </div>
+            <div class="tip info">
+              <b>User Installer 가 기본입니다</b>
+              <p>기본 버튼은 <b>User Installer</b>(내 계정에만 설치)입니다. <b>관리자 권한이 없어도 설치</b>되므로 기관 PC에 유리합니다.</p>
+            </div>
+            <div class="tip">
+              <b>Stable vs Insiders</b>
+              <p>초록색 <b>Insiders</b>는 시험판입니다. 반드시 <b>파란색 Stable</b> 을 받으세요.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<rect x="8" y="72" width="884" height="56" fill="#FFFFFF"/>
-<text x="40" y="108" font-size="17" class="b" fill="#0065A9">Visual Studio Code</text>
-<text x="240" y="108" font-size="13" fill="#5B6B7C">Docs   Updates   Blog   Extensions</text>
-<text x="450" y="188" text-anchor="middle" font-size="30" class="b" fill="#16202B">Your code editor.</text>
-<text x="450" y="224" text-anchor="middle" font-size="15" fill="#5B6B7C">무료로 제공되는 코드 편집기입니다.</text>
-<rect x="300" y="262" width="300" height="54" rx="8" fill="#0065A9"/>
-<text x="450" y="290" text-anchor="middle" font-size="16" class="b" fill="#FFFFFF">⬇  Download for Windows</text>
-<text x="450" y="308" text-anchor="middle" font-size="10.5" fill="#CFE4F5">Stable Build</text>
-<text x="450" y="348" text-anchor="middle" font-size="12" fill="#5B6B7C">Other platforms  ·  Insiders  ·  All downloads</text>
-<rect x="8" y="496" width="884" height="56" fill="#EDF1F5"/>
-<rect x="30" y="510" width="286" height="32" rx="6" fill="#FFFFFF" stroke="#D9E0E8"/>
-<circle cx="50" cy="526" r="9" fill="#1A7F37"/><path d="M45.5 526l3.2 3.2 5.6-6.4" stroke="#fff" stroke-width="1.8" fill="none"/>
-<text x="66" y="531" class="m" font-size="11.5" fill="#24292F">VSCodeUserSetup-x64-1.9x.x.exe</text>
-<rect x="118" y="42" width="644" height="30" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="96" cy="57" r="15" fill="#F26B21"/><text x="96" y="63" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="294" y="256" width="312" height="66" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="638" cy="289" r="15" fill="#F26B21"/><text x="638" y="295" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="26" y="506" width="294" height="40" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="344" cy="526" r="15" fill="#F26B21"/><text x="344" y="532" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+      <section class="slide" data-no="04 / 15">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 2</span><span class="sm">VS CODE · 설치 마법사</span></div>
+          <h2>라이선스 동의 → 설치 위치 → <b>다음</b></h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="6" fill="#0065A9" />
+              <rect x="8" y="30" width="884" height="22" fill="#0065A9" />
+              <text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Visual Studio Code 설치</text>
+              <rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18" />
+              <text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <rect x="8" y="52" width="884" height="424" fill="#FFFFFF" />
+              <line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5" />
+              <rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD" />
+              <text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; 뒤로</text>
+              <rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47" />
+              <text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">다음 &gt;</text>
+              <rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD" />
+              <text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">취소</text>
 
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>VS Code 설치 파일을 내려받습니다.</p></div>
-      <ol class="acts"><li>주소창에 <b>code.visualstudio.com</b> 을 입력해 접속합니다.</li><li>파란색 <b>Download for Windows</b> 버튼을 누릅니다.</li><li>화면 아래에서 <code>VSCodeUserSetup-x64-1.9x.x.exe</code> 를 확인합니다.</li></ol>
-      <div class="cmd">
-  <b class="lbl">주소</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="https://code.visualstudio.com">복사</button><pre>https://code.visualstudio.com</pre></div>
-  </div>
-      <div class="tip info"><b>User Installer 가 기본입니다</b><p>기본 버튼은 <b>User Installer</b>(내 계정에만 설치)입니다. <b>관리자 권한이 없어도 설치</b>되므로 기관 PC에 유리합니다.</p></div><div class="tip "><b>Stable vs Insiders</b><p>초록색 <b>Insiders</b>는 시험판입니다. 반드시 <b>파란색 Stable</b> 을 받으세요.</p></div>
+              <rect x="8" y="52" width="884" height="72" fill="#FFFFFF" />
+              <text x="38" y="86" font-size="18" class="b" fill="#16202B">사용권 계약</text>
+              <text x="38" y="110" font-size="12.5" fill="#5B6B7C">계속하기 전에 다음 중요 정보를 읽어 보십시오.</text>
+              <line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB" />
+              <circle cx="836" cy="88" r="22" fill="#0065A9" opacity="0.14" />
+              <text x="836" y="97" text-anchor="middle" font-size="22">🧩</text>
+              <rect x="60" y="146" width="500" height="176" rx="4" fill="#FCFCFC" stroke="#D9E0E8" />
+              <text x="80" y="174" font-size="12.5" class="b" fill="#16202B">Visual Studio Code에 대한 사용권 계약</text>
+              <text x="80" y="202" font-size="11.5" fill="#5B6B7C">이 라이선스는 Microsoft Corporation과 귀하 간의 계약입니다.</text>
+              <text x="80" y="224" font-size="11.5" fill="#5B6B7C">본 소프트웨어를 사용함으로써 이 조건에 동의하는 것입니다.</text>
+              <text x="80" y="246" font-size="11.5" fill="#5B6B7C">1. 설치 및 사용 권한 …</text>
+              <text x="80" y="268" font-size="11.5" fill="#5B6B7C">2. 데이터 수집 …</text>
+              <circle cx="69" cy="351" r="8.5" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6" />
+              <circle cx="69" cy="351" r="4.5" fill="#0E2A47" />
+              <text x="88" y="356" font-size="14" class="b" fill="#24292F">동의합니다</text>
+              <circle cx="309" cy="351" r="8.5" fill="#FFFFFF" stroke="#9AA5B1" stroke-width="1.6" />
+              <text x="328" y="356" font-size="14" class="" fill="#24292F">동의하지 않습니다</text>
+              <rect x="584" y="146" width="250" height="92" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2" />
+              <text x="630" y="176" font-size="13.5" class="b" fill="#C1521A">.exe 더블클릭</text>
+              <text x="604" y="202" font-size="12.5" fill="#3A4855">다운로드한 설치 파일을</text>
+              <text x="604" y="224" font-size="12.5" fill="#3A4855">두 번 클릭해 실행합니다.</text>
+              <circle cx="608" cy="170" r="15" fill="#F26B21" />
+              <text x="608" y="176" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="584" y="258" width="250" height="92" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2" />
+              <text x="630" y="288" font-size="13.5" class="b" fill="#C1521A">남은 화면도 다음</text>
+              <text x="604" y="314" font-size="12.5" fill="#3A4855">설치 위치 · 시작 메뉴 폴더</text>
+              <text x="604" y="336" font-size="12.5" fill="#3A4855">그대로 두고 넘어갑니다.</text>
+              <circle cx="608" cy="282" r="15" fill="#F26B21" />
+              <text x="608" y="288" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+              <rect x="54" y="336" width="200" height="34" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="282" cy="353" r="15" fill="#F26B21" />
+              <text x="282" y="359" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="466" cy="514" r="15" fill="#F26B21" />
+              <text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+            </svg>
+          </div>
+          <div class="side">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>앞쪽 화면들을 기본값 그대로 넘어갑니다.</p>
+            </div>
+            <ol class="acts">
+              <li>내려받은 <code>VSCodeUserSetup…exe</code> 를 <b>더블클릭</b>합니다.</li>
+              <li><b>사용권 계약</b> 화면에서 <b>동의합니다</b> 를 선택합니다.</li>
+              <li><b>다음</b> 을 누릅니다.</li>
+              <li><b>설치 위치</b>·<b>시작 메뉴 폴더</b> 화면도 그대로 <b>다음</b> 으로 넘깁니다.</li>
+            </ol>
+
+            <div class="tip">
+              <b>VS Code는 한국어 설치 마법사</b>
+              <p>Git·Node.js와 달리 설치 화면이 <b>한글</b>로 나옵니다. 읽으면서 진행하면 됩니다.</p>
+            </div>
+            <div class="tip info">
+              <b>관리자 권한 창이 안 떠요</b>
+              <p>User Installer는 <b>내 계정 폴더에만</b> 설치하므로 관리자 권한이 필요 없습니다. 정상입니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="05 / 15">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 3</span><span class="sm">VS CODE · 설치 마법사 ★중요</span></div>
+          <h2>추가 작업 선택 — <b>PATH에 추가</b> 확인</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="6" fill="#0065A9" />
+              <rect x="8" y="30" width="884" height="22" fill="#0065A9" />
+              <text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Visual Studio Code 설치</text>
+              <rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18" />
+              <text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <rect x="8" y="52" width="884" height="424" fill="#FFFFFF" />
+              <line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5" />
+              <rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD" />
+              <text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; 뒤로</text>
+              <rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47" />
+              <text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">다음 &gt;</text>
+              <rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD" />
+              <text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">취소</text>
+
+              <rect x="8" y="52" width="884" height="72" fill="#FFFFFF" />
+              <text x="38" y="86" font-size="18" class="b" fill="#16202B">추가 작업 선택</text>
+              <text x="38" y="110" font-size="12.5" fill="#5B6B7C">
+                Visual Studio Code를 설치하는 동안 수행할 추가 작업을 선택한 후 다음을 클릭하십시오.
+              </text>
+              <line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB" />
+              <circle cx="836" cy="88" r="22" fill="#0065A9" opacity="0.14" />
+              <text x="836" y="97" text-anchor="middle" font-size="22">🧩</text>
+              <rect x="60" y="150" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#9AA5B1" stroke-width="1.6" />
+              <text x="87" y="164" font-size="13.5" fill="#24292F">바탕 화면에 바로가기 만들기</text>
+              <text x="60" y="198" font-size="12.5" class="b" fill="#5B6B7C">기타:</text>
+              <rect x="60" y="210" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6" />
+              <path d="M63.5 218.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round" />
+              <text x="87" y="224" font-size="13.5" fill="#24292F">"Code(으)로 열기" 작업을 Windows 탐색기 파일 상황에 맞는 메뉴에 추가</text>
+              <rect x="60" y="244" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6" />
+              <path d="M63.5 252.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round" />
+              <text x="87" y="258" font-size="13.5" fill="#24292F">"Code(으)로 열기" 작업을 Windows 탐색기 디렉터리 상황에 맞는 메뉴에 추가</text>
+              <rect x="60" y="278" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6" />
+              <path d="M63.5 286.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round" />
+              <text x="87" y="292" font-size="13.5" fill="#24292F">지원되는 파일 형식에 대한 편집기로 Code 등록</text>
+              <rect x="60" y="312" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6" />
+              <path d="M63.5 320.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round" />
+              <text x="87" y="326" font-size="13.5" fill="#24292F">PATH에 추가(다시 시작한 후 사용 가능)</text>
+              <rect x="60" y="364" width="420" height="70" rx="6" fill="#FFF1E7" stroke="#F26B21" />
+              <text x="82" y="390" font-size="13" class="b" fill="#F26B21">이 체크만 꼭 확인하세요</text>
+              <text x="82" y="414" font-size="12.5" fill="#3A4855">PATH에 추가 → 터미널에서 code . 로 폴더를 엽니다.</text>
+              <rect x="510" y="364" width="324" height="92" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2" />
+              <text x="556" y="394" font-size="13.5" class="b" fill="#C1521A">다음 화면에서 [설치]</text>
+              <text x="530" y="420" font-size="12.5" fill="#3A4855">설치 준비 완료 화면이 나오면</text>
+              <text x="530" y="442" font-size="12.5" fill="#3A4855">설치 버튼을 누르면 됩니다.</text>
+              <circle cx="534" cy="388" r="15" fill="#F26B21" />
+              <text x="534" y="394" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+              <rect x="54" y="306" width="420" height="32" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="506" cy="322" r="15" fill="#F26B21" />
+              <text x="506" y="328" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="54" y="204" width="560" height="76" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="646" cy="242" r="15" fill="#F26B21" />
+              <text x="646" y="248" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="466" cy="514" r="15" fill="#F26B21" />
+              <text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>터미널에서 <code>code</code> 명령을 쓸 수 있도록 PATH 등록을 확인합니다.</p>
+            </div>
+            <ol class="acts">
+              <li><b>PATH에 추가(다시 시작한 후 사용 가능)</b> 가 <b>체크</b>되어 있는지 확인합니다. (기본 체크)</li>
+              <li><b>"Code(으)로 열기" 작업을…추가</b> 두 항목도 체크되어 있으면 편리합니다.</li>
+              <li><b>다음</b> 을 누릅니다.</li>
+              <li>이어지는 <b>설치 준비 완료</b> 화면에서 <b>설치</b> 를 누릅니다.</li>
+            </ol>
+
+            <div class="tip warn">
+              <b>PATH 체크를 빼면</b>
+              <p>터미널에서 <code>code .</code> 명령이 동작하지 않고, 클로드 코드와의 연동도 번거로워집니다. <b>반드시 체크 상태로 두세요.</b></p>
+            </div>
+            <div class="tip ok">
+              <b>탐색기 우클릭 메뉴가 편합니다</b>
+              <p>"Code(으)로 열기" 를 체크하면 폴더에서 <b>오른쪽 클릭 → Code로 열기</b> 로 바로 작업할 수 있습니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="06 / 15">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 4</span><span class="sm">VS CODE · 첫 실행</span></div>
+          <h2>설치 완료 → VS Code 실행</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#1E1E1E" />
+              <rect x="8" y="8" width="884" height="34" rx="8" fill="#323233" />
+              <rect x="8" y="30" width="884" height="12" fill="#323233" />
+              <text x="30" y="30" font-size="12" fill="#CCCCCC">파일 편집 선택 보기 이동 실행 터미널 도움말</text>
+              <rect x="8" y="42" width="52" height="510" fill="#333333" />
+              <text x="34" y="76" text-anchor="middle" font-size="19" fill="#FFFFFF">🗂</text>
+              <text x="34" y="118" text-anchor="middle" font-size="17" fill="#8A8A8A">🔍</text>
+              <text x="34" y="160" text-anchor="middle" font-size="17" fill="#8A8A8A">⑂</text>
+              <text x="34" y="202" text-anchor="middle" font-size="17" fill="#8A8A8A">▷</text>
+              <text x="34" y="244" text-anchor="middle" font-size="17" fill="#8A8A8A">⊞</text>
+
+              <rect x="60" y="42" width="832" height="34" fill="#252526" />
+              <rect x="60" y="42" width="150" height="34" fill="#1E1E1E" />
+              <text x="80" y="64" font-size="12" fill="#FFFFFF">시작</text>
+              <text x="330" y="144" font-size="30" class="b" fill="#FFFFFF">Visual Studio Code</text>
+              <text x="330" y="176" font-size="14" fill="#9A9A9A">코드 편집을 다시 정의합니다</text>
+              <text x="330" y="226" font-size="14" class="b" fill="#4EC9B0">시작</text>
+              <text x="330" y="258" font-size="13" fill="#569CD6">새 파일…</text>
+              <text x="330" y="286" font-size="13" fill="#569CD6">파일 열기…</text>
+              <text x="330" y="314" font-size="13" fill="#569CD6">폴더 열기…</text>
+              <text x="620" y="226" font-size="14" class="b" fill="#4EC9B0">색 테마</text>
+              <rect x="620" y="240" width="106" height="42" rx="6" fill="#1E1E1E" stroke="#0078D4" stroke-width="2" />
+              <text x="673" y="266" text-anchor="middle" font-size="12" fill="#FFFFFF">Dark Modern</text>
+              <rect x="738" y="240" width="106" height="42" rx="6" fill="#F3F3F3" />
+              <text x="791" y="266" text-anchor="middle" font-size="12" fill="#24292F">Light Modern</text>
+              <rect x="8" y="528" width="884" height="24" fill="#007ACC" />
+              <text x="30" y="544" font-size="11" fill="#FFFFFF">⑂ main ⊗ 0 ⚠ 0</text>
+              <text x="760" y="544" font-size="11" fill="#FFFFFF">줄 1, 열 1 UTF-8</text>
+              <rect x="330" y="350" width="380" height="70" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="376" y="380" font-size="13.5" class="b" fill="#F9B27A">설치 마지막 화면</text>
+              <text x="350" y="406" font-size="12.5" fill="#DCE6EF">"Visual Studio Code 실행" 체크 → [종료]</text>
+              <circle cx="354" cy="374" r="15" fill="#F26B21" />
+              <text x="354" y="380" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="56" y="38" width="300" height="42" rx="6" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="384" cy="59" r="15" fill="#F26B21" />
+              <text x="384" y="65" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="616" y="236" width="232" height="50" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="872" cy="261" r="15" fill="#F26B21" />
+              <text x="872" y="267" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+            </svg>
+          </div>
+          <div class="side">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>설치를 마치고 VS Code를 처음 실행합니다.</p>
+            </div>
+            <ol class="acts">
+              <li>설치가 끝나면 <b>Visual Studio Code 실행</b> 체크를 켠 채 <b>종료</b> 를 누릅니다.</li>
+              <li>파란 로고와 함께 <b>시작</b> 탭이 열립니다.</li>
+              <li>테마 선택 화면이 나오면 마음에 드는 것을 고릅니다. (나중에 변경 가능)</li>
+            </ol>
+
+            <div class="tip ok">
+              <b>첫 화면은 비어 있습니다</b>
+              <p>"시작(Get Started)" 탭만 보이는 것이 정상입니다. 아직 아무 폴더도 열지 않았기 때문입니다.</p>
+            </div>
+            <div class="tip">
+              <b>테마를 바꾸려면</b>
+              <p><b>Ctrl+K → Ctrl+T</b> 로 언제든 바꿀 수 있습니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="07 / 15">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 5</span><span class="sm">VS CODE · 한국어 설정</span></div>
+          <h2>한국어 언어팩 설치</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#1E1E1E" />
+              <rect x="8" y="8" width="884" height="34" rx="8" fill="#323233" />
+              <rect x="8" y="30" width="884" height="12" fill="#323233" />
+              <text x="30" y="30" font-size="12" fill="#CCCCCC">파일 편집 선택 보기 이동 실행 터미널 도움말</text>
+              <rect x="8" y="42" width="52" height="510" fill="#333333" />
+              <text x="34" y="76" text-anchor="middle" font-size="19" fill="#FFFFFF">🗂</text>
+              <text x="34" y="118" text-anchor="middle" font-size="17" fill="#8A8A8A">🔍</text>
+              <text x="34" y="160" text-anchor="middle" font-size="17" fill="#8A8A8A">⑂</text>
+              <text x="34" y="202" text-anchor="middle" font-size="17" fill="#8A8A8A">▷</text>
+              <text x="34" y="244" text-anchor="middle" font-size="17" fill="#8A8A8A">⊞</text>
+
+              <rect x="60" y="42" width="300" height="510" fill="#252526" />
+              <text x="80" y="72" font-size="11.5" class="b" fill="#CCCCCC">확장: 마켓플레이스</text>
+              <rect x="76" y="86" width="268" height="30" rx="4" fill="#3C3C3C" stroke="#007ACC" />
+              <text x="90" y="106" font-size="12.5" class="m" fill="#FFFFFF">korean</text>
+              <rect x="76" y="132" width="268" height="76" rx="4" fill="#37373D" />
+              <rect x="88" y="144" width="40" height="40" rx="6" fill="#0065A9" />
+              <text x="108" y="171" text-anchor="middle" font-size="17" fill="#fff">한</text>
+              <text x="140" y="158" font-size="12" class="b" fill="#FFFFFF">Korean Language Pack</text>
+              <text x="140" y="176" font-size="10.5" fill="#9A9A9A">Microsoft ⬇ 30M ★ 4.5</text>
+              <rect x="256" y="182" width="72" height="22" rx="4" fill="#0E639C" />
+              <text x="292" y="197" text-anchor="middle" font-size="11" class="b" fill="#FFFFFF">Install</text>
+              <rect x="76" y="220" width="268" height="66" rx="4" fill="#2D2D30" />
+              <text x="140" y="246" font-size="12" fill="#CCCCCC">Korean Spell Checker</text>
+              <text x="140" y="264" font-size="10.5" fill="#9A9A9A">기타 확장</text>
+              <text x="430" y="200" font-size="15" class="b" fill="#FFFFFF">Korean Language Pack for VS Code</text>
+              <text x="430" y="228" font-size="12.5" fill="#9A9A9A">VS Code의 메뉴·설정을 한국어로 표시합니다.</text>
+              <rect x="600" y="440" width="270" height="76" rx="6" fill="#252526" stroke="#454545" />
+              <text x="618" y="468" font-size="12" fill="#CCCCCC">표시 언어를 변경하려면</text>
+              <text x="618" y="488" font-size="12" fill="#CCCCCC">다시 시작해야 합니다.</text>
+              <rect x="700" y="494" width="156" height="24" rx="4" fill="#0E639C" />
+              <text x="778" y="511" text-anchor="middle" font-size="10.5" class="b" fill="#FFFFFF">Change Language and Restart</text>
+              <rect x="16" y="228" width="38" height="34" rx="6" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="88" cy="245" r="15" fill="#F26B21" />
+              <text x="88" y="251" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="72" y="82" width="276" height="38" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="374" cy="101" r="15" fill="#F26B21" />
+              <text x="374" y="107" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="252" y="178" width="80" height="30" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="374" cy="193" r="15" fill="#F26B21" />
+              <text x="374" y="199" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="696" y="490" width="164" height="32" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="676" cy="506" r="15" fill="#F26B21" />
+              <text x="676" y="512" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>메뉴를 한글로 바꿔 초보자도 쉽게 쓸 수 있게 합니다.</p>
+            </div>
+            <ol class="acts">
+              <li>왼쪽 세로 막대의 <b>네모 4개 아이콘(확장)</b> 을 클릭합니다. (또는 <b>Ctrl+Shift+X</b>)</li>
+              <li>검색창에 <b>korean</b> 을 입력합니다.</li>
+              <li><b>Korean Language Pack</b> 의 <b>Install</b> 을 누릅니다.</li>
+              <li>오른쪽 아래 <b>Change Language and Restart</b> 를 누르면 한글로 바뀝니다.</li>
+            </ol>
+
+            <div class="tip info">
+              <b>영어가 편하면 건너뛰세요</b>
+              <p>필수는 아닙니다. 다만 강의 실습에서는 <b>한글 메뉴</b>가 훨씬 따라오기 쉽습니다.</p>
+            </div>
+            <div class="tip">
+              <b>다시 영어로 돌리려면</b>
+              <p><b>Ctrl+Shift+P</b> → <code>Configure Display Language</code> → English 선택.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="08 / 15">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 6</span><span class="sm">VS CODE · 폴더 열기</span></div>
+          <h2>작업 폴더 열기 (가장 중요한 습관)</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#1E1E1E" />
+              <rect x="8" y="8" width="884" height="34" rx="8" fill="#323233" />
+              <rect x="8" y="30" width="884" height="12" fill="#323233" />
+              <text x="30" y="30" font-size="12" fill="#CCCCCC">파일 편집 선택 보기 이동 실행 터미널 도움말</text>
+              <rect x="8" y="42" width="52" height="510" fill="#333333" />
+              <text x="34" y="76" text-anchor="middle" font-size="19" fill="#FFFFFF">🗂</text>
+              <text x="34" y="118" text-anchor="middle" font-size="17" fill="#8A8A8A">🔍</text>
+              <text x="34" y="160" text-anchor="middle" font-size="17" fill="#8A8A8A">⑂</text>
+              <text x="34" y="202" text-anchor="middle" font-size="17" fill="#8A8A8A">▷</text>
+              <text x="34" y="244" text-anchor="middle" font-size="17" fill="#8A8A8A">⊞</text>
+
+              <rect x="60" y="42" width="230" height="510" fill="#252526" />
+              <text x="80" y="72" font-size="11.5" class="b" fill="#CCCCCC">탐색기</text>
+              <text x="80" y="102" font-size="11.5" class="b" fill="#CCCCCC">▾ DEV</text>
+              <text x="96" y="128" font-size="11.5" fill="#CCCCCC">▾ 📁 my-first-app</text>
+              <text x="116" y="152" font-size="11.5" fill="#9CDCFE">📄 README.md</text>
+              <text x="116" y="176" font-size="11.5" fill="#9CDCFE">📄 index.html</text>
+              <rect x="310" y="90" width="380" height="230" rx="8" fill="#252526" stroke="#454545" />
+              <text x="334" y="126" font-size="14" class="b" fill="#FFFFFF">이 폴더에 있는 파일 작성자를 신뢰합니까?</text>
+              <text x="334" y="160" font-size="12" fill="#BBBBBB">코드 실행은 컴퓨터에 영향을 줄 수 있습니다.</text>
+              <text x="334" y="182" font-size="12" fill="#BBBBBB">신뢰하지 않으면 제한 모드로 열립니다.</text>
+              <rect x="334" y="208" width="332" height="30" rx="4" fill="#37373D" />
+              <text x="350" y="228" font-size="11.5" class="m" fill="#9CDCFE">C:\Users\hufs\Desktop\dev</text>
+              <rect x="334" y="256" width="200" height="32" rx="4" fill="#0E639C" />
+              <text x="434" y="277" text-anchor="middle" font-size="12" class="b" fill="#FFFFFF">예, 작성자를 신뢰합니다</text>
+              <rect x="546" y="256" width="120" height="32" rx="4" fill="#3A3D41" />
+              <text x="606" y="277" text-anchor="middle" font-size="12" fill="#FFFFFF">아니요</text>
+              <rect x="8" y="528" width="884" height="24" fill="#007ACC" />
+              <text x="30" y="544" font-size="11" fill="#FFFFFF">⑂ main ⊗ 0 ⚠ 0</text>
+              <rect x="24" y="12" width="60" height="24" rx="4" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="300" cy="24" r="15" fill="#F26B21" />
+              <text x="300" y="30" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="330" y="204" width="340" height="38" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="694" cy="223" r="15" fill="#F26B21" />
+              <text x="694" y="229" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="330" y="252" width="208" height="40" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="716" cy="272" r="15" fill="#F26B21" />
+              <text x="716" y="278" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="72" y="92" width="210" height="100" rx="6" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="110" cy="218" r="15" fill="#F26B21" />
+              <text x="110" y="224" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>앞으로 클로드 코드와 함께 쓸 작업 폴더를 VS Code에서 엽니다.</p>
+            </div>
+            <ol class="acts">
+              <li>메뉴 <b>파일 → 폴더 열기…</b> 를 선택합니다. (<b>Ctrl+K → Ctrl+O</b>)</li>
+              <li>바탕화면의 <b>dev</b> 폴더(Git 가이드에서 만든 폴더)를 고릅니다.</li>
+              <li>신뢰 확인 창이 뜨면 <b>예, 작성자를 신뢰합니다</b> 를 누릅니다.</li>
+              <li>왼쪽에 폴더 안 파일 목록이 나타나면 성공입니다.</li>
+            </ol>
+
+            <div class="tip warn">
+              <b>파일 하나만 열지 마세요</b>
+              <p>반드시 <b>폴더</b>를 여세요. 클로드 코드는 <b>열린 폴더 전체</b>를 보고 작업합니다.</p>
+            </div>
+            <div class="tip info">
+              <b>신뢰 창이 뭔가요?</b>
+              <p>내가 만든 폴더면 <b>신뢰</b>를 누르세요. 인터넷에서 받은 낯선 코드라면 <b>제한 모드</b>가 안전합니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="09 / 15">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 7</span><span class="sm">VS CODE · 실행 확인</span></div>
+          <h2>탐색기에서 <b>Code로 열기</b></h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#F3F3F3" stroke="#D9E0E8" />
+              <rect x="8" y="8" width="884" height="52" fill="#FFFFFF" />
+              <text x="34" y="40" font-size="13" fill="#24292F">📁 바탕 화면</text>
+              <rect x="200" y="20" width="420" height="28" rx="14" fill="#F0F0F0" stroke="#D9E0E8" />
+              <text x="218" y="39" font-size="11.5" class="m" fill="#5B6B7C">C:\Users\hufs\Desktop</text>
+              <rect x="30" y="86" width="120" height="120" rx="8" fill="#FFFFFF" stroke="#0078D4" stroke-width="2" />
+              <text x="90" y="146" text-anchor="middle" font-size="40">📁</text>
+              <text x="90" y="180" text-anchor="middle" font-size="12.5" class="b" fill="#24292F">dev</text>
+              <rect x="170" y="86" width="120" height="120" rx="8" fill="#FFFFFF" stroke="#E4E7EB" />
+              <text x="230" y="146" text-anchor="middle" font-size="40">📁</text>
+              <text x="230" y="180" text-anchor="middle" font-size="12.5" fill="#24292F">문서</text>
+              <rect x="150" y="212" width="290" height="250" rx="8" fill="#FFFFFF" stroke="#D0D0D0" />
+              <text x="172" y="244" font-size="12.5" fill="#24292F">열기</text>
+              <text x="172" y="276" font-size="12.5" fill="#24292F">새 창에서 열기</text>
+              <rect x="156" y="290" width="278" height="30" rx="4" fill="#E8F1FB" />
+              <text x="172" y="310" font-size="12.5" class="b" fill="#0065A9">Code(으)로 열기</text>
+              <text x="172" y="344" font-size="12.5" fill="#24292F">Git Bash Here</text>
+              <text x="172" y="376" font-size="12.5" fill="#24292F">터미널에서 열기</text>
+              <line x1="156" y1="392" x2="434" y2="392" stroke="#E4E7EB" />
+              <text x="172" y="418" font-size="12.5" fill="#24292F">이름 바꾸기</text>
+              <text x="172" y="446" font-size="12.5" fill="#5B6B7C">추가 옵션 표시</text>
+              <rect x="480" y="212" width="380" height="250" rx="10" fill="#0E2A47" />
+              <text x="504" y="248" font-size="15" class="b" fill="#F9B27A">앞으로의 작업 순서</text>
+              <text x="504" y="286" font-size="13" fill="#DCE6EF">① 작업 폴더를 우클릭</text>
+              <text x="504" y="316" font-size="13" fill="#DCE6EF">② Code(으)로 열기</text>
+              <text x="504" y="346" font-size="13" fill="#DCE6EF">③ VS Code에서 터미널 열기</text>
+              <text x="504" y="376" font-size="13" fill="#DCE6EF">④ claude 입력 → 작업 시작</text>
+              <rect x="504" y="400" width="330" height="38" rx="6" fill="#F26B21" />
+              <text x="524" y="425" font-size="13" class="b" fill="#FFFFFF">이 4단계만 익히면 됩니다</text>
+              <rect x="26" y="220" width="118" height="32" rx="6" fill="#FFFFFF" stroke="#D0D0D0" />
+              <text x="38" y="241" font-size="12" fill="#24292F">🖱 오른쪽 클릭</text>
+              <rect x="26" y="82" width="128" height="128" rx="10" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="178" cy="122" r="15" fill="#F26B21" />
+              <text x="178" y="128" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="22" y="216" width="126" height="40" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="86" cy="282" r="15" fill="#F26B21" />
+              <text x="86" y="288" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="152" y="286" width="286" height="38" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="462" cy="305" r="15" fill="#F26B21" />
+              <text x="462" y="311" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="166" y="434" width="132" height="26" rx="6" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="322" cy="447" r="15" fill="#F26B21" />
+              <text x="322" y="453" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>설치 때 체크한 우클릭 메뉴로 폴더를 더 빠르게 여는 방법을 익힙니다.</p>
+            </div>
+            <ol class="acts">
+              <li>Windows 탐색기에서 작업 폴더(예: <b>바탕화면\dev</b>)를 찾습니다.</li>
+              <li>폴더 위에서 <b>마우스 오른쪽 클릭</b>합니다.</li>
+              <li><b>Code(으)로 열기</b> 를 선택하면 VS Code가 그 폴더로 열립니다.</li>
+              <li>메뉴가 안 보이면 <b>추가 옵션 표시</b> 안에 있습니다. (Windows 11)</li>
+            </ol>
+
+            <div class="tip ok">
+              <b>이 방법이 가장 빠릅니다</b>
+              <p>앞으로 작업할 때마다 <b>폴더 우클릭 → Code로 열기</b> 한 번이면 준비 끝입니다.</p>
+            </div>
+            <div class="tip warn">
+              <b>메뉴가 아예 없다면</b>
+              <p>STEP 3의 체크를 안 한 것입니다. 설치 파일을 다시 실행해 <b>같은 위치에 다시 설치</b>하면서 체크하세요.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="10 / 15">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 8</span><span class="sm">VS CODE · 터미널</span></div>
+          <h2>VS Code 안에서 터미널 열기</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#1E1E1E" />
+              <rect x="8" y="8" width="884" height="34" rx="8" fill="#323233" />
+              <rect x="8" y="30" width="884" height="12" fill="#323233" />
+              <text x="30" y="30" font-size="12" fill="#CCCCCC">파일 편집 선택 보기 이동 실행 터미널 도움말</text>
+              <rect x="8" y="42" width="52" height="510" fill="#333333" />
+              <text x="34" y="76" text-anchor="middle" font-size="19" fill="#FFFFFF">🗂</text>
+              <text x="34" y="118" text-anchor="middle" font-size="17" fill="#8A8A8A">🔍</text>
+              <text x="34" y="160" text-anchor="middle" font-size="17" fill="#8A8A8A">⑂</text>
+              <text x="34" y="202" text-anchor="middle" font-size="17" fill="#8A8A8A">▷</text>
+              <text x="34" y="244" text-anchor="middle" font-size="17" fill="#8A8A8A">⊞</text>
+
+              <rect x="60" y="42" width="200" height="290" fill="#252526" />
+              <text x="80" y="72" font-size="11.5" class="b" fill="#CCCCCC">탐색기</text>
+              <text x="80" y="102" font-size="11.5" class="b" fill="#CCCCCC">▾ DEV</text>
+              <text x="96" y="128" font-size="11.5" fill="#CCCCCC">📁 my-first-app</text>
+              <rect x="260" y="42" width="632" height="290" fill="#1E1E1E" />
+              <rect x="300" y="96" width="230" height="44" rx="6" fill="#2D2D30" stroke="#555555" />
+              <text x="415" y="124" text-anchor="middle" font-size="16" class="b m" fill="#FFFFFF">Ctrl + `</text>
+              <text x="415" y="166" text-anchor="middle" font-size="12.5" fill="#8A8A8A">숫자 1 왼쪽의 키</text>
+              <rect x="60" y="332" width="832" height="196" fill="#181818" />
+              <rect x="60" y="332" width="832" height="30" fill="#252526" />
+              <text x="84" y="352" font-size="11" fill="#FFFFFF">문제 출력 디버그 콘솔 터미널</text>
+              <rect x="228" y="336" width="60" height="22" fill="#1E1E1E" />
+              <text x="258" y="352" font-size="11" class="b" fill="#FFFFFF">터미널</text>
+              <text x="772" y="353" font-size="13" fill="#CCCCCC">＋</text>
+              <text x="812" y="353" font-size="15" class="b" fill="#CCCCCC">˅</text>
+              <text x="842" y="353" font-size="13" fill="#CCCCCC">⊞</text>
+              <text x="868" y="353" font-size="13" fill="#CCCCCC">🗑</text>
+              <text x="84" y="392" class="m" font-size="12.5" fill="#FFFFFF">PS C:\Users\hufs\Desktop\dev&gt; pwd</text>
+              <text x="84" y="420" class="m" font-size="12.5" fill="#9A9A9A">Path</text>
+              <text x="84" y="440" class="m" font-size="12.5" fill="#9A9A9A">----</text>
+              <text x="84" y="462" class="m b" font-size="12.5" fill="#4EC9B0">C:\Users\hufs\Desktop\dev</text>
+              <text x="84" y="496" class="m" font-size="12.5" fill="#FFFFFF">PS C:\Users\hufs\Desktop\dev&gt; _</text>
+              <rect x="8" y="528" width="884" height="24" fill="#007ACC" />
+              <text x="30" y="544" font-size="11" fill="#FFFFFF">⑂ main ⊗ 0 ⚠ 0</text>
+              <rect x="296" y="92" width="238" height="52" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="558" cy="118" r="15" fill="#F26B21" />
+              <text x="558" y="124" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="56" y="328" width="300" height="40" rx="6" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="380" cy="348" r="15" fill="#F26B21" />
+              <text x="380" y="354" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="76" y="374" width="380" height="100" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="480" cy="424" r="15" fill="#F26B21" />
+              <text x="480" y="430" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="804" y="336" width="28" height="24" rx="5" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="818" cy="300" r="15" fill="#F26B21" />
+              <text x="818" y="306" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+            </svg>
+          </div>
+          <div class="side">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>창을 왔다 갔다 하지 않고 VS Code 안에서 명령을 입력할 수 있게 합니다.</p>
+            </div>
+            <ol class="acts">
+              <li>키보드 <b>Ctrl + `</b> 를 누릅니다. (백틱: 숫자 1 왼쪽 키)</li>
+              <li>아래쪽에 <b>터미널</b> 패널이 열립니다.</li>
+              <li><code>pwd</code> 를 입력해 현재 폴더 위치를 확인합니다.</li>
+              <li>터미널 종류를 바꾸려면 오른쪽 <b>˅</b> 를 누릅니다.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">현재 폴더 확인</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="pwd">복사</button>
+                <pre>pwd</pre>
+              </div>
+            </div>
+            <div class="tip ok">
+              <b>여기서 클로드 코드를 실행합니다</b>
+              <p>다음 가이드에서 이 터미널에 <code>claude</code> 를 입력합니다. <b>폴더 위치가 곧 작업 대상</b>입니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="11 / 15">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 9</span><span class="sm">VS CODE · 마지막 확인</span></div>
+          <h2>터미널에서 <b>code .</b> 실행해 보기</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766" />
+              <rect x="8" y="32" width="884" height="20" fill="#0B3766" />
+              <text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <text x="34" y="106" class="m b" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; cd "$HOME\Desktop\dev"</text>
+              <text x="34" y="146" class="m b" font-size="14" fill="#FFFFFF">PS C:\Users\hufs\Desktop\dev&gt; code .</text>
+              <text x="34" y="186" class="m b" font-size="13.5" fill="#7EE787">(VS Code 창이 새로 열립니다)</text>
+              <text x="34" y="232" class="m" font-size="14" fill="#FFFFFF">PS C:\Users\hufs\Desktop\dev&gt; _</text>
+              <rect x="26" y="86" width="380" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="430" cy="100.5" r="15" fill="#F26B21" />
+              <text x="430" y="106.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="26" y="126" width="380" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="430" cy="140.5" r="15" fill="#F26B21" />
+              <text x="430" y="146.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="26" y="166.5" width="280" height="28.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="330" cy="180.75" r="15" fill="#F26B21" />
+              <text x="330" y="186.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="470" y="300" width="402" height="176" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="494" y="332" font-size="14" class="b" fill="#F9B27A">code . 의 의미</text>
+              <text x="494" y="364" font-size="12.5" fill="#DCE6EF">code = VS Code 실행</text>
+              <text x="494" y="386" font-size="12.5" fill="#DCE6EF">.(점) = 지금 있는 폴더</text>
+              <text x="494" y="418" font-size="12.5" class="b" fill="#FF9F6B">→ "지금 폴더를 VS Code로 열어라"</text>
+              <text x="494" y="448" font-size="12" fill="#9FC6EE">code 와 . 사이 띄어쓰기 필수!</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>PATH 등록이 제대로 되었는지 마지막으로 확인합니다.</p>
+            </div>
+            <ol class="acts">
+              <li>PowerShell을 새로 열고 작업 폴더로 이동합니다.</li>
+              <li><b>code .</b> 를 입력합니다. (<b>code</b> 뒤에 <b>띄어쓰기 + 점</b>)</li>
+              <li>VS Code 창이 그 폴더로 새로 열리면 성공입니다.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">① 작업 폴더로 이동</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c='cd "$HOME\Desktop\dev"'>복사</button>
+                <pre>cd "$HOME\Desktop\dev"</pre>
+              </div>
+            </div>
+            <div class="cmd">
+              <b class="lbl">② 지금 폴더를 VS Code로 열기</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="code .">복사</button>
+                <pre>code .</pre>
+              </div>
+            </div>
+            <div class="tip warn">
+              <b>"code 용어가 인식되지 않습니다"</b>
+              <p>PATH 등록이 안 된 것입니다. ① 터미널 새로 열기 ② PC 재부팅 ③ 설치 파일을 다시 실행해 <b>PATH에 추가</b> 체크 후 재설치.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="12 / 15">
+        <div class="rail acc"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 1/2</span></div>
+          <h2>VS Code 명령어 · 단축키 모음 <span style="font-size: 22px; color: #8a94a0; font-weight: 700">(1/2)</span></h2>
+          <p class="lead">명령은 <b>복사</b> 버튼으로, 단축키는 눈으로 익히세요. 자주 쓰는 것만 모았습니다.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="cgrid">
+          <div class="ccard">
+            <div class="ct">① 지금 폴더를 VS Code로 열기</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="code .">복사</button>
+              <pre>code .</pre>
+            </div>
+
+            <div class="cd">가장 많이 쓰는 명령입니다. <b>code</b> 와 <b>.</b> 사이 띄어쓰기 필수.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">② 특정 폴더 열기</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c='code "$HOME\Desktop\dev"'>복사</button>
+              <pre>code "$HOME\Desktop\dev"</pre>
+            </div>
+
+            <div class="cd">경로를 직접 지정해 엽니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">③ 버전 확인 (설치 점검)</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="code --version">복사</button>
+              <pre>code --version</pre>
+            </div>
+            <div class="out">→ 1.9x.x</div>
+            <div class="cd">이 명령이 되면 PATH 등록이 정상입니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">④ 확장 설치 (한국어 언어팩)</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="code --install-extension MS-CEINTL.vscode-language-pack-ko">복사</button>
+              <pre>code --install-extension MS-CEINTL.vscode-language-pack-ko</pre>
+            </div>
+
+            <div class="cd">화면에서 클릭하는 대신 명령으로 설치할 수 있습니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">⑤ 설치된 확장 목록 보기</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="code --list-extensions">복사</button>
+              <pre>code --list-extensions</pre>
+            </div>
+
+            <div class="cd">어떤 확장이 깔려 있는지 확인합니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">⑥ VS Code 설치 위치 확인 (문제 진단)</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="Get-Command code | Select-Object Source">복사</button>
+              <pre>Get-Command code | Select-Object Source</pre>
+            </div>
+
+            <div class="cd">아무것도 안 나오면 PATH 등록이 안 된 것입니다.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="13 / 15">
+        <div class="rail acc"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 2/2</span></div>
+          <h2>VS Code 명령어 · 단축키 모음 <span style="font-size: 22px; color: #8a94a0; font-weight: 700">(2/2)</span></h2>
+          <p class="lead">명령은 <b>복사</b> 버튼으로, 단축키는 눈으로 익히세요. 자주 쓰는 것만 모았습니다.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="cgrid">
+          <div class="ccard">
+            <div class="ct">⑦ 자주 쓰는 단축키 — 터미널 열기/닫기</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="Ctrl + `">복사</button>
+              <pre>Ctrl + `</pre>
+            </div>
+
+            <div class="cd">백틱(`)은 숫자 1 왼쪽 키입니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">⑧ 자주 쓰는 단축키 — 명령 팔레트</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="Ctrl + Shift + P">복사</button>
+              <pre>Ctrl + Shift + P</pre>
+            </div>
+
+            <div class="cd">모든 기능을 이름으로 찾아 실행합니다. 길을 잃으면 이것부터.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="14 / 15">
+        <div class="rail acc"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">문제 해결</span><span class="sm">TROUBLESHOOTING</span></div>
+          <h2>VS Code — 문제가 생겼을 때</h2>
+          <p class="lead">증상별 해결 순서입니다.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="tbwrap">
+          <table class="tb">
+            <thead>
+              <tr>
+                <th style="width: 29%">이런 화면·메시지가 나오면</th>
+                <th style="width: 24%">원인</th>
+                <th>이렇게 해결하세요</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="s"><code>'code' 용어가 … 인식되지 않습니다</code></td>
+                <td class="c">PATH 미등록 또는 미반영</td>
+                <td>① 터미널을 <b>모두 닫고 새로 열기</b> ② PC 재부팅 ③ 설치 파일을 다시 실행해 <b>같은 위치에 재설치</b>하며 "PATH에 추가" 체크.</td>
+              </tr>
+              <tr>
+                <td class="s">우클릭 메뉴에 "Code(으)로 열기"가 없음</td>
+                <td class="c">설치 시 해당 체크 해제</td>
+                <td>
+                  설치 파일을 다시 실행 → <b>추가 작업 선택</b> 화면에서 두 개의 "Code(으)로 열기" 체크 → 재설치. Windows 11은
+                  <b>추가 옵션 표시</b> 안에 있을 수도 있습니다.
+                </td>
+              </tr>
+              <tr>
+                <td class="s">메뉴가 계속 영어로 나옴</td>
+                <td class="c">언어팩 미설치 또는 재시작 안 함</td>
+                <td>
+                  <b>Ctrl+Shift+X</b> → korean 검색 → 설치 → <b>Change Language and Restart</b>. 안 되면 <b>Ctrl+Shift+P</b> →
+                  <code>Configure Display Language</code> → 한국어.
+                </td>
+              </tr>
+              <tr>
+                <td class="s">한글 입력이 이상하게 깨짐</td>
+                <td class="c">글꼴 문제</td>
+                <td>
+                  <b>Ctrl+,</b> (설정) → <code>font family</code> 검색 → <code>Consolas, D2Coding, Malgun Gothic</code> 처럼 한글 글꼴을 뒤에 추가.
+                </td>
+              </tr>
+              <tr>
+                <td class="s">"제한 모드"라 실행이 막힘</td>
+                <td class="c">폴더 신뢰 설정</td>
+                <td>위쪽 노란 띠의 <b>신뢰</b> 클릭, 또는 <b>파일 → 폴더 신뢰 관리</b>. 내가 만든 폴더면 신뢰해도 안전합니다.</td>
+              </tr>
+              <tr>
+                <td class="s">터미널이 Git Bash로 열려 명령이 다름</td>
+                <td class="c">기본 프로필 설정</td>
+                <td>터미널 오른쪽 <b>˅</b> → <b>기본 프로필 선택</b> → <b>PowerShell</b>. 이 가이드의 명령은 PowerShell 기준입니다.</td>
+              </tr>
+              <tr>
+                <td class="s">기관 PC라 설치가 막힘</td>
+                <td class="c">관리자 권한 제한</td>
+                <td>
+                  VS Code는 <b>User Installer</b> 라서 보통 권한 없이 설치됩니다. 그래도 막히면 공식 사이트의 <b>.zip 무설치판</b>을 내려받아 압축을
+                  풀고 <code>Code.exe</code> 를 실행하세요.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="slide" data-no="15 / 15">
+        <div class="rail acc"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">마무리</span><span class="sm">CHECKLIST &amp; NEXT</span></div>
+          <h2>VS Code 설치 완료 확인</h2>
+          <p class="lead">아래가 모두 되면 준비 끝입니다. 마지막은 <b>Claude Code 설치</b>입니다.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="two">
+          <div class="panel">
+            <h3>✅ 완료 체크리스트</h3>
+            <ul class="chk">
+              <li>
+                <span class="box"></span
+                ><span><span class="t">설치를 마치고 VS Code가 실행된다</span><span class="d">파란 로고 + 시작 탭</span></span>
+              </li>
+              <li>
+                <span class="box"></span
+                ><span><span class="t">"PATH에 추가"를 체크하고 설치했다</span><span class="d">code --version 으로 확인 가능</span></span>
+              </li>
+              <li>
+                <span class="box"></span><span><span class="t">한국어 언어팩을 설치했다(선택)</span><span class="d">메뉴가 한글로 보임</span></span>
+              </li>
+              <li>
+                <span class="box"></span
+                ><span><span class="t">폴더를 열 줄 안다</span><span class="d">파일 → 폴더 열기 또는 우클릭 → Code로 열기</span></span>
+              </li>
+              <li>
+                <span class="box"></span
+                ><span><span class="t">Ctrl + ` 로 터미널을 열 수 있다</span><span class="d">여기서 claude 를 실행하게 됩니다</span></span>
+              </li>
+              <li>
+                <span class="box"></span><span><span class="t">code . 명령이 동작한다</span><span class="d">터미널에서 폴더 열기 성공</span></span>
+              </li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>➡️ 다음 단계 &amp; 참고</h3>
+            <ul class="nxt">
+              <li><b>⑤ Claude Code 설치 가이드</b><span>드디어 마지막입니다. (<b>05-claude-code-guide</b>)</span></li>
+              <li>
+                <b>앞으로의 작업 루틴</b
+                ><span>① 작업 폴더 우클릭 → <b>Code로 열기</b> ② <code>Ctrl + `</code> 터미널 ③ <code>claude</code> ④ 한국어로 요청</span>
+              </li>
+              <li><b>추천 확장(선택)</b><span>Korean Language Pack · Live Server(HTML 미리보기) · Prettier(코드 정리)</span></li>
+              <li>
+                <b>알아 두면 좋은 단축키</b><span><code>Ctrl+Shift+P</code> 명령 팔레트 · <code>Ctrl+S</code> 저장 · <code>Ctrl+`</code> 터미널</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="final"><b>최종 확인 명령</b><span>code --version</span></div>
+      </section>
     </div>
-  </div>
-</section>
-
-<section class="slide" data-no="04 / 15">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 2</span><span class="sm">VS CODE · 설치 마법사</span></div>
-    <h2>라이선스 동의 → 설치 위치 → <b>다음</b></h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="6" fill="#0065A9"/><rect x="8" y="30" width="884" height="22" fill="#0065A9"/>
-<text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Visual Studio Code 설치</text>
-<rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18"/><text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
-<line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5"/>
-<rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; 뒤로</text><rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47"/><text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">다음 &gt;</text><rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">취소</text>
-
-
-<rect x="8" y="52" width="884" height="72" fill="#FFFFFF"/>
-<text x="38" y="86" font-size="18" class="b" fill="#16202B">사용권 계약</text>
-<text x="38" y="110" font-size="12.5" fill="#5B6B7C">계속하기 전에 다음 중요 정보를 읽어 보십시오.</text>
-<line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB"/>
-<circle cx="836" cy="88" r="22" fill="#0065A9" opacity="0.14"/><text x="836" y="97" text-anchor="middle" font-size="22">🧩</text>
-<rect x="60" y="146" width="500" height="176" rx="4" fill="#FCFCFC" stroke="#D9E0E8"/>
-<text x="80" y="174" font-size="12.5" class="b" fill="#16202B">Visual Studio Code에 대한 사용권 계약</text>
-<text x="80" y="202" font-size="11.5" fill="#5B6B7C">이 라이선스는 Microsoft Corporation과 귀하 간의 계약입니다.</text>
-<text x="80" y="224" font-size="11.5" fill="#5B6B7C">본 소프트웨어를 사용함으로써 이 조건에 동의하는 것입니다.</text>
-<text x="80" y="246" font-size="11.5" fill="#5B6B7C">1. 설치 및 사용 권한 …</text>
-<text x="80" y="268" font-size="11.5" fill="#5B6B7C">2. 데이터 수집 …</text>
-<circle cx="69" cy="351" r="8.5" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><circle cx="69" cy="351" r="4.5" fill="#0E2A47"/><text x="88" y="356" font-size="14" class="b" fill="#24292F">동의합니다</text>
-<circle cx="309" cy="351" r="8.5" fill="#FFFFFF" stroke="#9AA5B1" stroke-width="1.6"/><text x="328" y="356" font-size="14" class="" fill="#24292F">동의하지 않습니다</text>
-<rect x="584" y="146" width="250" height="92" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2"/>
-<text x="630" y="176" font-size="13.5" class="b" fill="#C1521A">.exe 더블클릭</text>
-<text x="604" y="202" font-size="12.5" fill="#3A4855">다운로드한 설치 파일을</text>
-<text x="604" y="224" font-size="12.5" fill="#3A4855">두 번 클릭해 실행합니다.</text>
-<circle cx="608" cy="170" r="15" fill="#F26B21"/><text x="608" y="176" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="584" y="258" width="250" height="92" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2"/>
-<text x="630" y="288" font-size="13.5" class="b" fill="#C1521A">남은 화면도 다음</text>
-<text x="604" y="314" font-size="12.5" fill="#3A4855">설치 위치 · 시작 메뉴 폴더</text>
-<text x="604" y="336" font-size="12.5" fill="#3A4855">그대로 두고 넘어갑니다.</text>
-<circle cx="608" cy="282" r="15" fill="#F26B21"/><text x="608" y="288" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
-<rect x="54" y="336" width="200" height="34" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="282" cy="353" r="15" fill="#F26B21"/><text x="282" y="359" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="514" r="15" fill="#F26B21"/><text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-
-    </svg></div>
-    <div class="side">
-      <div class="goal"><b>이 단계의 목표</b><p>앞쪽 화면들을 기본값 그대로 넘어갑니다.</p></div>
-      <ol class="acts"><li>내려받은 <code>VSCodeUserSetup…exe</code> 를 <b>더블클릭</b>합니다.</li><li><b>사용권 계약</b> 화면에서 <b>동의합니다</b> 를 선택합니다.</li><li><b>다음</b> 을 누릅니다.</li><li><b>설치 위치</b>·<b>시작 메뉴 폴더</b> 화면도 그대로 <b>다음</b> 으로 넘깁니다.</li></ol>
-      
-      <div class="tip "><b>VS Code는 한국어 설치 마법사</b><p>Git·Node.js와 달리 설치 화면이 <b>한글</b>로 나옵니다. 읽으면서 진행하면 됩니다.</p></div><div class="tip info"><b>관리자 권한 창이 안 떠요</b><p>User Installer는 <b>내 계정 폴더에만</b> 설치하므로 관리자 권한이 필요 없습니다. 정상입니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="05 / 15">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 3</span><span class="sm">VS CODE · 설치 마법사 ★중요</span></div>
-    <h2>추가 작업 선택 — <b>PATH에 추가</b> 확인</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="6" fill="#0065A9"/><rect x="8" y="30" width="884" height="22" fill="#0065A9"/>
-<text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Visual Studio Code 설치</text>
-<rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18"/><text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
-<line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5"/>
-<rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; 뒤로</text><rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47"/><text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">다음 &gt;</text><rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">취소</text>
-
-
-<rect x="8" y="52" width="884" height="72" fill="#FFFFFF"/>
-<text x="38" y="86" font-size="18" class="b" fill="#16202B">추가 작업 선택</text>
-<text x="38" y="110" font-size="12.5" fill="#5B6B7C">Visual Studio Code를 설치하는 동안 수행할 추가 작업을 선택한 후 다음을 클릭하십시오.</text>
-<line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB"/>
-<circle cx="836" cy="88" r="22" fill="#0065A9" opacity="0.14"/><text x="836" y="97" text-anchor="middle" font-size="22">🧩</text>
-<rect x="60" y="150" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#9AA5B1" stroke-width="1.6"/><text x="87" y="164" font-size="13.5" fill="#24292F">바탕 화면에 바로가기 만들기</text>
-<text x="60" y="198" font-size="12.5" class="b" fill="#5B6B7C">기타:</text>
-<rect x="60" y="210" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><path d="M63.5 218.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="87" y="224" font-size="13.5" fill="#24292F">"Code(으)로 열기" 작업을 Windows 탐색기 파일 상황에 맞는 메뉴에 추가</text>
-<rect x="60" y="244" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><path d="M63.5 252.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="87" y="258" font-size="13.5" fill="#24292F">"Code(으)로 열기" 작업을 Windows 탐색기 디렉터리 상황에 맞는 메뉴에 추가</text>
-<rect x="60" y="278" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><path d="M63.5 286.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="87" y="292" font-size="13.5" fill="#24292F">지원되는 파일 형식에 대한 편집기로 Code 등록</text>
-<rect x="60" y="312" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><path d="M63.5 320.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="87" y="326" font-size="13.5" fill="#24292F">PATH에 추가(다시 시작한 후 사용 가능)</text>
-<rect x="60" y="364" width="420" height="70" rx="6" fill="#FFF1E7" stroke="#F26B21"/>
-<text x="82" y="390" font-size="13" class="b" fill="#F26B21">이 체크만 꼭 확인하세요</text>
-<text x="82" y="414" font-size="12.5" fill="#3A4855">PATH에 추가 → 터미널에서 code . 로 폴더를 엽니다.</text>
-<rect x="510" y="364" width="324" height="92" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2"/>
-<text x="556" y="394" font-size="13.5" class="b" fill="#C1521A">다음 화면에서 [설치]</text>
-<text x="530" y="420" font-size="12.5" fill="#3A4855">설치 준비 완료 화면이 나오면</text>
-<text x="530" y="442" font-size="12.5" fill="#3A4855">설치 버튼을 누르면 됩니다.</text>
-<circle cx="534" cy="388" r="15" fill="#F26B21"/><text x="534" y="394" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
-<rect x="54" y="306" width="420" height="32" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="506" cy="322" r="15" fill="#F26B21"/><text x="506" y="328" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="54" y="204" width="560" height="76" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="646" cy="242" r="15" fill="#F26B21"/><text x="646" y="248" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="514" r="15" fill="#F26B21"/><text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>터미널에서 <code>code</code> 명령을 쓸 수 있도록 PATH 등록을 확인합니다.</p></div>
-      <ol class="acts"><li><b>PATH에 추가(다시 시작한 후 사용 가능)</b> 가 <b>체크</b>되어 있는지 확인합니다. (기본 체크)</li><li><b>"Code(으)로 열기" 작업을…추가</b> 두 항목도 체크되어 있으면 편리합니다.</li><li><b>다음</b> 을 누릅니다.</li><li>이어지는 <b>설치 준비 완료</b> 화면에서 <b>설치</b> 를 누릅니다.</li></ol>
-      
-      <div class="tip warn"><b>PATH 체크를 빼면</b><p>터미널에서 <code>code .</code> 명령이 동작하지 않고, 클로드 코드와의 연동도 번거로워집니다. <b>반드시 체크 상태로 두세요.</b></p></div><div class="tip ok"><b>탐색기 우클릭 메뉴가 편합니다</b><p>"Code(으)로 열기" 를 체크하면 폴더에서 <b>오른쪽 클릭 → Code로 열기</b> 로 바로 작업할 수 있습니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="06 / 15">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 4</span><span class="sm">VS CODE · 첫 실행</span></div>
-    <h2>설치 완료 → VS Code 실행</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      
-<rect x="8" y="8" width="884" height="544" rx="8" fill="#1E1E1E"/>
-<rect x="8" y="8" width="884" height="34" rx="8" fill="#323233"/><rect x="8" y="30" width="884" height="12" fill="#323233"/>
-<text x="30" y="30" font-size="12" fill="#CCCCCC">파일  편집  선택  보기  이동  실행  터미널  도움말</text>
-<rect x="8" y="42" width="52" height="510" fill="#333333"/>
-<text x="34" y="76" text-anchor="middle" font-size="19" fill="#FFFFFF">🗂</text>
-<text x="34" y="118" text-anchor="middle" font-size="17" fill="#8A8A8A">🔍</text>
-<text x="34" y="160" text-anchor="middle" font-size="17" fill="#8A8A8A">⑂</text>
-<text x="34" y="202" text-anchor="middle" font-size="17" fill="#8A8A8A">▷</text>
-<text x="34" y="244" text-anchor="middle" font-size="17" fill="#8A8A8A">⊞</text>
-
-<rect x="60" y="42" width="832" height="34" fill="#252526"/>
-<rect x="60" y="42" width="150" height="34" fill="#1E1E1E"/>
-<text x="80" y="64" font-size="12" fill="#FFFFFF">시작</text>
-<text x="330" y="144" font-size="30" class="b" fill="#FFFFFF">Visual Studio Code</text>
-<text x="330" y="176" font-size="14" fill="#9A9A9A">코드 편집을 다시 정의합니다</text>
-<text x="330" y="226" font-size="14" class="b" fill="#4EC9B0">시작</text>
-<text x="330" y="258" font-size="13" fill="#569CD6">새 파일…</text>
-<text x="330" y="286" font-size="13" fill="#569CD6">파일 열기…</text>
-<text x="330" y="314" font-size="13" fill="#569CD6">폴더 열기…</text>
-<text x="620" y="226" font-size="14" class="b" fill="#4EC9B0">색 테마</text>
-<rect x="620" y="240" width="106" height="42" rx="6" fill="#1E1E1E" stroke="#0078D4" stroke-width="2"/>
-<text x="673" y="266" text-anchor="middle" font-size="12" fill="#FFFFFF">Dark Modern</text>
-<rect x="738" y="240" width="106" height="42" rx="6" fill="#F3F3F3"/>
-<text x="791" y="266" text-anchor="middle" font-size="12" fill="#24292F">Light Modern</text>
-<rect x="8" y="528" width="884" height="24" fill="#007ACC"/>
-<text x="30" y="544" font-size="11" fill="#FFFFFF">⑂ main    ⊗ 0  ⚠ 0</text>
-<text x="760" y="544" font-size="11" fill="#FFFFFF">줄 1, 열 1    UTF-8</text>
-<rect x="330" y="350" width="380" height="70" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="376" y="380" font-size="13.5" class="b" fill="#F9B27A">설치 마지막 화면</text>
-<text x="350" y="406" font-size="12.5" fill="#DCE6EF">"Visual Studio Code 실행" 체크 → [종료]</text>
-<circle cx="354" cy="374" r="15" fill="#F26B21"/><text x="354" y="380" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="56" y="38" width="300" height="42" rx="6" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="384" cy="59" r="15" fill="#F26B21"/><text x="384" y="65" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="616" y="236" width="232" height="50" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="872" cy="261" r="15" fill="#F26B21"/><text x="872" y="267" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-
-    </svg></div>
-    <div class="side">
-      <div class="goal"><b>이 단계의 목표</b><p>설치를 마치고 VS Code를 처음 실행합니다.</p></div>
-      <ol class="acts"><li>설치가 끝나면 <b>Visual Studio Code 실행</b> 체크를 켠 채 <b>종료</b> 를 누릅니다.</li><li>파란 로고와 함께 <b>시작</b> 탭이 열립니다.</li><li>테마 선택 화면이 나오면 마음에 드는 것을 고릅니다. (나중에 변경 가능)</li></ol>
-      
-      <div class="tip ok"><b>첫 화면은 비어 있습니다</b><p>"시작(Get Started)" 탭만 보이는 것이 정상입니다. 아직 아무 폴더도 열지 않았기 때문입니다.</p></div><div class="tip "><b>테마를 바꾸려면</b><p><b>Ctrl+K → Ctrl+T</b> 로 언제든 바꿀 수 있습니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="07 / 15">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 5</span><span class="sm">VS CODE · 한국어 설정</span></div>
-    <h2>한국어 언어팩 설치</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      
-<rect x="8" y="8" width="884" height="544" rx="8" fill="#1E1E1E"/>
-<rect x="8" y="8" width="884" height="34" rx="8" fill="#323233"/><rect x="8" y="30" width="884" height="12" fill="#323233"/>
-<text x="30" y="30" font-size="12" fill="#CCCCCC">파일  편집  선택  보기  이동  실행  터미널  도움말</text>
-<rect x="8" y="42" width="52" height="510" fill="#333333"/>
-<text x="34" y="76" text-anchor="middle" font-size="19" fill="#FFFFFF">🗂</text>
-<text x="34" y="118" text-anchor="middle" font-size="17" fill="#8A8A8A">🔍</text>
-<text x="34" y="160" text-anchor="middle" font-size="17" fill="#8A8A8A">⑂</text>
-<text x="34" y="202" text-anchor="middle" font-size="17" fill="#8A8A8A">▷</text>
-<text x="34" y="244" text-anchor="middle" font-size="17" fill="#8A8A8A">⊞</text>
-
-<rect x="60" y="42" width="300" height="510" fill="#252526"/>
-<text x="80" y="72" font-size="11.5" class="b" fill="#CCCCCC">확장: 마켓플레이스</text>
-<rect x="76" y="86" width="268" height="30" rx="4" fill="#3C3C3C" stroke="#007ACC"/>
-<text x="90" y="106" font-size="12.5" class="m" fill="#FFFFFF">korean</text>
-<rect x="76" y="132" width="268" height="76" rx="4" fill="#37373D"/>
-<rect x="88" y="144" width="40" height="40" rx="6" fill="#0065A9"/><text x="108" y="171" text-anchor="middle" font-size="17" fill="#fff">한</text>
-<text x="140" y="158" font-size="12" class="b" fill="#FFFFFF">Korean Language Pack</text>
-<text x="140" y="176" font-size="10.5" fill="#9A9A9A">Microsoft   ⬇ 30M   ★ 4.5</text>
-<rect x="256" y="182" width="72" height="22" rx="4" fill="#0E639C"/>
-<text x="292" y="197" text-anchor="middle" font-size="11" class="b" fill="#FFFFFF">Install</text>
-<rect x="76" y="220" width="268" height="66" rx="4" fill="#2D2D30"/>
-<text x="140" y="246" font-size="12" fill="#CCCCCC">Korean Spell Checker</text>
-<text x="140" y="264" font-size="10.5" fill="#9A9A9A">기타 확장</text>
-<text x="430" y="200" font-size="15" class="b" fill="#FFFFFF">Korean Language Pack for VS Code</text>
-<text x="430" y="228" font-size="12.5" fill="#9A9A9A">VS Code의 메뉴·설정을 한국어로 표시합니다.</text>
-<rect x="600" y="440" width="270" height="76" rx="6" fill="#252526" stroke="#454545"/>
-<text x="618" y="468" font-size="12" fill="#CCCCCC">표시 언어를 변경하려면</text>
-<text x="618" y="488" font-size="12" fill="#CCCCCC">다시 시작해야 합니다.</text>
-<rect x="700" y="494" width="156" height="24" rx="4" fill="#0E639C"/>
-<text x="778" y="511" text-anchor="middle" font-size="10.5" class="b" fill="#FFFFFF">Change Language and Restart</text>
-<rect x="16" y="228" width="38" height="34" rx="6" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="88" cy="245" r="15" fill="#F26B21"/><text x="88" y="251" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="72" y="82" width="276" height="38" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="374" cy="101" r="15" fill="#F26B21"/><text x="374" y="107" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="252" y="178" width="80" height="30" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="374" cy="193" r="15" fill="#F26B21"/><text x="374" y="199" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="696" y="490" width="164" height="32" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="676" cy="506" r="15" fill="#F26B21"/><text x="676" y="512" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
-
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>메뉴를 한글로 바꿔 초보자도 쉽게 쓸 수 있게 합니다.</p></div>
-      <ol class="acts"><li>왼쪽 세로 막대의 <b>네모 4개 아이콘(확장)</b> 을 클릭합니다. (또는 <b>Ctrl+Shift+X</b>)</li><li>검색창에 <b>korean</b> 을 입력합니다.</li><li><b>Korean Language Pack</b> 의 <b>Install</b> 을 누릅니다.</li><li>오른쪽 아래 <b>Change Language and Restart</b> 를 누르면 한글로 바뀝니다.</li></ol>
-      
-      <div class="tip info"><b>영어가 편하면 건너뛰세요</b><p>필수는 아닙니다. 다만 강의 실습에서는 <b>한글 메뉴</b>가 훨씬 따라오기 쉽습니다.</p></div><div class="tip "><b>다시 영어로 돌리려면</b><p><b>Ctrl+Shift+P</b> → <code>Configure Display Language</code> → English 선택.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="08 / 15">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 6</span><span class="sm">VS CODE · 폴더 열기</span></div>
-    <h2>작업 폴더 열기 (가장 중요한 습관)</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      
-<rect x="8" y="8" width="884" height="544" rx="8" fill="#1E1E1E"/>
-<rect x="8" y="8" width="884" height="34" rx="8" fill="#323233"/><rect x="8" y="30" width="884" height="12" fill="#323233"/>
-<text x="30" y="30" font-size="12" fill="#CCCCCC">파일  편집  선택  보기  이동  실행  터미널  도움말</text>
-<rect x="8" y="42" width="52" height="510" fill="#333333"/>
-<text x="34" y="76" text-anchor="middle" font-size="19" fill="#FFFFFF">🗂</text>
-<text x="34" y="118" text-anchor="middle" font-size="17" fill="#8A8A8A">🔍</text>
-<text x="34" y="160" text-anchor="middle" font-size="17" fill="#8A8A8A">⑂</text>
-<text x="34" y="202" text-anchor="middle" font-size="17" fill="#8A8A8A">▷</text>
-<text x="34" y="244" text-anchor="middle" font-size="17" fill="#8A8A8A">⊞</text>
-
-<rect x="60" y="42" width="230" height="510" fill="#252526"/>
-<text x="80" y="72" font-size="11.5" class="b" fill="#CCCCCC">탐색기</text>
-<text x="80" y="102" font-size="11.5" class="b" fill="#CCCCCC">▾ DEV</text>
-<text x="96" y="128" font-size="11.5" fill="#CCCCCC">▾ 📁 my-first-app</text>
-<text x="116" y="152" font-size="11.5" fill="#9CDCFE">📄 README.md</text>
-<text x="116" y="176" font-size="11.5" fill="#9CDCFE">📄 index.html</text>
-<rect x="310" y="90" width="380" height="230" rx="8" fill="#252526" stroke="#454545"/>
-<text x="334" y="126" font-size="14" class="b" fill="#FFFFFF">이 폴더에 있는 파일 작성자를 신뢰합니까?</text>
-<text x="334" y="160" font-size="12" fill="#BBBBBB">코드 실행은 컴퓨터에 영향을 줄 수 있습니다.</text>
-<text x="334" y="182" font-size="12" fill="#BBBBBB">신뢰하지 않으면 제한 모드로 열립니다.</text>
-<rect x="334" y="208" width="332" height="30" rx="4" fill="#37373D"/>
-<text x="350" y="228" font-size="11.5" class="m" fill="#9CDCFE">C:\Users\hufs\Desktop\dev</text>
-<rect x="334" y="256" width="200" height="32" rx="4" fill="#0E639C"/>
-<text x="434" y="277" text-anchor="middle" font-size="12" class="b" fill="#FFFFFF">예, 작성자를 신뢰합니다</text>
-<rect x="546" y="256" width="120" height="32" rx="4" fill="#3A3D41"/>
-<text x="606" y="277" text-anchor="middle" font-size="12" fill="#FFFFFF">아니요</text>
-<rect x="8" y="528" width="884" height="24" fill="#007ACC"/>
-<text x="30" y="544" font-size="11" fill="#FFFFFF">⑂ main    ⊗ 0  ⚠ 0</text>
-<rect x="24" y="12" width="60" height="24" rx="4" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="300" cy="24" r="15" fill="#F26B21"/><text x="300" y="30" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="330" y="204" width="340" height="38" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="694" cy="223" r="15" fill="#F26B21"/><text x="694" y="229" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="330" y="252" width="208" height="40" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="716" cy="272" r="15" fill="#F26B21"/><text x="716" y="278" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="72" y="92" width="210" height="100" rx="6" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="110" cy="218" r="15" fill="#F26B21"/><text x="110" y="224" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
-
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>앞으로 클로드 코드와 함께 쓸 작업 폴더를 VS Code에서 엽니다.</p></div>
-      <ol class="acts"><li>메뉴 <b>파일 → 폴더 열기…</b> 를 선택합니다. (<b>Ctrl+K → Ctrl+O</b>)</li><li>바탕화면의 <b>dev</b> 폴더(Git 가이드에서 만든 폴더)를 고릅니다.</li><li>신뢰 확인 창이 뜨면 <b>예, 작성자를 신뢰합니다</b> 를 누릅니다.</li><li>왼쪽에 폴더 안 파일 목록이 나타나면 성공입니다.</li></ol>
-      
-      <div class="tip warn"><b>파일 하나만 열지 마세요</b><p>반드시 <b>폴더</b>를 여세요. 클로드 코드는 <b>열린 폴더 전체</b>를 보고 작업합니다.</p></div><div class="tip info"><b>신뢰 창이 뭔가요?</b><p>내가 만든 폴더면 <b>신뢰</b>를 누르세요. 인터넷에서 받은 낯선 코드라면 <b>제한 모드</b>가 안전합니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="09 / 15">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 7</span><span class="sm">VS CODE · 실행 확인</span></div>
-    <h2>탐색기에서 <b>Code로 열기</b></h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#F3F3F3" stroke="#D9E0E8"/>
-<rect x="8" y="8" width="884" height="52" fill="#FFFFFF"/>
-<text x="34" y="40" font-size="13" fill="#24292F">📁  바탕 화면</text>
-<rect x="200" y="20" width="420" height="28" rx="14" fill="#F0F0F0" stroke="#D9E0E8"/>
-<text x="218" y="39" font-size="11.5" class="m" fill="#5B6B7C">C:\Users\hufs\Desktop</text>
-<rect x="30" y="86" width="120" height="120" rx="8" fill="#FFFFFF" stroke="#0078D4" stroke-width="2"/>
-<text x="90" y="146" text-anchor="middle" font-size="40">📁</text>
-<text x="90" y="180" text-anchor="middle" font-size="12.5" class="b" fill="#24292F">dev</text>
-<rect x="170" y="86" width="120" height="120" rx="8" fill="#FFFFFF" stroke="#E4E7EB"/>
-<text x="230" y="146" text-anchor="middle" font-size="40">📁</text>
-<text x="230" y="180" text-anchor="middle" font-size="12.5" fill="#24292F">문서</text>
-<rect x="150" y="212" width="290" height="250" rx="8" fill="#FFFFFF" stroke="#D0D0D0"/>
-<text x="172" y="244" font-size="12.5" fill="#24292F">열기</text>
-<text x="172" y="276" font-size="12.5" fill="#24292F">새 창에서 열기</text>
-<rect x="156" y="290" width="278" height="30" rx="4" fill="#E8F1FB"/>
-<text x="172" y="310" font-size="12.5" class="b" fill="#0065A9">Code(으)로 열기</text>
-<text x="172" y="344" font-size="12.5" fill="#24292F">Git Bash Here</text>
-<text x="172" y="376" font-size="12.5" fill="#24292F">터미널에서 열기</text>
-<line x1="156" y1="392" x2="434" y2="392" stroke="#E4E7EB"/>
-<text x="172" y="418" font-size="12.5" fill="#24292F">이름 바꾸기</text>
-<text x="172" y="446" font-size="12.5" fill="#5B6B7C">추가 옵션 표시</text>
-<rect x="480" y="212" width="380" height="250" rx="10" fill="#0E2A47"/>
-<text x="504" y="248" font-size="15" class="b" fill="#F9B27A">앞으로의 작업 순서</text>
-<text x="504" y="286" font-size="13" fill="#DCE6EF">① 작업 폴더를 우클릭</text>
-<text x="504" y="316" font-size="13" fill="#DCE6EF">② Code(으)로 열기</text>
-<text x="504" y="346" font-size="13" fill="#DCE6EF">③ VS Code에서 터미널 열기</text>
-<text x="504" y="376" font-size="13" fill="#DCE6EF">④ claude 입력 → 작업 시작</text>
-<rect x="504" y="400" width="330" height="38" rx="6" fill="#F26B21"/>
-<text x="524" y="425" font-size="13" class="b" fill="#FFFFFF">이 4단계만 익히면 됩니다</text>
-<rect x="26" y="220" width="118" height="32" rx="6" fill="#FFFFFF" stroke="#D0D0D0"/>
-<text x="38" y="241" font-size="12" fill="#24292F">🖱 오른쪽 클릭</text>
-<rect x="26" y="82" width="128" height="128" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="178" cy="122" r="15" fill="#F26B21"/><text x="178" y="128" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="22" y="216" width="126" height="40" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="86" cy="282" r="15" fill="#F26B21"/><text x="86" y="288" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="152" y="286" width="286" height="38" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="462" cy="305" r="15" fill="#F26B21"/><text x="462" y="311" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="166" y="434" width="132" height="26" rx="6" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="322" cy="447" r="15" fill="#F26B21"/><text x="322" y="453" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>설치 때 체크한 우클릭 메뉴로 폴더를 더 빠르게 여는 방법을 익힙니다.</p></div>
-      <ol class="acts"><li>Windows 탐색기에서 작업 폴더(예: <b>바탕화면\dev</b>)를 찾습니다.</li><li>폴더 위에서 <b>마우스 오른쪽 클릭</b>합니다.</li><li><b>Code(으)로 열기</b> 를 선택하면 VS Code가 그 폴더로 열립니다.</li><li>메뉴가 안 보이면 <b>추가 옵션 표시</b> 안에 있습니다. (Windows 11)</li></ol>
-      
-      <div class="tip ok"><b>이 방법이 가장 빠릅니다</b><p>앞으로 작업할 때마다 <b>폴더 우클릭 → Code로 열기</b> 한 번이면 준비 끝입니다.</p></div><div class="tip warn"><b>메뉴가 아예 없다면</b><p>STEP 3의 체크를 안 한 것입니다. 설치 파일을 다시 실행해 <b>같은 위치에 다시 설치</b>하면서 체크하세요.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="10 / 15">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 8</span><span class="sm">VS CODE · 터미널</span></div>
-    <h2>VS Code 안에서 터미널 열기</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      
-<rect x="8" y="8" width="884" height="544" rx="8" fill="#1E1E1E"/>
-<rect x="8" y="8" width="884" height="34" rx="8" fill="#323233"/><rect x="8" y="30" width="884" height="12" fill="#323233"/>
-<text x="30" y="30" font-size="12" fill="#CCCCCC">파일  편집  선택  보기  이동  실행  터미널  도움말</text>
-<rect x="8" y="42" width="52" height="510" fill="#333333"/>
-<text x="34" y="76" text-anchor="middle" font-size="19" fill="#FFFFFF">🗂</text>
-<text x="34" y="118" text-anchor="middle" font-size="17" fill="#8A8A8A">🔍</text>
-<text x="34" y="160" text-anchor="middle" font-size="17" fill="#8A8A8A">⑂</text>
-<text x="34" y="202" text-anchor="middle" font-size="17" fill="#8A8A8A">▷</text>
-<text x="34" y="244" text-anchor="middle" font-size="17" fill="#8A8A8A">⊞</text>
-
-<rect x="60" y="42" width="200" height="290" fill="#252526"/>
-<text x="80" y="72" font-size="11.5" class="b" fill="#CCCCCC">탐색기</text>
-<text x="80" y="102" font-size="11.5" class="b" fill="#CCCCCC">▾ DEV</text>
-<text x="96" y="128" font-size="11.5" fill="#CCCCCC">📁 my-first-app</text>
-<rect x="260" y="42" width="632" height="290" fill="#1E1E1E"/>
-<rect x="300" y="96" width="230" height="44" rx="6" fill="#2D2D30" stroke="#555555"/>
-<text x="415" y="124" text-anchor="middle" font-size="16" class="b m" fill="#FFFFFF">Ctrl + `</text>
-<text x="415" y="166" text-anchor="middle" font-size="12.5" fill="#8A8A8A">숫자 1 왼쪽의 키</text>
-<rect x="60" y="332" width="832" height="196" fill="#181818"/>
-<rect x="60" y="332" width="832" height="30" fill="#252526"/>
-<text x="84" y="352" font-size="11" fill="#FFFFFF">문제   출력   디버그 콘솔   터미널</text>
-<rect x="228" y="336" width="60" height="22" fill="#1E1E1E"/>
-<text x="258" y="352" font-size="11" class="b" fill="#FFFFFF">터미널</text>
-<text x="772" y="353" font-size="13" fill="#CCCCCC">＋</text>
-<text x="812" y="353" font-size="15" class="b" fill="#CCCCCC">˅</text>
-<text x="842" y="353" font-size="13" fill="#CCCCCC">⊞</text>
-<text x="868" y="353" font-size="13" fill="#CCCCCC">🗑</text>
-<text x="84" y="392" class="m" font-size="12.5" fill="#FFFFFF">PS C:\Users\hufs\Desktop\dev&gt; pwd</text>
-<text x="84" y="420" class="m" font-size="12.5" fill="#9A9A9A">Path</text>
-<text x="84" y="440" class="m" font-size="12.5" fill="#9A9A9A">----</text>
-<text x="84" y="462" class="m b" font-size="12.5" fill="#4EC9B0">C:\Users\hufs\Desktop\dev</text>
-<text x="84" y="496" class="m" font-size="12.5" fill="#FFFFFF">PS C:\Users\hufs\Desktop\dev&gt; _</text>
-<rect x="8" y="528" width="884" height="24" fill="#007ACC"/>
-<text x="30" y="544" font-size="11" fill="#FFFFFF">⑂ main    ⊗ 0  ⚠ 0</text>
-<rect x="296" y="92" width="238" height="52" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="558" cy="118" r="15" fill="#F26B21"/><text x="558" y="124" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="56" y="328" width="300" height="40" rx="6" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="380" cy="348" r="15" fill="#F26B21"/><text x="380" y="354" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="76" y="374" width="380" height="100" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="480" cy="424" r="15" fill="#F26B21"/><text x="480" y="430" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="804" y="336" width="28" height="24" rx="5" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="818" cy="300" r="15" fill="#F26B21"/><text x="818" y="306" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
-
-    </svg></div>
-    <div class="side">
-      <div class="goal"><b>이 단계의 목표</b><p>창을 왔다 갔다 하지 않고 VS Code 안에서 명령을 입력할 수 있게 합니다.</p></div>
-      <ol class="acts"><li>키보드 <b>Ctrl + `</b> 를 누릅니다. (백틱: 숫자 1 왼쪽 키)</li><li>아래쪽에 <b>터미널</b> 패널이 열립니다.</li><li><code>pwd</code> 를 입력해 현재 폴더 위치를 확인합니다.</li><li>터미널 종류를 바꾸려면 오른쪽 <b>˅</b> 를 누릅니다.</li></ol>
-      <div class="cmd">
-  <b class="lbl">현재 폴더 확인</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="pwd">복사</button><pre>pwd</pre></div>
-  </div>
-      <div class="tip ok"><b>여기서 클로드 코드를 실행합니다</b><p>다음 가이드에서 이 터미널에 <code>claude</code> 를 입력합니다. <b>폴더 위치가 곧 작업 대상</b>입니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="11 / 15">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 9</span><span class="sm">VS CODE · 마지막 확인</span></div>
-    <h2>터미널에서 <b>code .</b> 실행해 보기</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
-<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<text x="34" y="106" class="m b" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; cd "$HOME\Desktop\dev"</text><text x="34" y="146" class="m b" font-size="14" fill="#FFFFFF">PS C:\Users\hufs\Desktop\dev&gt; code .</text><text x="34" y="186" class="m b" font-size="13.5" fill="#7EE787">(VS Code 창이 새로 열립니다)</text><text x="34" y="232" class="m " font-size="14" fill="#FFFFFF">PS C:\Users\hufs\Desktop\dev&gt; _</text>
-<rect x="26" y="86" width="380" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="430" cy="100.5" r="15" fill="#F26B21"/><text x="430" y="106.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="26" y="126" width="380" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="430" cy="140.5" r="15" fill="#F26B21"/><text x="430" y="146.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="26" y="166.5" width="280" height="28.5" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="330" cy="180.75" r="15" fill="#F26B21"/><text x="330" y="186.75" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="470" y="300" width="402" height="176" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="494" y="332" font-size="14" class="b" fill="#F9B27A">code . 의 의미</text>
-<text x="494" y="364" font-size="12.5" fill="#DCE6EF">code = VS Code 실행</text>
-<text x="494" y="386" font-size="12.5" fill="#DCE6EF">.(점) = 지금 있는 폴더</text>
-<text x="494" y="418" font-size="12.5" class="b" fill="#FF9F6B">→ "지금 폴더를 VS Code로 열어라"</text>
-<text x="494" y="448" font-size="12" fill="#9FC6EE">code 와 . 사이 띄어쓰기 필수!</text>
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>PATH 등록이 제대로 되었는지 마지막으로 확인합니다.</p></div>
-      <ol class="acts"><li>PowerShell을 새로 열고 작업 폴더로 이동합니다.</li><li><b>code .</b> 를 입력합니다. (<b>code</b> 뒤에 <b>띄어쓰기 + 점</b>)</li><li>VS Code 창이 그 폴더로 새로 열리면 성공입니다.</li></ol>
-      <div class="cmd">
-  <b class="lbl">① 작업 폴더로 이동</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="cd &quot;$HOME\Desktop\dev&quot;">복사</button><pre>cd "$HOME\Desktop\dev"</pre></div>
-  </div><div class="cmd">
-  <b class="lbl">② 지금 폴더를 VS Code로 열기</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="code .">복사</button><pre>code .</pre></div>
-  </div>
-      <div class="tip warn"><b>"code 용어가 인식되지 않습니다"</b><p>PATH 등록이 안 된 것입니다. ① 터미널 새로 열기 ② PC 재부팅 ③ 설치 파일을 다시 실행해 <b>PATH에 추가</b> 체크 후 재설치.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="12 / 15">
-  <div class="rail acc"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 1/2</span></div>
-    <h2>VS Code 명령어 · 단축키 모음 <span style="font-size:22px;color:#8A94A0;font-weight:700">(1/2)</span></h2>
-    <p class="lead">명령은 <b>복사</b> 버튼으로, 단축키는 눈으로 익히세요. 자주 쓰는 것만 모았습니다.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="cgrid"><div class="ccard">
-  <div class="ct">① 지금 폴더를 VS Code로 열기</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="code .">복사</button><pre>code .</pre></div>
-  
-  <div class="cd">가장 많이 쓰는 명령입니다. <b>code</b> 와 <b>.</b> 사이 띄어쓰기 필수.</div>
-</div><div class="ccard">
-  <div class="ct">② 특정 폴더 열기</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="code &quot;$HOME\Desktop\dev&quot;">복사</button><pre>code "$HOME\Desktop\dev"</pre></div>
-  
-  <div class="cd">경로를 직접 지정해 엽니다.</div>
-</div><div class="ccard">
-  <div class="ct">③ 버전 확인 (설치 점검)</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="code --version">복사</button><pre>code --version</pre></div>
-  <div class="out">→ 1.9x.x</div>
-  <div class="cd">이 명령이 되면 PATH 등록이 정상입니다.</div>
-</div><div class="ccard">
-  <div class="ct">④ 확장 설치 (한국어 언어팩)</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="code --install-extension MS-CEINTL.vscode-language-pack-ko">복사</button><pre>code --install-extension MS-CEINTL.vscode-language-pack-ko</pre></div>
-  
-  <div class="cd">화면에서 클릭하는 대신 명령으로 설치할 수 있습니다.</div>
-</div><div class="ccard">
-  <div class="ct">⑤ 설치된 확장 목록 보기</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="code --list-extensions">복사</button><pre>code --list-extensions</pre></div>
-  
-  <div class="cd">어떤 확장이 깔려 있는지 확인합니다.</div>
-</div><div class="ccard">
-  <div class="ct">⑥ VS Code 설치 위치 확인 (문제 진단)</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="Get-Command code | Select-Object Source">복사</button><pre>Get-Command code | Select-Object Source</pre></div>
-  
-  <div class="cd">아무것도 안 나오면 PATH 등록이 안 된 것입니다.</div>
-</div></div>
-</section>
-
-<section class="slide" data-no="13 / 15">
-  <div class="rail acc"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 2/2</span></div>
-    <h2>VS Code 명령어 · 단축키 모음 <span style="font-size:22px;color:#8A94A0;font-weight:700">(2/2)</span></h2>
-    <p class="lead">명령은 <b>복사</b> 버튼으로, 단축키는 눈으로 익히세요. 자주 쓰는 것만 모았습니다.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="cgrid"><div class="ccard">
-  <div class="ct">⑦ 자주 쓰는 단축키 — 터미널 열기/닫기</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="Ctrl + `">복사</button><pre>Ctrl + `</pre></div>
-  
-  <div class="cd">백틱(`)은 숫자 1 왼쪽 키입니다.</div>
-</div><div class="ccard">
-  <div class="ct">⑧ 자주 쓰는 단축키 — 명령 팔레트</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="Ctrl + Shift + P">복사</button><pre>Ctrl + Shift + P</pre></div>
-  
-  <div class="cd">모든 기능을 이름으로 찾아 실행합니다. 길을 잃으면 이것부터.</div>
-</div></div>
-</section>
-
-<section class="slide" data-no="14 / 15">
-  <div class="rail acc"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">문제 해결</span><span class="sm">TROUBLESHOOTING</span></div>
-    <h2>VS Code — 문제가 생겼을 때</h2>
-    <p class="lead">증상별 해결 순서입니다.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="tbwrap"><table class="tb">
-    <thead><tr><th style="width:29%">이런 화면·메시지가 나오면</th><th style="width:24%">원인</th><th>이렇게 해결하세요</th></tr></thead>
-    <tbody><tr><td class="s"><code>'code' 용어가 … 인식되지 않습니다</code></td><td class="c">PATH 미등록 또는 미반영</td><td>① 터미널을 <b>모두 닫고 새로 열기</b> ② PC 재부팅 ③ 설치 파일을 다시 실행해 <b>같은 위치에 재설치</b>하며 "PATH에 추가" 체크.</td></tr><tr><td class="s">우클릭 메뉴에 "Code(으)로 열기"가 없음</td><td class="c">설치 시 해당 체크 해제</td><td>설치 파일을 다시 실행 → <b>추가 작업 선택</b> 화면에서 두 개의 "Code(으)로 열기" 체크 → 재설치. Windows 11은 <b>추가 옵션 표시</b> 안에 있을 수도 있습니다.</td></tr><tr><td class="s">메뉴가 계속 영어로 나옴</td><td class="c">언어팩 미설치 또는 재시작 안 함</td><td><b>Ctrl+Shift+X</b> → korean 검색 → 설치 → <b>Change Language and Restart</b>. 안 되면 <b>Ctrl+Shift+P</b> → <code>Configure Display Language</code> → 한국어.</td></tr><tr><td class="s">한글 입력이 이상하게 깨짐</td><td class="c">글꼴 문제</td><td><b>Ctrl+,</b> (설정) → <code>font family</code> 검색 → <code>Consolas, D2Coding, Malgun Gothic</code> 처럼 한글 글꼴을 뒤에 추가.</td></tr><tr><td class="s">"제한 모드"라 실행이 막힘</td><td class="c">폴더 신뢰 설정</td><td>위쪽 노란 띠의 <b>신뢰</b> 클릭, 또는 <b>파일 → 폴더 신뢰 관리</b>. 내가 만든 폴더면 신뢰해도 안전합니다.</td></tr><tr><td class="s">터미널이 Git Bash로 열려 명령이 다름</td><td class="c">기본 프로필 설정</td><td>터미널 오른쪽 <b>˅</b> → <b>기본 프로필 선택</b> → <b>PowerShell</b>. 이 가이드의 명령은 PowerShell 기준입니다.</td></tr><tr><td class="s">기관 PC라 설치가 막힘</td><td class="c">관리자 권한 제한</td><td>VS Code는 <b>User Installer</b> 라서 보통 권한 없이 설치됩니다. 그래도 막히면 공식 사이트의 <b>.zip 무설치판</b>을 내려받아 압축을 풀고 <code>Code.exe</code> 를 실행하세요.</td></tr></tbody>
-  </table></div>
-</section>
-
-<section class="slide" data-no="15 / 15">
-  <div class="rail acc"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">마무리</span><span class="sm">CHECKLIST &amp; NEXT</span></div>
-    <h2>VS Code 설치 완료 확인</h2>
-    <p class="lead">아래가 모두 되면 준비 끝입니다. 마지막은 <b>Claude Code 설치</b>입니다.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="two">
-    <div class="panel"><h3>✅ 완료 체크리스트</h3><ul class="chk"><li><span class="box"></span><span><span class="t">설치를 마치고 VS Code가 실행된다</span><span class="d">파란 로고 + 시작 탭</span></span></li><li><span class="box"></span><span><span class="t">"PATH에 추가"를 체크하고 설치했다</span><span class="d">code --version 으로 확인 가능</span></span></li><li><span class="box"></span><span><span class="t">한국어 언어팩을 설치했다(선택)</span><span class="d">메뉴가 한글로 보임</span></span></li><li><span class="box"></span><span><span class="t">폴더를 열 줄 안다</span><span class="d">파일 → 폴더 열기 또는 우클릭 → Code로 열기</span></span></li><li><span class="box"></span><span><span class="t">Ctrl + ` 로 터미널을 열 수 있다</span><span class="d">여기서 claude 를 실행하게 됩니다</span></span></li><li><span class="box"></span><span><span class="t">code . 명령이 동작한다</span><span class="d">터미널에서 폴더 열기 성공</span></span></li></ul></div>
-    <div class="panel"><h3>➡️ 다음 단계 &amp; 참고</h3><ul class="nxt"><li><b>⑤ Claude Code 설치 가이드</b><span>드디어 마지막입니다. (<b>05-claude-code-guide</b>)</span></li><li><b>앞으로의 작업 루틴</b><span>① 작업 폴더 우클릭 → <b>Code로 열기</b> ② <code>Ctrl + `</code> 터미널 ③ <code>claude</code> ④ 한국어로 요청</span></li><li><b>추천 확장(선택)</b><span>Korean Language Pack · Live Server(HTML 미리보기) · Prettier(코드 정리)</span></li><li><b>알아 두면 좋은 단축키</b><span><code>Ctrl+Shift+P</code> 명령 팔레트 · <code>Ctrl+S</code> 저장 · <code>Ctrl+`</code> 터미널</span></li></ul></div>
-  </div>
-  <div class="final"><b>최종 확인 명령</b><span>code --version</span></div>
-</section>
-
-</div>
-<script>
-function copyText(t){
-  if(navigator.clipboard && window.isSecureContext){ return navigator.clipboard.writeText(t); }
-  var ta=document.createElement('textarea'); ta.value=t;
-  ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta);
-  ta.focus(); ta.select();
-  try{ document.execCommand('copy'); }catch(e){}
-  document.body.removeChild(ta); return Promise.resolve();
-}
-var toast=document.createElement('div'); toast.className='toast'; toast.textContent='복사되었습니다';
-document.addEventListener('DOMContentLoaded',function(){ document.body.appendChild(toast); });
-document.addEventListener('click',function(e){
-  var b=e.target.closest ? e.target.closest('.cp') : null; if(!b) return;
-  copyText(b.getAttribute('data-c')).then(function(){
-    var old=b.textContent; b.textContent='복사됨'; b.classList.add('done');
-    toast.classList.add('on');
-    setTimeout(function(){ b.textContent=old; b.classList.remove('done'); toast.classList.remove('on'); },1400);
-  });
-});
-</script>
-</body>
+    <script>
+      function copyText(t) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(t);
+        }
+        var ta = document.createElement("textarea");
+        ta.value = t;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand("copy");
+        } catch (e) {}
+        document.body.removeChild(ta);
+        return Promise.resolve();
+      }
+      var toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = "복사되었습니다";
+      document.addEventListener("DOMContentLoaded", function () {
+        document.body.appendChild(toast);
+      });
+      document.addEventListener("click", function (e) {
+        var b = e.target.closest ? e.target.closest(".cp") : null;
+        if (!b) return;
+        copyText(b.getAttribute("data-c")).then(function () {
+          var old = b.textContent;
+          b.textContent = "복사됨";
+          b.classList.add("done");
+          toast.classList.add("on");
+          setTimeout(function () {
+            b.textContent = old;
+            b.classList.remove("done");
+            toast.classList.remove("on");
+          }, 1400);
+        });
+      });
+    </script>
+  </body>
 </html>

@@ -1,693 +1,1665 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>③ Node.js LTS 설치 — 클로드 코드 준비 가이드</title>
-<style>
-:root{
-  --navy:#0E2A47; --navy-2:#1B4A78; --accent:#F26B21; --accent-soft:#FFF1E7;
-  --paper:#FFFFFF; --surface:#F4F6F9; --line:#D9E0E8; --muted:#5B6B7C; --ink:#16202B; --ok:#1A7F37; --bad:#C4341C;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Malgun Gothic','Nanum Gothic','Apple SD Gothic Neo',sans-serif;background:#8E9AA8;color:var(--ink);
-  -webkit-font-smoothing:antialiased;padding:28px 0;}
-.deck{display:flex;flex-direction:column;align-items:center;gap:24px;}
-.slide{width:1280px;height:720px;background:var(--paper);position:relative;overflow:hidden;
-  box-shadow:0 10px 34px rgba(0,0,0,.22);flex:0 0 auto;}
-.slide::after{content:attr(data-no);position:absolute;right:36px;bottom:22px;font-size:13px;font-weight:700;color:#A8B4C0;letter-spacing:.08em;}
-.rail{position:absolute;left:0;top:0;width:10px;height:100%;background:var(--navy);}
-.rail.acc{background:var(--accent);}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>③ Node.js LTS 설치 — 클로드 코드 준비 가이드</title>
+    <style>
+      :root {
+        --navy: #0e2a47;
+        --navy-2: #1b4a78;
+        --accent: #f26b21;
+        --accent-soft: #fff1e7;
+        --paper: #ffffff;
+        --surface: #f4f6f9;
+        --line: #d9e0e8;
+        --muted: #5b6b7c;
+        --ink: #16202b;
+        --ok: #1a7f37;
+        --bad: #c4341c;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Malgun Gothic", "Nanum Gothic", "Apple SD Gothic Neo", sans-serif;
+        background: #8e9aa8;
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+        padding: 28px 0;
+      }
+      .deck {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+      }
+      .slide {
+        width: 1280px;
+        height: 720px;
+        background: var(--paper);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 34px rgba(0, 0, 0, 0.22);
+        flex: 0 0 auto;
+      }
+      .slide::after {
+        content: attr(data-no);
+        position: absolute;
+        right: 36px;
+        bottom: 22px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #a8b4c0;
+        letter-spacing: 0.08em;
+      }
+      .rail {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 10px;
+        height: 100%;
+        background: var(--navy);
+      }
+      .rail.acc {
+        background: var(--accent);
+      }
 
-.cover{background:var(--navy);color:#fff;padding:0 90px;display:flex;flex-direction:column;justify-content:center;}
-.cover .kicker{font-size:15px;letter-spacing:.3em;color:#F9B27A;font-weight:700;margin-bottom:24px;}
-.cover h1{font-size:62px;line-height:1.18;letter-spacing:-.02em;font-weight:800;}
-.cover h1 em{font-style:normal;color:#F9B27A;}
-.cover .sub{margin-top:24px;font-size:20px;color:#B7C7D8;line-height:1.55;max-width:940px;}
-.cover .bar{width:96px;height:6px;background:var(--accent);margin:36px 0 32px;}
-.cover .meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px;}
-.cover .chip{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:9px 20px;font-size:14px;color:#DCE6EF;}
-.cover .chip.ver{border-color:var(--accent);color:#F9B27A;font-weight:700;letter-spacing:.05em;}
-.cover .stamp{position:absolute;right:-24px;bottom:-84px;font-size:300px;font-weight:800;color:rgba(255,255,255,.055);letter-spacing:-.04em;}
+      .cover {
+        background: var(--navy);
+        color: #fff;
+        padding: 0 90px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .cover .kicker {
+        font-size: 15px;
+        letter-spacing: 0.3em;
+        color: #f9b27a;
+        font-weight: 700;
+        margin-bottom: 24px;
+      }
+      .cover h1 {
+        font-size: 62px;
+        line-height: 1.18;
+        letter-spacing: -0.02em;
+        font-weight: 800;
+      }
+      .cover h1 em {
+        font-style: normal;
+        color: #f9b27a;
+      }
+      .cover .sub {
+        margin-top: 24px;
+        font-size: 20px;
+        color: #b7c7d8;
+        line-height: 1.55;
+        max-width: 940px;
+      }
+      .cover .bar {
+        width: 96px;
+        height: 6px;
+        background: var(--accent);
+        margin: 36px 0 32px;
+      }
+      .cover .meta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 34px;
+      }
+      .cover .chip {
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        border-radius: 999px;
+        padding: 9px 20px;
+        font-size: 14px;
+        color: #dce6ef;
+      }
+      .cover .chip.ver {
+        border-color: var(--accent);
+        color: #f9b27a;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+      .cover .stamp {
+        position: absolute;
+        right: -24px;
+        bottom: -84px;
+        font-size: 300px;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.055);
+        letter-spacing: -0.04em;
+      }
 
-.head{padding:34px 60px 0 70px;}
-.eyebrow{display:inline-flex;align-items:center;gap:12px;margin-bottom:11px;}
-.eyebrow .tag{background:var(--accent);color:#fff;font-size:13px;font-weight:800;letter-spacing:.1em;padding:5px 12px;border-radius:4px;}
-.eyebrow .sm{font-size:12.5px;color:var(--muted);letter-spacing:.14em;font-weight:700;}
-.head h2{font-size:36px;font-weight:800;letter-spacing:-.02em;color:var(--navy);line-height:1.2;}
-.head .lead{margin-top:9px;font-size:15.5px;color:var(--muted);}
-.hr{height:3px;background:var(--navy);margin:15px 70px 0 70px;}
-.hr i{display:block;width:120px;height:3px;background:var(--accent);}
+      .head {
+        padding: 34px 60px 0 70px;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 11px;
+      }
+      .eyebrow .tag {
+        background: var(--accent);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        padding: 5px 12px;
+        border-radius: 4px;
+      }
+      .eyebrow .sm {
+        font-size: 12.5px;
+        color: var(--muted);
+        letter-spacing: 0.14em;
+        font-weight: 700;
+      }
+      .head h2 {
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: var(--navy);
+        line-height: 1.2;
+      }
+      .head .lead {
+        margin-top: 9px;
+        font-size: 15.5px;
+        color: var(--muted);
+      }
+      .hr {
+        height: 3px;
+        background: var(--navy);
+        margin: 15px 70px 0 70px;
+      }
+      .hr i {
+        display: block;
+        width: 120px;
+        height: 3px;
+        background: var(--accent);
+      }
 
-.body{display:grid;grid-template-columns:706px 1fr;gap:32px;padding:22px 70px 0 70px;}
-.shot{border:1px solid var(--line);background:var(--surface);padding:9px;}
-.shot svg{display:block;}
-.side{display:flex;flex-direction:column;gap:12px;overflow:hidden;}
-.goal{background:var(--navy);color:#fff;padding:14px 18px;}
-.goal>b{display:block;font-size:11.5px;letter-spacing:.18em;color:#F9B27A;margin-bottom:6px;}
-.goal p{font-size:15.5px;line-height:1.45;font-weight:700;}
-ol.acts{list-style:none;counter-reset:a;display:flex;flex-direction:column;gap:9px;}
-ol.acts li{counter-increment:a;position:relative;padding-left:34px;font-size:14px;line-height:1.5;color:#25313D;}
-ol.acts li::before{content:counter(a);position:absolute;left:0;top:1px;width:23px;height:23px;border-radius:50%;
-  background:var(--accent);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;}
-.tip{border-left:4px solid var(--accent);background:var(--accent-soft);padding:11px 14px;}
-.tip.warn{border-left-color:var(--bad);background:#FDEEEB;}
-.tip.ok{border-left-color:var(--ok);background:#F0F7F1;}
-.tip.info{border-left-color:var(--navy-2);background:#EDF3F9;}
-.tip>b{display:block;font-size:12.5px;color:var(--accent);margin-bottom:5px;font-weight:800;}
-.tip.warn>b{color:var(--bad);} .tip.ok>b{color:var(--ok);} .tip.info>b{color:var(--navy-2);}
-.tip p{font-size:13px;line-height:1.55;color:#3A4855;}
+      .body {
+        display: grid;
+        grid-template-columns: 706px 1fr;
+        gap: 32px;
+        padding: 22px 70px 0 70px;
+      }
+      .shot {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        padding: 9px;
+      }
+      .shot svg {
+        display: block;
+      }
+      .side {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        overflow: hidden;
+      }
+      .goal {
+        background: var(--navy);
+        color: #fff;
+        padding: 14px 18px;
+      }
+      .goal > b {
+        display: block;
+        font-size: 11.5px;
+        letter-spacing: 0.18em;
+        color: #f9b27a;
+        margin-bottom: 6px;
+      }
+      .goal p {
+        font-size: 15.5px;
+        line-height: 1.45;
+        font-weight: 700;
+      }
+      ol.acts {
+        list-style: none;
+        counter-reset: a;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+      }
+      ol.acts li {
+        counter-increment: a;
+        position: relative;
+        padding-left: 34px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #25313d;
+      }
+      ol.acts li::before {
+        content: counter(a);
+        position: absolute;
+        left: 0;
+        top: 1px;
+        width: 23px;
+        height: 23px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .tip {
+        border-left: 4px solid var(--accent);
+        background: var(--accent-soft);
+        padding: 11px 14px;
+      }
+      .tip.warn {
+        border-left-color: var(--bad);
+        background: #fdeeeb;
+      }
+      .tip.ok {
+        border-left-color: var(--ok);
+        background: #f0f7f1;
+      }
+      .tip.info {
+        border-left-color: var(--navy-2);
+        background: #edf3f9;
+      }
+      .tip > b {
+        display: block;
+        font-size: 12.5px;
+        color: var(--accent);
+        margin-bottom: 5px;
+        font-weight: 800;
+      }
+      .tip.warn > b {
+        color: var(--bad);
+      }
+      .tip.ok > b {
+        color: var(--ok);
+      }
+      .tip.info > b {
+        color: var(--navy-2);
+      }
+      .tip p {
+        font-size: 13px;
+        line-height: 1.55;
+        color: #3a4855;
+      }
 
-/* 명령어 + 복사 버튼 */
-.cmd .lbl{display:block;font-size:11.5px;font-weight:800;letter-spacing:.1em;color:var(--navy);margin-bottom:5px;}
-.cmdwrap{position:relative;}
-.cmdwrap pre{background:var(--navy);color:#E7EEF6;padding:12px 62px 12px 14px;border-radius:6px;
-  font-family:'Consolas','D2Coding',monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-all;}
-.cp{position:absolute;right:8px;top:8px;background:var(--accent);color:#fff;border:0;border-radius:4px;
-  font-size:11px;font-weight:800;padding:5px 10px;cursor:pointer;font-family:inherit;letter-spacing:.02em;}
-.cp:hover{filter:brightness(1.08);}
-.cp.done{background:var(--ok);}
-.out{margin-top:5px;font-family:'Consolas','D2Coding',monospace;font-size:11.5px;color:var(--muted);}
+      /* 명령어 + 복사 버튼 */
+      .cmd .lbl {
+        display: block;
+        font-size: 11.5px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        color: var(--navy);
+        margin-bottom: 5px;
+      }
+      .cmdwrap {
+        position: relative;
+      }
+      .cmdwrap pre {
+        background: var(--navy);
+        color: #e7eef6;
+        padding: 12px 62px 12px 14px;
+        border-radius: 6px;
+        font-family: "Consolas", "D2Coding", monospace;
+        font-size: 12.5px;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      .cp {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        background: var(--accent);
+        color: #fff;
+        border: 0;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-family: inherit;
+        letter-spacing: 0.02em;
+      }
+      .cp:hover {
+        filter: brightness(1.08);
+      }
+      .cp.done {
+        background: var(--ok);
+      }
+      .out {
+        margin-top: 5px;
+        font-family: "Consolas", "D2Coding", monospace;
+        font-size: 11.5px;
+        color: var(--muted);
+      }
 
-/* 내용이 많은 슬라이드용 축약 모드 */
-.side.dense{gap:9px;}
-.side.dense .goal{padding:11px 15px;}
-.side.dense .goal>b{font-size:11px;margin-bottom:5px;}
-.side.dense .goal p{font-size:14px;line-height:1.4;}
-.side.dense ol.acts{gap:6px;}
-.side.dense ol.acts li{font-size:13px;line-height:1.45;padding-left:29px;}
-.side.dense ol.acts li::before{width:20px;height:20px;font-size:11px;}
-.side.dense .cmd .lbl{font-size:11px;margin-bottom:4px;}
-.side.dense .cmdwrap pre{font-size:11.5px;line-height:1.5;padding:9px 54px 9px 11px;}
-.side.dense .cp{padding:4px 8px;font-size:10px;top:6px;right:6px;}
-.side.dense .out{font-size:10.5px;margin-top:4px;}
-.side.dense .tip{padding:9px 12px;}
-.side.dense .tip>b{font-size:11.5px;margin-bottom:4px;}
-.side.dense .tip p{font-size:12px;line-height:1.5;}
+      /* 내용이 많은 슬라이드용 축약 모드 */
+      .side.dense {
+        gap: 9px;
+      }
+      .side.dense .goal {
+        padding: 11px 15px;
+      }
+      .side.dense .goal > b {
+        font-size: 11px;
+        margin-bottom: 5px;
+      }
+      .side.dense .goal p {
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      .side.dense ol.acts {
+        gap: 6px;
+      }
+      .side.dense ol.acts li {
+        font-size: 13px;
+        line-height: 1.45;
+        padding-left: 29px;
+      }
+      .side.dense ol.acts li::before {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
+      }
+      .side.dense .cmd .lbl {
+        font-size: 11px;
+        margin-bottom: 4px;
+      }
+      .side.dense .cmdwrap pre {
+        font-size: 11.5px;
+        line-height: 1.5;
+        padding: 9px 54px 9px 11px;
+      }
+      .side.dense .cp {
+        padding: 4px 8px;
+        font-size: 10px;
+        top: 6px;
+        right: 6px;
+      }
+      .side.dense .out {
+        font-size: 10.5px;
+        margin-top: 4px;
+      }
+      .side.dense .tip {
+        padding: 9px 12px;
+      }
+      .side.dense .tip > b {
+        font-size: 11.5px;
+        margin-bottom: 4px;
+      }
+      .side.dense .tip p {
+        font-size: 12px;
+        line-height: 1.5;
+      }
 
-/* 명령어 모음 슬라이드 */
-.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px;padding:22px 70px 0 70px;}
-.ccard{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);padding:13px 15px;}
-.ccard .ct{font-size:13.5px;font-weight:800;color:var(--navy);margin-bottom:8px;}
-.ccard .cd{margin-top:7px;font-size:12.5px;line-height:1.5;color:var(--muted);}
+      /* 명령어 모음 슬라이드 */
+      .cgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px 26px;
+        padding: 22px 70px 0 70px;
+      }
+      .ccard {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--accent);
+        padding: 13px 15px;
+      }
+      .ccard .ct {
+        font-size: 13.5px;
+        font-weight: 800;
+        color: var(--navy);
+        margin-bottom: 8px;
+      }
+      .ccard .cd {
+        margin-top: 7px;
+        font-size: 12.5px;
+        line-height: 1.5;
+        color: var(--muted);
+      }
 
-/* 문제 해결 표 */
-.tbwrap{padding:20px 70px 0 70px;}
-table.tb{width:100%;border-collapse:collapse;}
-table.tb th{background:var(--navy);color:#fff;font-size:13px;text-align:left;padding:10px 13px;font-weight:700;}
-table.tb td{border-bottom:1px solid var(--line);padding:9px 13px;font-size:12.8px;vertical-align:top;line-height:1.5;}
-table.tb tr:nth-child(even) td{background:#FAFBFC;}
-table.tb td.s{font-weight:700;color:var(--bad);}
-table.tb td.c{color:var(--muted);}
-table.tb code{font-family:'Consolas','D2Coding',monospace;background:#EEF2F6;padding:1px 5px;border-radius:3px;font-size:12px;color:#20364C;}
+      /* 문제 해결 표 */
+      .tbwrap {
+        padding: 20px 70px 0 70px;
+      }
+      table.tb {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      table.tb th {
+        background: var(--navy);
+        color: #fff;
+        font-size: 13px;
+        text-align: left;
+        padding: 10px 13px;
+        font-weight: 700;
+      }
+      table.tb td {
+        border-bottom: 1px solid var(--line);
+        padding: 9px 13px;
+        font-size: 12.8px;
+        vertical-align: top;
+        line-height: 1.5;
+      }
+      table.tb tr:nth-child(even) td {
+        background: #fafbfc;
+      }
+      table.tb td.s {
+        font-weight: 700;
+        color: var(--bad);
+      }
+      table.tb td.c {
+        color: var(--muted);
+      }
+      table.tb code {
+        font-family: "Consolas", "D2Coding", monospace;
+        background: #eef2f6;
+        padding: 1px 5px;
+        border-radius: 3px;
+        font-size: 12px;
+        color: #20364c;
+      }
 
-/* 마무리 */
-.two{display:grid;grid-template-columns:1fr 1fr;gap:30px;padding:24px 70px 0 70px;}
-.panel h3{font-size:17px;color:var(--navy);font-weight:800;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--line);}
-ul.chk{list-style:none;display:flex;flex-direction:column;gap:7px;}
-ul.chk li{display:flex;gap:11px;align-items:flex-start;background:var(--surface);padding:8px 12px;}
-ul.chk .box{width:16px;height:16px;border:2px solid var(--accent);flex:0 0 auto;margin-top:2px;}
-ul.chk .t{display:block;font-size:13.5px;font-weight:700;color:#25313D;}
-ul.chk .d{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45;}
-ul.nxt{list-style:none;display:flex;flex-direction:column;gap:9px;}
-ul.nxt li{border-left:3px solid var(--navy-2);padding:6px 0 6px 12px;}
-ul.nxt>li>b{display:block;font-size:13.5px;color:var(--navy);margin-bottom:3px;}
-ul.nxt>li>span{font-size:12.5px;color:var(--muted);line-height:1.5;}
-.final{margin:18px 70px 0 70px;background:var(--navy);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:24px;}
-.final b{font-size:13px;color:#F9B27A;letter-spacing:.14em;flex:0 0 auto;}
-.final span{font-family:'Consolas','D2Coding',monospace;font-size:17px;}
+      /* 마무리 */
+      .two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        padding: 24px 70px 0 70px;
+      }
+      .panel h3 {
+        font-size: 17px;
+        color: var(--navy);
+        font-weight: 800;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--line);
+      }
+      ul.chk {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      ul.chk li {
+        display: flex;
+        gap: 11px;
+        align-items: flex-start;
+        background: var(--surface);
+        padding: 8px 12px;
+      }
+      ul.chk .box {
+        width: 16px;
+        height: 16px;
+        border: 2px solid var(--accent);
+        flex: 0 0 auto;
+        margin-top: 2px;
+      }
+      ul.chk .t {
+        display: block;
+        font-size: 13.5px;
+        font-weight: 700;
+        color: #25313d;
+      }
+      ul.chk .d {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+        line-height: 1.45;
+      }
+      ul.nxt {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+      }
+      ul.nxt li {
+        border-left: 3px solid var(--navy-2);
+        padding: 6px 0 6px 12px;
+      }
+      ul.nxt > li > b {
+        display: block;
+        font-size: 13.5px;
+        color: var(--navy);
+        margin-bottom: 3px;
+      }
+      ul.nxt > li > span {
+        font-size: 12.5px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .final {
+        margin: 18px 70px 0 70px;
+        background: var(--navy);
+        color: #fff;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .final b {
+        font-size: 13px;
+        color: #f9b27a;
+        letter-spacing: 0.14em;
+        flex: 0 0 auto;
+      }
+      .final span {
+        font-family: "Consolas", "D2Coding", monospace;
+        font-size: 17px;
+      }
 
-.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#0E2A47;color:#fff;
-  padding:11px 22px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;transition:.22s;pointer-events:none;z-index:99;}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 26px;
+        transform: translateX(-50%) translateY(20px);
+        background: #0e2a47;
+        color: #fff;
+        padding: 11px 22px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 700;
+        opacity: 0;
+        transition: 0.22s;
+        pointer-events: none;
+        z-index: 99;
+      }
+      .toast.on {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
 
-@media print{
-  body{background:#fff;padding:0;} .deck{gap:0;}
-  .slide{box-shadow:none;page-break-after:always;}
-  .cp,.toast{display:none!important;}
-  .cmdwrap pre{padding-right:14px;}
-  @page{size:1280px 720px;margin:0;}
-}
-</style>
-</head>
-<body>
-<div class="deck">
+      @media print {
+        body {
+          background: #fff;
+          padding: 0;
+        }
+        .deck {
+          gap: 0;
+        }
+        .slide {
+          box-shadow: none;
+          page-break-after: always;
+        }
+        .cp,
+        .toast {
+          display: none !important;
+        }
+        .cmdwrap pre {
+          padding-right: 14px;
+        }
+        @page {
+          size: 1280px 720px;
+          margin: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="deck">
+      <section class="slide cover" data-no="01 / 14">
+        <div class="stamp">JS</div>
+        <div class="kicker">CLAUDE CODE 준비 · 03 NODE.JS</div>
+        <h1>Node.js LTS<br /><em>안정 버전 설치하기</em></h1>
+        <div class="bar"></div>
+        <p class="sub">
+          클로드 코드와 개발 도구를 돌리는 엔진 Node.js를 설치합니다. 화면에서 <b>딱 한 가지</b>, 반드시 <b>LTS</b>를 고르는 것만 기억하세요.
+        </p>
+        <div class="meta">
+          <span class="chip">소요 시간 약 7분</span><span class="chip">Windows 10 / 11</span><span class="chip">무료 · 관리자 권한 필요</span
+          ><span class="chip">초보자 대상</span><span class="chip ver">v1.0 · 2026-07-26</span>
+        </div>
+      </section>
 
-<section class="slide cover" data-no="01 / 14">
-  <div class="stamp">JS</div>
-  <div class="kicker">CLAUDE CODE 준비 · 03 NODE.JS</div>
-  <h1>Node.js LTS<br><em>안정 버전 설치하기</em></h1>
-  <div class="bar"></div>
-  <p class="sub">클로드 코드와 개발 도구를 돌리는 엔진 Node.js를 설치합니다. 화면에서 <b>딱 한 가지</b>, 반드시 <b>LTS</b>를 고르는 것만 기억하세요.</p>
-  <div class="meta"><span class="chip">소요 시간 약 7분</span><span class="chip">Windows 10 / 11</span><span class="chip">무료 · 관리자 권한 필요</span><span class="chip">초보자 대상</span><span class="chip ver">v1.0 · 2026-07-26</span></div>
-</section>
+      <section class="slide" data-no="02 / 14">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">한눈에 보기</span></div>
+          <h2>Node.js 설치 전체 흐름</h2>
+          <p class="lead">
+            LTS 내려받기 → 설치 마법사(Next 반복) → 터미널 새로 열기 → 확인 순서입니다. 설치 마법사에서 <b>바꿀 것이 거의 없습니다.</b>
+          </p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="flowwrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 372" width="100%" preserveAspectRatio="xMidYMid meet">
+            <style>
+              text {
+                font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+              }
+              .b {
+                font-weight: 700;
+              }
+            </style>
+            <rect x="0" y="0" width="1000" height="372" fill="#FFFFFF" />
+            <g>
+              <rect x="18" y="66" width="172" height="176" rx="12" fill="#0E2A47" />
+              <text x="40" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">01</text>
+              <text x="40" y="152" font-size="30" class="b">⬇️</text>
+              <text x="40" y="184" font-size="16" class="b" fill="#FFFFFF">LTS 내려받기</text>
+              <rect x="40" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="50" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 1</text>
+            </g>
+            <path d="M194 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <g>
+              <rect x="216" y="66" width="172" height="176" rx="12" fill="#1B4A78" />
+              <text x="238" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">02</text>
+              <text x="238" y="152" font-size="30" class="b">⚙️</text>
+              <text x="238" y="184" font-size="16" class="b" fill="#FFFFFF">설치 마법사</text>
+              <rect x="238" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="248" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 2–5</text>
+            </g>
+            <path d="M392 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <g>
+              <rect x="414" y="66" width="172" height="176" rx="12" fill="#2A6EA6" />
+              <text x="436" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">03</text>
+              <text x="436" y="152" font-size="30" class="b">🔄</text>
+              <text x="436" y="184" font-size="16" class="b" fill="#FFFFFF">새 터미널</text>
+              <rect x="436" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="446" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 6</text>
+            </g>
+            <path d="M590 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <g>
+              <rect x="612" y="66" width="172" height="176" rx="12" fill="#E2762A" />
+              <text x="634" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">04</text>
+              <text x="634" y="152" font-size="30" class="b">✅</text>
+              <text x="634" y="184" font-size="16" class="b" fill="#FFFFFF">설치 확인</text>
+              <rect x="634" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="644" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 7</text>
+            </g>
+            <path d="M788 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <g>
+              <rect x="810" y="66" width="172" height="176" rx="12" fill="#F26B21" />
+              <text x="832" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">05</text>
+              <text x="832" y="152" font-size="30" class="b">📦</text>
+              <text x="832" y="184" font-size="16" class="b" fill="#FFFFFF">npm 확인</text>
+              <rect x="832" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18" />
+              <text x="842" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 8</text>
+            </g>
+            <rect x="18" y="282" width="964" height="62" rx="10" fill="#F4F6F9" stroke="#D9E0E8" />
+            <text x="42" y="308" font-size="13" class="b" fill="#0E2A47">가장 중요한 한 가지</text>
+            <text x="42" y="330" font-size="12.5" fill="#5B6B7C">
+              반드시 왼쪽 초록색 LTS(장기 지원) 버전을 고르세요. 오른쪽 Current(최신) 버전은 실험용이라 오류가 잦습니다.
+            </text>
+          </svg>
+        </div>
+      </section>
 
-<section class="slide" data-no="02 / 14">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">한눈에 보기</span></div>
-    <h2>Node.js 설치 전체 흐름</h2>
-    <p class="lead">LTS 내려받기 → 설치 마법사(Next 반복) → 터미널 새로 열기 → 확인 순서입니다. 설치 마법사에서 <b>바꿀 것이 거의 없습니다.</b></p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="flowwrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 372" width="100%" preserveAspectRatio="xMidYMid meet">
-    <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.b{font-weight:700;}</style>
-    <rect x="0" y="0" width="1000" height="372" fill="#FFFFFF"/>
-    <g><rect x="18" y="66" width="172" height="176" rx="12" fill="#0E2A47"/>
-<text x="40" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">01</text>
-<text x="40" y="152" font-size="30" class="b">⬇️</text>
-<text x="40" y="184" font-size="16" class="b" fill="#FFFFFF">LTS 내려받기</text>
-<rect x="40" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="50" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 1</text></g><path d="M194 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="216" y="66" width="172" height="176" rx="12" fill="#1B4A78"/>
-<text x="238" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">02</text>
-<text x="238" y="152" font-size="30" class="b">⚙️</text>
-<text x="238" y="184" font-size="16" class="b" fill="#FFFFFF">설치 마법사</text>
-<rect x="238" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="248" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 2–5</text></g><path d="M392 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="414" y="66" width="172" height="176" rx="12" fill="#2A6EA6"/>
-<text x="436" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">03</text>
-<text x="436" y="152" font-size="30" class="b">🔄</text>
-<text x="436" y="184" font-size="16" class="b" fill="#FFFFFF">새 터미널</text>
-<rect x="436" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="446" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 6</text></g><path d="M590 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="612" y="66" width="172" height="176" rx="12" fill="#E2762A"/>
-<text x="634" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">04</text>
-<text x="634" y="152" font-size="30" class="b">✅</text>
-<text x="634" y="184" font-size="16" class="b" fill="#FFFFFF">설치 확인</text>
-<rect x="634" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="644" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 7</text></g><path d="M788 154 l16 0 m-7 -7 l7 7 l-7 7" stroke="#B9C4D0" stroke-width="2.5" fill="none" stroke-linecap="round"/><g><rect x="810" y="66" width="172" height="176" rx="12" fill="#F26B21"/>
-<text x="832" y="112" font-size="27" class="b" fill="#FFFFFF" opacity="0.4">05</text>
-<text x="832" y="152" font-size="30" class="b">📦</text>
-<text x="832" y="184" font-size="16" class="b" fill="#FFFFFF">npm 확인</text>
-<rect x="832" y="200" width="128" height="24" rx="12" fill="#FFFFFF" opacity="0.18"/>
-<text x="842" y="217" font-size="11.5" class="b" fill="#FFFFFF">STEP 8</text></g>
-    <rect x="18" y="282" width="964" height="62" rx="10" fill="#F4F6F9" stroke="#D9E0E8"/>
-    <text x="42" y="308" font-size="13" class="b" fill="#0E2A47">가장 중요한 한 가지</text>
-    <text x="42" y="330" font-size="12.5" fill="#5B6B7C">반드시 왼쪽 초록색 LTS(장기 지원) 버전을 고르세요. 오른쪽 Current(최신) 버전은 실험용이라 오류가 잦습니다.</text>
-  </svg></div>
-</section>
+      <section class="slide" data-no="03 / 14">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 1</span><span class="sm">NODE.JS · 내려받기</span></div>
+          <h2>nodejs.org 에서 <b>LTS</b> 고르기</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5" />
+              <path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5" />
+              <circle cx="34" cy="30" r="6" fill="#FF5F57" />
+              <circle cx="54" cy="30" r="6" fill="#FEBC2E" />
+              <circle cx="74" cy="30" r="6" fill="#28C840" />
+              <rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8" />
+              <text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://nodejs.org/en/download</text>
+              <rect x="8" y="72" width="884" height="480" fill="#FFFFFF" />
 
-<section class="slide" data-no="03 / 14">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 1</span><span class="sm">NODE.JS · 내려받기</span></div>
-    <h2>nodejs.org 에서 <b>LTS</b> 고르기</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="12" fill="#FFFFFF" stroke="#D9E0E8" stroke-width="1.5"/>
-<path d="M8 20a12 12 0 0 1 12-12h860a12 12 0 0 1 12 12v52H8z" fill="#EDF1F5"/>
-<circle cx="34" cy="30" r="6" fill="#FF5F57"/><circle cx="54" cy="30" r="6" fill="#FEBC2E"/><circle cx="74" cy="30" r="6" fill="#28C840"/>
-<rect x="120" y="44" width="640" height="26" rx="13" fill="#FFFFFF" stroke="#D9E0E8"/>
-<text x="140" y="62" class="m" font-size="12.5" fill="#5B6B7C">https://nodejs.org/en/download</text>
-<rect x="8" y="72" width="884" height="480" fill="#FFFFFF"/>
+              <rect x="8" y="72" width="884" height="56" fill="#FFFFFF" />
+              <text x="40" y="108" font-size="19" class="b" fill="#417E38">node</text>
+              <text x="120" y="108" font-size="13" fill="#5B6B7C">Download Docs Learn</text>
+              <text x="450" y="168" text-anchor="middle" font-size="25" class="b" fill="#16202B">Download Node.js</text>
+              <rect x="80" y="196" width="356" height="196" rx="12" fill="#F0F7F1" stroke="#417E38" stroke-width="2.5" />
+              <text x="258" y="236" text-anchor="middle" font-size="30" class="b" fill="#417E38">v24.x.x</text>
+              <rect x="186" y="250" width="144" height="28" rx="14" fill="#417E38" />
+              <text x="258" y="269" text-anchor="middle" font-size="13" class="b" fill="#FFFFFF">LTS · 안정 버전</text>
+              <text x="258" y="302" text-anchor="middle" font-size="12.5" fill="#3A4855">대부분의 사용자에게 권장</text>
+              <rect x="120" y="322" width="276" height="40" rx="8" fill="#417E38" />
+              <text x="258" y="348" text-anchor="middle" font-size="14" class="b" fill="#FFFFFF">Windows Installer (.msi)</text>
+              <rect x="500" y="196" width="356" height="196" rx="12" fill="#F7F7F8" stroke="#D9E0E8" />
+              <text x="678" y="236" text-anchor="middle" font-size="30" class="b" fill="#8A94A0">v26.x.x</text>
+              <rect x="606" y="250" width="144" height="28" rx="14" fill="#8A94A0" />
+              <text x="678" y="269" text-anchor="middle" font-size="13" class="b" fill="#FFFFFF">Current · 최신 실험</text>
+              <text x="678" y="302" text-anchor="middle" font-size="12.5" fill="#8A94A0">최신 기능을 시험하는 버전</text>
+              <rect x="540" y="322" width="276" height="40" rx="8" fill="#C8CED6" />
+              <text x="678" y="348" text-anchor="middle" font-size="14" class="b" fill="#FFFFFF">Windows Installer (.msi)</text>
+              <text x="678" y="420" text-anchor="middle" font-size="14" class="b" fill="#C4341C">✕ 이쪽은 고르지 마세요</text>
+              <rect x="8" y="496" width="884" height="56" fill="#EDF1F5" />
+              <rect x="30" y="510" width="286" height="32" rx="6" fill="#FFFFFF" stroke="#D9E0E8" />
+              <circle cx="50" cy="526" r="9" fill="#1A7F37" />
+              <path d="M45.5 526l3.2 3.2 5.6-6.4" stroke="#fff" stroke-width="1.8" fill="none" />
+              <text x="66" y="531" class="m" font-size="11.5" fill="#24292F">node-v24.x.x-x64.msi</text>
+              <rect x="118" y="42" width="644" height="30" rx="10" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="96" cy="57" r="15" fill="#F26B21" />
+              <text x="96" y="63" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="76" y="192" width="364" height="100" rx="12" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="462" cy="242" r="15" fill="#F26B21" />
+              <text x="462" y="248" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="116" y="318" width="284" height="48" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="424" cy="342" r="15" fill="#F26B21" />
+              <text x="424" y="348" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="26" y="506" width="294" height="40" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="344" cy="526" r="15" fill="#F26B21" />
+              <text x="344" y="532" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>안정 버전(LTS) 설치 파일을 내려받습니다.</p>
+            </div>
+            <ol class="acts">
+              <li>주소창에 <b>nodejs.org</b> 를 입력해 접속합니다.</li>
+              <li>왼쪽 초록색 <b>LTS</b> 카드를 고릅니다. — <b>오른쪽 Current 아님</b></li>
+              <li>그 아래 <b>Windows Installer (.msi)</b> 를 누릅니다.</li>
+              <li>화면 아래에서 <code>node-v24.x.x-x64.msi</code> 가 받아졌는지 확인합니다.</li>
+            </ol>
 
-<rect x="8" y="72" width="884" height="56" fill="#FFFFFF"/>
-<text x="40" y="108" font-size="19" class="b" fill="#417E38">node</text>
-<text x="120" y="108" font-size="13" fill="#5B6B7C">Download   Docs   Learn</text>
-<text x="450" y="168" text-anchor="middle" font-size="25" class="b" fill="#16202B">Download Node.js</text>
-<rect x="80" y="196" width="356" height="196" rx="12" fill="#F0F7F1" stroke="#417E38" stroke-width="2.5"/>
-<text x="258" y="236" text-anchor="middle" font-size="30" class="b" fill="#417E38">v24.x.x</text>
-<rect x="186" y="250" width="144" height="28" rx="14" fill="#417E38"/>
-<text x="258" y="269" text-anchor="middle" font-size="13" class="b" fill="#FFFFFF">LTS · 안정 버전</text>
-<text x="258" y="302" text-anchor="middle" font-size="12.5" fill="#3A4855">대부분의 사용자에게 권장</text>
-<rect x="120" y="322" width="276" height="40" rx="8" fill="#417E38"/>
-<text x="258" y="348" text-anchor="middle" font-size="14" class="b" fill="#FFFFFF">Windows Installer (.msi)</text>
-<rect x="500" y="196" width="356" height="196" rx="12" fill="#F7F7F8" stroke="#D9E0E8"/>
-<text x="678" y="236" text-anchor="middle" font-size="30" class="b" fill="#8A94A0">v26.x.x</text>
-<rect x="606" y="250" width="144" height="28" rx="14" fill="#8A94A0"/>
-<text x="678" y="269" text-anchor="middle" font-size="13" class="b" fill="#FFFFFF">Current · 최신 실험</text>
-<text x="678" y="302" text-anchor="middle" font-size="12.5" fill="#8A94A0">최신 기능을 시험하는 버전</text>
-<rect x="540" y="322" width="276" height="40" rx="8" fill="#C8CED6"/>
-<text x="678" y="348" text-anchor="middle" font-size="14" class="b" fill="#FFFFFF">Windows Installer (.msi)</text>
-<text x="678" y="420" text-anchor="middle" font-size="14" class="b" fill="#C4341C">✕ 이쪽은 고르지 마세요</text>
-<rect x="8" y="496" width="884" height="56" fill="#EDF1F5"/>
-<rect x="30" y="510" width="286" height="32" rx="6" fill="#FFFFFF" stroke="#D9E0E8"/>
-<circle cx="50" cy="526" r="9" fill="#1A7F37"/><path d="M45.5 526l3.2 3.2 5.6-6.4" stroke="#fff" stroke-width="1.8" fill="none"/>
-<text x="66" y="531" class="m" font-size="11.5" fill="#24292F">node-v24.x.x-x64.msi</text>
-<rect x="118" y="42" width="644" height="30" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="96" cy="57" r="15" fill="#F26B21"/><text x="96" y="63" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="76" y="192" width="364" height="100" rx="12" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="462" cy="242" r="15" fill="#F26B21"/><text x="462" y="248" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="116" y="318" width="284" height="48" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="424" cy="342" r="15" fill="#F26B21"/><text x="424" y="348" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="26" y="506" width="294" height="40" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="344" cy="526" r="15" fill="#F26B21"/><text x="344" y="532" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+            <div class="tip warn">
+              <b>LTS vs Current</b>
+              <p><b>LTS</b>는 오래 지원되는 안정 버전, <b>Current</b>는 최신 기능 실험 버전입니다. 업무용은 무조건 <b>LTS</b>.</p>
+            </div>
+            <div class="tip info">
+              <b>버전 숫자가 달라도 됩니다</b>
+              <p>v24가 아닌 다른 숫자가 보여도 <b>LTS 라고 적힌 쪽</b>이면 정상입니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>안정 버전(LTS) 설치 파일을 내려받습니다.</p></div>
-      <ol class="acts"><li>주소창에 <b>nodejs.org</b> 를 입력해 접속합니다.</li><li>왼쪽 초록색 <b>LTS</b> 카드를 고릅니다. — <b>오른쪽 Current 아님</b></li><li>그 아래 <b>Windows Installer (.msi)</b> 를 누릅니다.</li><li>화면 아래에서 <code>node-v24.x.x-x64.msi</code> 가 받아졌는지 확인합니다.</li></ol>
-      
-      <div class="tip warn"><b>LTS vs Current</b><p><b>LTS</b>는 오래 지원되는 안정 버전, <b>Current</b>는 최신 기능 실험 버전입니다. 업무용은 무조건 <b>LTS</b>.</p></div><div class="tip info"><b>버전 숫자가 달라도 됩니다</b><p>v24가 아닌 다른 숫자가 보여도 <b>LTS 라고 적힌 쪽</b>이면 정상입니다.</p></div>
+      <section class="slide" data-no="04 / 14">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 2</span><span class="sm">NODE.JS · 설치 시작</span></div>
+          <h2>.msi 파일 실행 → 라이선스 동의</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="6" fill="#417E38" />
+              <rect x="8" y="30" width="884" height="22" fill="#417E38" />
+              <text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Node.js Setup</text>
+              <rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18" />
+              <text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <rect x="8" y="52" width="884" height="424" fill="#FFFFFF" />
+              <line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5" />
+              <rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD" />
+              <text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text>
+              <rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47" />
+              <text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Next &gt;</text>
+              <rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD" />
+              <text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
+
+              <rect x="8" y="52" width="884" height="72" fill="#FFFFFF" />
+              <text x="38" y="86" font-size="18" class="b" fill="#16202B">End-User License Agreement</text>
+              <text x="38" y="110" font-size="12.5" fill="#5B6B7C">계속하려면 라이선스 조건에 동의해야 합니다.</text>
+              <line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB" />
+              <circle cx="836" cy="88" r="22" fill="#417E38" opacity="0.14" />
+              <text x="836" y="97" text-anchor="middle" font-size="22">🟢</text>
+              <rect x="60" y="146" width="772" height="184" rx="4" fill="#FCFCFC" stroke="#D9E0E8" />
+              <text x="80" y="174" font-size="12.5" class="b" fill="#16202B">Node.js is licensed for use as follows:</text>
+              <text x="80" y="200" font-size="11.5" fill="#5B6B7C">Copyright Node.js contributors. All rights reserved.</text>
+              <text x="80" y="222" font-size="11.5" fill="#5B6B7C">Permission is hereby granted, free of charge, to any person obtaining a copy</text>
+              <text x="80" y="244" font-size="11.5" fill="#5B6B7C">
+                of this software and associated documentation files (the "Software"), to deal
+              </text>
+              <text x="80" y="266" font-size="11.5" fill="#5B6B7C">in the Software without restriction, including without limitation the rights</text>
+              <text x="80" y="288" font-size="11.5" fill="#5B6B7C">to use, copy, modify, merge, publish, distribute, sublicense, and/or sell …</text>
+              <rect x="60" y="348" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6" />
+              <path d="M63.5 356.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round" />
+              <text x="87" y="362" font-size="13.5" fill="#24292F">I accept the terms in the License Agreement</text>
+              <rect x="60" y="386" width="400" height="70" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2" />
+              <text x="106" y="416" font-size="13.5" class="b" fill="#C1521A">여기까지 오는 길</text>
+              <text x="80" y="442" font-size="12.5" fill="#3A4855">.msi 더블클릭 → UAC "예" → Welcome 화면 Next</text>
+              <circle cx="84" cy="410" r="15" fill="#F26B21" />
+              <text x="84" y="416" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="500" y="384" width="200" height="42" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="730" cy="405" r="15" fill="#F26B21" />
+              <text x="730" y="411" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <text x="516" y="411" font-size="13" class="b" fill="#5B6B7C">Welcome 화면 → Next</text>
+              <rect x="54" y="342" width="380" height="30" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="462" cy="357" r="15" fill="#F26B21" />
+              <text x="462" y="363" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="466" cy="514" r="15" fill="#F26B21" />
+              <text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+            </svg>
+          </div>
+          <div class="side">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>설치 마법사를 열고 라이선스에 동의합니다.</p>
+            </div>
+            <ol class="acts">
+              <li>내려받은 <code>node-v24.x.x-x64.msi</code> 를 <b>더블클릭</b>하고, UAC 창이 뜨면 <b>예</b>.</li>
+              <li>첫 <b>Welcome</b> 화면에서 <b>Next</b>.</li>
+              <li><b>I accept the terms in the License Agreement</b> 를 체크합니다.</li>
+              <li><b>Next</b> 를 누릅니다.</li>
+            </ol>
+
+            <div class="tip">
+              <b>.msi 가 뭔가요?</b>
+              <p>Windows 표준 설치 파일 형식입니다. <b>.exe</b> 와 똑같이 더블클릭하면 됩니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="05 / 14">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 3</span><span class="sm">NODE.JS · 설치 마법사 ★확인</span></div>
+          <h2><b>Add to PATH</b> 켜져 있는지 확인</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="6" fill="#417E38" />
+              <rect x="8" y="30" width="884" height="22" fill="#417E38" />
+              <text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Node.js Setup</text>
+              <rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18" />
+              <text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <rect x="8" y="52" width="884" height="424" fill="#FFFFFF" />
+              <line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5" />
+              <rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD" />
+              <text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text>
+              <rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47" />
+              <text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Next &gt;</text>
+              <rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD" />
+              <text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
+
+              <rect x="8" y="52" width="884" height="72" fill="#FFFFFF" />
+              <text x="38" y="86" font-size="18" class="b" fill="#16202B">Custom Setup</text>
+              <text x="38" y="110" font-size="12.5" fill="#5B6B7C">설치할 항목을 고릅니다. 기본값 그대로 두면 됩니다.</text>
+              <line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB" />
+              <circle cx="836" cy="88" r="22" fill="#417E38" opacity="0.14" />
+              <text x="836" y="97" text-anchor="middle" font-size="22">🟢</text>
+              <rect x="60" y="146" width="420" height="230" rx="4" fill="#FCFCFC" stroke="#D9E0E8" />
+              <text x="84" y="176" font-size="13" fill="#16202B">💾 Node.js runtime</text>
+              <text x="84" y="208" font-size="13" fill="#16202B">💾 corepack manager</text>
+              <text x="84" y="240" font-size="13" fill="#16202B">💾 npm package manager</text>
+              <text x="84" y="272" font-size="13" fill="#16202B">💾 Online documentation shortcuts</text>
+              <rect x="72" y="288" width="396" height="32" rx="4" fill="#1F6FEB" opacity="0.12" />
+              <text x="84" y="309" font-size="13" class="b" fill="#0E2A47">💾 Add to PATH</text>
+              <rect x="500" y="146" width="332" height="120" rx="4" fill="#F4F6F9" stroke="#D9E0E8" />
+              <text x="520" y="176" font-size="12.5" class="b" fill="#16202B">Destination Folder</text>
+              <text x="520" y="202" font-size="11.5" class="m" fill="#5B6B7C">C:\Program Files\nodejs\</text>
+              <text x="520" y="232" font-size="11.5" fill="#5B6B7C">그대로 두고 Next 를 누른 뒤</text>
+              <text x="520" y="252" font-size="11.5" fill="#5B6B7C">이 Custom Setup 화면이 나옵니다.</text>
+              <rect x="60" y="396" width="772" height="46" rx="6" fill="#FFF1E7" stroke="#F26B21" />
+              <text x="80" y="424" font-size="12.5" fill="#3A4855">
+                앞의 아이콘이 💾(디스크)면 설치됨, ✕(빨간 X)면 제외됨 — Add to PATH는 반드시 💾 여야 합니다.
+              </text>
+              <rect x="496" y="142" width="340" height="128" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="858" cy="206" r="15" fill="#F26B21" />
+              <text x="858" y="212" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="68" y="284" width="404" height="40" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="506" cy="304" r="15" fill="#F26B21" />
+              <text x="506" y="310" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="466" cy="514" r="15" fill="#F26B21" />
+              <text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>기본값 그대로 두되, Add to PATH가 설치 대상인지만 눈으로 확인합니다.</p>
+            </div>
+            <ol class="acts">
+              <li><b>Destination Folder</b> 화면은 그대로 <b>Next</b>. (<code>C:\Program Files\nodejs\</code>)</li>
+              <li><b>Custom Setup</b> 화면에서 <b>Add to PATH</b> 앞에 <b>💾 디스크 아이콘</b>이 있는지 확인합니다.</li>
+              <li>아무것도 바꾸지 말고 <b>Next</b> 를 누릅니다.</li>
+            </ol>
+
+            <div class="tip warn">
+              <b>✕ 표시가 있으면 눌러서 바꾸세요</b>
+              <p>항목 앞이 <b>✕(빨간 X)</b> 면 제외된 상태입니다. 클릭 → <b>Will be installed on local hard drive</b> 를 선택하세요.</p>
+            </div>
+            <div class="tip info">
+              <b>PATH가 뭔가요?</b>
+              <p>
+                "이 프로그램은 어느 창에서든 이름만 부르면 실행된다"고 Windows에 알려 주는 목록입니다. 여기 없으면 <code>node</code> 명령이 동작하지
+                않습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="06 / 14">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 4</span><span class="sm">NODE.JS · 설치 마법사</span></div>
+          <h2>Tools for Native Modules → <b>체크하지 말고 Next</b></h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="6" fill="#417E38" />
+              <rect x="8" y="30" width="884" height="22" fill="#417E38" />
+              <text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Node.js Setup</text>
+              <rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18" />
+              <text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <rect x="8" y="52" width="884" height="424" fill="#FFFFFF" />
+              <line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5" />
+              <rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD" />
+              <text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text>
+              <rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47" />
+              <text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Next &gt;</text>
+              <rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD" />
+              <text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
+
+              <rect x="8" y="52" width="884" height="72" fill="#FFFFFF" />
+              <text x="38" y="86" font-size="18" class="b" fill="#16202B">Tools for Native Modules</text>
+              <text x="38" y="110" font-size="12.5" fill="#5B6B7C">일부 npm 모듈을 컴파일하는 데 필요한 추가 도구입니다.</text>
+              <line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB" />
+              <circle cx="836" cy="88" r="22" fill="#417E38" opacity="0.14" />
+              <text x="836" y="97" text-anchor="middle" font-size="22">🟢</text>
+              <text x="60" y="168" font-size="13" fill="#3A4855">Some npm modules need to be compiled from C/C++ when installing.</text>
+              <text x="60" y="192" font-size="13" fill="#3A4855">If you want to be able to install such modules, some tools</text>
+              <text x="60" y="216" font-size="13" fill="#3A4855">(Python and Visual Studio Build Tools) need to be installed.</text>
+              <rect x="60" y="254" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#9AA5B1" stroke-width="1.6" />
+              <text x="87" y="268" font-size="13.5" fill="#24292F">Automatically install the necessary tools. Note that this will also</text>
+              <text x="87" y="290" font-size="13.5" fill="#24292F">install Chocolatey. The script will pop up in a new window after</text>
+              <text x="87" y="312" font-size="13.5" fill="#24292F">the installation completes.</text>
+              <rect x="60" y="344" width="500" height="100" rx="6" fill="#FDEEEB" stroke="#C4341C" />
+              <text x="82" y="372" font-size="13.5" class="b" fill="#C4341C">체크하지 마세요 (비워 두기)</text>
+              <text x="82" y="398" font-size="12.5" fill="#3A4855">체크하면 Python + Visual Studio 빌드 도구까지</text>
+              <text x="82" y="420" font-size="12.5" fill="#3A4855">내려받아 10~30분이 더 걸립니다.</text>
+              <rect x="54" y="138" width="780" height="92" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="858" cy="184" r="15" fill="#F26B21" />
+              <text x="858" y="190" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="54" y="248" width="30" height="30" rx="6" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="32" cy="263" r="15" fill="#F26B21" />
+              <text x="32" y="269" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="466" cy="514" r="15" fill="#F26B21" />
+              <text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+            </svg>
+          </div>
+          <div class="side">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>용량이 큰 추가 도구를 건너뛰어 설치 시간을 줄입니다.</p>
+            </div>
+            <ol class="acts">
+              <li><b>Tools for Native Modules</b> 화면이 나옵니다.</li>
+              <li><b>Automatically install the necessary tools…</b> 체크박스는 <b>비워 둡니다.</b></li>
+              <li><b>Next</b> 를 누릅니다.</li>
+            </ol>
+
+            <div class="tip warn">
+              <b>체크하면 오래 걸립니다</b>
+              <p>체크하면 Python·Visual Studio 빌드 도구까지 자동 설치되어 <b>10~30분</b>이 더 걸립니다. 클로드 코드 사용에는 필요 없습니다.</p>
+            </div>
+            <div class="tip">
+              <b>나중에 필요해지면?</b>
+              <p>그때 다시 설치하면 됩니다. 지금은 건너뛰는 것이 정답입니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="07 / 14">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 5</span><span class="sm">NODE.JS · 설치 완료</span></div>
+          <h2><b>Install</b> → 잠시 대기 → <b>Finish</b></h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="6" fill="#417E38" />
+              <rect x="8" y="30" width="884" height="22" fill="#417E38" />
+              <text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Node.js Setup</text>
+              <rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18" />
+              <text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <rect x="8" y="52" width="884" height="424" fill="#FFFFFF" />
+              <line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5" />
+              <rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD" />
+              <text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text>
+              <rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47" />
+              <text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Finish</text>
+              <rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD" />
+              <text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
+
+              <rect x="8" y="52" width="884" height="424" fill="#FFFFFF" />
+              <rect x="8" y="52" width="270" height="424" fill="#EFF5EE" />
+              <text x="143" y="196" text-anchor="middle" font-size="56">🟢</text>
+              <text x="143" y="244" text-anchor="middle" font-size="16" class="b" fill="#417E38">Node.js</text>
+              <text x="143" y="268" text-anchor="middle" font-size="12" fill="#6E8A6B">v24.x.x LTS</text>
+              <text x="308" y="104" font-size="20" class="b" fill="#16202B">Completed the Node.js Setup Wizard</text>
+              <text x="308" y="132" font-size="13" fill="#5B6B7C">Node.js has been successfully installed.</text>
+              <rect x="308" y="156" width="300" height="70" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2" />
+              <text x="354" y="186" font-size="13.5" class="b" fill="#C1521A">Install 클릭 → UAC "예"</text>
+              <text x="328" y="212" font-size="12.5" fill="#3A4855">Ready to install 화면에서 누릅니다.</text>
+              <circle cx="332" cy="180" r="15" fill="#F26B21" />
+              <text x="332" y="186" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="628" y="156" width="236" height="70" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2" />
+              <text x="674" y="186" font-size="13.5" class="b" fill="#C1521A">1~2분 대기</text>
+              <text x="648" y="212" font-size="12.5" fill="#3A4855">진행 막대가 끝날 때까지</text>
+              <circle cx="652" cy="180" r="15" fill="#F26B21" />
+              <text x="652" y="186" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="308" y="270" width="556" height="112" rx="8" fill="#F0F7F1" stroke="#1A7F37" />
+              <text x="330" y="298" font-size="13.5" class="b" fill="#1A7F37">함께 설치된 것</text>
+              <text x="330" y="324" font-size="12.5" fill="#3A4855">• node — 자바스크립트 실행 엔진 • npm — 프로그램 설치 도구</text>
+              <text x="330" y="348" font-size="12.5" fill="#3A4855">• PATH 등록 — 어느 창에서나 node / npm 명령 사용 가능</text>
+              <text x="330" y="372" font-size="12.5" class="b" fill="#1A7F37">이 문구가 보이면 설치 성공입니다.</text>
+              <rect x="304" y="88" width="560" height="60" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="280" cy="118" r="15" fill="#F26B21" />
+              <text x="280" y="124" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="466" cy="514" r="15" fill="#F26B21" />
+              <text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
+            </svg>
+          </div>
+          <div class="side">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>실제 설치를 진행하고 마법사를 닫습니다.</p>
+            </div>
+            <ol class="acts">
+              <li><b>Ready to install</b> 화면에서 <b>Install</b> 을 누르고, UAC 창이 뜨면 <b>예</b>.</li>
+              <li>초록색 진행 막대가 끝날 때까지 1~2분 기다립니다.</li>
+              <li><b>Completed the Node.js Setup Wizard</b> 문구를 확인합니다.</li>
+              <li><b>Finish</b> 를 눌러 창을 닫습니다.</li>
+            </ol>
+
+            <div class="tip warn">
+              <b>검은 창이 잠깐 떠도 정상</b>
+              <p>설치 마무리에 명령 창이 깜빡일 수 있습니다. 저절로 닫힐 때까지 두세요.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="08 / 14">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 6</span><span class="sm">NODE.JS · 반영</span></div>
+          <h2>터미널 새로 열기 (또는 재부팅)</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#1B2733" />
+              <rect x="440" y="60" width="392" height="120" rx="10" fill="#FFFFFF" />
+              <text x="464" y="96" font-size="15" class="b" fill="#C4341C">❌ 이렇게 하면 실패</text>
+              <text x="464" y="126" font-size="12.5" fill="#3A4855">설치 전부터 열려 있던 터미널에</text>
+              <text x="464" y="148" font-size="12.5" fill="#3A4855">그대로 node --version 입력</text>
+              <rect x="60" y="60" width="340" height="440" rx="10" fill="#0E2A47" />
+              <rect x="60" y="60" width="340" height="46" rx="10" fill="#F26B21" />
+              <rect x="60" y="86" width="340" height="20" fill="#F26B21" />
+              <text x="84" y="90" font-size="14" class="b" fill="#FFFFFF">시작 메뉴 검색</text>
+              <rect x="84" y="132" width="292" height="42" rx="21" fill="#FFFFFF" />
+              <text x="106" y="159" font-size="14" class="m" fill="#16202B">powershell</text>
+              <circle cx="356" cy="153" r="10" fill="#0E2A47" />
+              <text x="356" y="158" text-anchor="middle" font-size="11" fill="#fff">🔍</text>
+              <text x="84" y="206" font-size="11.5" class="b" fill="#F9B27A">가장 정확</text>
+              <rect x="84" y="216" width="292" height="56" rx="8" fill="#FFFFFF" />
+              <text x="106" y="240" font-size="14" class="b" fill="#16202B">Windows PowerShell</text>
+              <text x="106" y="260" font-size="11.5" fill="#5B6B7C">앱</text>
+              <rect x="84" y="288" width="292" height="46" rx="8" fill="#FFFFFF" opacity="0.5" />
+              <text x="106" y="316" font-size="13" fill="#16202B">Windows PowerShell ISE</text>
+              <rect x="84" y="348" width="292" height="46" rx="8" fill="#FFFFFF" opacity="0.5" />
+              <text x="106" y="376" font-size="13" fill="#16202B">Windows Terminal</text>
+              <rect x="440" y="200" width="392" height="92" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="486" y="230" font-size="13.5" class="b" fill="#F9B27A">먼저 기존 창을 모두 닫습니다</text>
+              <text x="460" y="256" font-size="12.5" fill="#DCE6EF">열려 있는 PowerShell·CMD 창의 ✕ 를 눌러</text>
+              <text x="460" y="278" font-size="12.5" fill="#DCE6EF">전부 닫은 뒤 새로 여세요.</text>
+              <circle cx="464" cy="224" r="15" fill="#F26B21" />
+              <text x="464" y="230" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="80" y="128" width="300" height="50" rx="25" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="410" cy="153" r="15" fill="#F26B21" />
+              <text x="410" y="159" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="80" y="212" width="300" height="64" rx="10" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="410" cy="244" r="15" fill="#F26B21" />
+              <text x="410" y="250" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="440" y="318" width="392" height="182" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="464" y="352" font-size="14" class="b" fill="#F9B27A">왜 새 창이어야 하나요?</text>
+              <text x="464" y="384" font-size="12.5" fill="#DCE6EF">PATH(프로그램 목록)는 창이 열릴 때</text>
+              <text x="464" y="406" font-size="12.5" fill="#DCE6EF">한 번만 읽힙니다. 이미 열린 창은</text>
+              <text x="464" y="428" font-size="12.5" fill="#DCE6EF">설치 전 목록을 그대로 들고 있습니다.</text>
+              <text x="464" y="462" font-size="12.5" class="b" fill="#F9B27A">→ 새로 열어야 node 를 찾습니다</text>
+            </svg>
+          </div>
+          <div class="side">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>PATH 등록 내용을 시스템에 적용합니다. 이 단계를 건너뛰면 다음 확인이 실패합니다.</p>
+            </div>
+            <ol class="acts">
+              <li>열려 있던 <b>PowerShell·CMD 창을 모두 닫습니다.</b></li>
+              <li><b>Windows 키</b> 를 누르고 <b>powershell</b> 이라고 입력합니다.</li>
+              <li>목록에서 <b>Windows PowerShell</b> 을 클릭해 실행합니다.</li>
+            </ol>
+
+            <div class="tip warn">
+              <b>가장 흔한 실수</b>
+              <p>설치 <b>전에</b> 열어 둔 터미널에는 새 PATH가 반영되지 않습니다. "설치했는데 안 된다"의 90%가 이 경우입니다.</p>
+            </div>
+            <div class="tip ok">
+              <b>재부팅이 가장 확실</b>
+              <p>시간이 있다면 재부팅하세요. Node.js와 Git 모두 확실히 반영됩니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="09 / 14">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 7</span><span class="sm">NODE.JS · 설치 확인</span></div>
+          <h2><b>node --version</b> 으로 확인</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766" />
+              <rect x="8" y="32" width="884" height="20" fill="#0B3766" />
+              <text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <text x="34" y="106" class="m" font-size="14" fill="#9FC6EE">Windows PowerShell</text>
+              <text x="34" y="128" class="m" font-size="12.5" fill="#7FA8D4">Copyright (C) Microsoft Corporation. All rights reserved.</text>
+              <text x="34" y="172" class="m b" font-size="15" fill="#FFFFFF">PS C:\Users\hufs&gt; node --version</text>
+              <text x="34" y="210" class="m b" font-size="16" fill="#7EE787">v24.9.0</text>
+              <text x="34" y="258" class="m b" font-size="15" fill="#FFFFFF">PS C:\Users\hufs&gt; npm --version</text>
+              <text x="34" y="296" class="m b" font-size="16" fill="#7EE787">11.6.2</text>
+              <text x="34" y="344" class="m" font-size="15" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
+              <rect x="26" y="151" width="330" height="30" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="380" cy="166" r="15" fill="#F26B21" />
+              <text x="380" y="172" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="26" y="188" width="330" height="31" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="380" cy="203.5" r="15" fill="#F26B21" />
+              <text x="380" y="209.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="26" y="237" width="330" height="68" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="380" cy="271" r="15" fill="#F26B21" />
+              <text x="380" y="277" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="520" y="330" width="352" height="128" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="544" y="362" font-size="14" class="b" fill="#F9B27A">이 두 줄이 성공의 증거</text>
+              <text x="544" y="392" font-size="12.5" fill="#DCE6EF">node → v로 시작하는 숫자</text>
+              <text x="544" y="414" font-size="12.5" fill="#DCE6EF">npm → 숫자.숫자.숫자</text>
+              <text x="544" y="440" font-size="12" fill="#9FC6EE">숫자가 달라도 전혀 문제없습니다</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>Node.js가 정상 설치되었는지 확인합니다.</p>
+            </div>
+            <ol class="acts">
+              <li>새로 연 PowerShell에 <code>node --version</code> 을 붙여넣고 Enter. (붙여넣기 = 마우스 오른쪽 클릭)</li>
+              <li><code>v24.x.x</code> 처럼 <b>v로 시작하는 숫자</b>가 나오면 성공입니다.</li>
+              <li>이어서 <code>npm --version</code> 도 확인합니다.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">Node.js 버전 확인</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="node --version">복사</button>
+                <pre>node --version</pre>
+              </div>
+              <div class="out">→ v24.x.x</div>
+            </div>
+            <div class="cmd">
+              <b class="lbl">npm 버전 확인</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="npm --version">복사</button>
+                <pre>npm --version</pre>
+              </div>
+              <div class="out">→ 11.x.x</div>
+            </div>
+            <div class="tip ok">
+              <b>두 개 다 나와야 정상</b>
+              <p>npm은 Node.js와 함께 설치됩니다. 둘 다 버전이 보이면 완료입니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="10 / 14">
+        <div class="rail"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">STEP 8</span><span class="sm">NODE.JS · 동작 시험</span></div>
+          <h2>npm이 실제로 동작하는지 시험</h2>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="body">
+          <div class="shot">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
+              <style>
+                text {
+                  font-family: "Malgun Gothic", "Nanum Gothic", sans-serif;
+                }
+                .m {
+                  font-family: "Consolas", "D2Coding", monospace;
+                }
+                .b {
+                  font-weight: 700;
+                }
+              </style>
+              <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5" />
+              <rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766" />
+              <rect x="8" y="32" width="884" height="20" fill="#0B3766" />
+              <text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
+              <rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14" />
+              <text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
+              <text x="34" y="106" class="m b" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; npm config get prefix</text>
+              <text x="34" y="138" class="m b" font-size="14" fill="#7EE787">C:\Users\hufs\AppData\Roaming\npm</text>
+              <text x="34" y="188" class="m b" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; npm ping</text>
+              <text x="34" y="220" class="m" font-size="13" fill="#9FC6EE">npm notice PING https://registry.npmjs.org/</text>
+              <text x="34" y="248" class="m b" font-size="14" fill="#7EE787">npm notice PONG 214ms</text>
+              <text x="34" y="298" class="m" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
+              <rect x="26" y="86" width="400" height="61" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="450" cy="116.5" r="15" fill="#F26B21" />
+              <text x="450" y="122.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
+              <rect x="26" y="168" width="300" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="350" cy="182.5" r="15" fill="#F26B21" />
+              <text x="350" y="188.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
+              <rect x="26" y="228" width="300" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3" />
+              <circle cx="350" cy="242.5" r="15" fill="#F26B21" />
+              <text x="350" y="248.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
+              <rect x="470" y="330" width="402" height="170" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2" />
+              <text x="494" y="362" font-size="14" class="b" fill="#F9B27A">PONG 이 나오면?</text>
+              <text x="494" y="392" font-size="12.5" fill="#DCE6EF">클로드 코드를 npm으로 설치할 수 있습니다.</text>
+              <text x="494" y="428" font-size="13" class="b" fill="#FF9F6B">실패(timeout)한다면?</text>
+              <text x="494" y="456" font-size="12.5" fill="#DCE6EF">방화벽·프록시 문제입니다. 클로드 코드는</text>
+              <text x="494" y="478" font-size="12.5" fill="#DCE6EF">네이티브 방식(irm)으로 설치하세요.</text>
+            </svg>
+          </div>
+          <div class="side dense">
+            <div class="goal">
+              <b>이 단계의 목표</b>
+              <p>클로드 코드를 npm으로 설치할 수 있는 상태인지 미리 점검합니다.</p>
+            </div>
+            <ol class="acts">
+              <li><code>npm config get prefix</code> 를 실행해 <b>설치 폴더 경로</b>가 나오는지 봅니다.</li>
+              <li><code>npm ping</code> 을 실행합니다.</li>
+              <li><b>PONG</b> 이 나오면 인터넷으로 프로그램을 받아올 수 있는 상태입니다.</li>
+            </ol>
+            <div class="cmd">
+              <b class="lbl">① npm 전역 설치 폴더 확인</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="npm config get prefix">복사</button>
+                <pre>npm config get prefix</pre>
+              </div>
+            </div>
+            <div class="cmd">
+              <b class="lbl">② npm 서버 연결 시험</b>
+              <div class="cmdwrap">
+                <button class="cp" type="button" data-c="npm ping">복사</button>
+                <pre>npm ping</pre>
+              </div>
+              <div class="out">→ npm notice PONG</div>
+            </div>
+            <div class="tip warn">
+              <b>npm ping 이 실패한다면</b>
+              <p>기관 방화벽·프록시 때문입니다. 이 경우 클로드 코드는 <b>네이티브 설치(irm)</b> 로 진행하세요.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="11 / 14">
+        <div class="rail acc"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 1/2</span></div>
+          <h2>Node.js 명령어 모음 (복사해서 사용) <span style="font-size: 22px; color: #8a94a0; font-weight: 700">(1/2)</span></h2>
+          <p class="lead">오른쪽 위 <b>복사</b> 버튼 → PowerShell에서 <b>마우스 오른쪽 클릭</b>으로 붙여넣기 → Enter.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="cgrid">
+          <div class="ccard">
+            <div class="ct">① Node.js 버전 확인</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="node --version">복사</button>
+              <pre>node --version</pre>
+            </div>
+            <div class="out">→ v24.x.x</div>
+            <div class="cd"><b>v로 시작하는 숫자</b>가 보이면 설치 성공입니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">② npm 버전 확인</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="npm --version">복사</button>
+              <pre>npm --version</pre>
+            </div>
+            <div class="out">→ 11.x.x</div>
+            <div class="cd">Node.js와 함께 설치되는 패키지 관리자입니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">③ 설치 위치 확인 (문제 진단)</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="Get-Command node | Select-Object Source">복사</button>
+              <pre>Get-Command node | Select-Object Source</pre>
+            </div>
+
+            <div class="cd">경로가 나오면 설치는 정상, PATH만 점검하면 됩니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">④ npm 전역 폴더 확인</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="npm config get prefix">복사</button>
+              <pre>npm config get prefix</pre>
+            </div>
+
+            <div class="cd">npm으로 설치한 프로그램이 저장되는 위치입니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">⑤ npm 서버 연결 시험</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="npm ping">복사</button>
+              <pre>npm ping</pre>
+            </div>
+            <div class="out">→ npm notice PONG</div>
+            <div class="cd">실패하면 방화벽·프록시 문제입니다.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">⑥ npm 캐시 정리 (설치 오류 시)</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="npm cache clean --force">복사</button>
+              <pre>npm cache clean --force</pre>
+            </div>
+
+            <div class="cd">설치가 자꾸 실패할 때 한 번 실행한 뒤 재시도하세요.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="12 / 14">
+        <div class="rail acc"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 2/2</span></div>
+          <h2>Node.js 명령어 모음 (복사해서 사용) <span style="font-size: 22px; color: #8a94a0; font-weight: 700">(2/2)</span></h2>
+          <p class="lead">오른쪽 위 <b>복사</b> 버튼 → PowerShell에서 <b>마우스 오른쪽 클릭</b>으로 붙여넣기 → Enter.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="cgrid">
+          <div class="ccard">
+            <div class="ct">⑦ 실행 정책 확인 (npm 스크립트 오류 시)</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="Get-ExecutionPolicy -Scope CurrentUser">복사</button>
+              <pre>Get-ExecutionPolicy -Scope CurrentUser</pre>
+            </div>
+
+            <div class="cd"><code>Restricted</code> 가 나오면 아래 ⑧을 실행하세요.</div>
+          </div>
+          <div class="ccard">
+            <div class="ct">⑧ 실행 정책 완화 (⑦이 Restricted일 때만)</div>
+            <div class="cmdwrap">
+              <button class="cp" type="button" data-c="Set-ExecutionPolicy -Scope CurrentUser RemoteSigned">복사</button>
+              <pre>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</pre>
+            </div>
+
+            <div class="cd">내 계정에만 적용되는 안전한 설정입니다. 물어보면 <b>Y</b> 입력.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-no="13 / 14">
+        <div class="rail acc"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">문제 해결</span><span class="sm">TROUBLESHOOTING</span></div>
+          <h2>Node.js — 문제가 생겼을 때</h2>
+          <p class="lead">증상별 해결 순서입니다. 대부분 <b>새 터미널</b> 또는 <b>재부팅</b> 으로 해결됩니다.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="tbwrap">
+          <table class="tb">
+            <thead>
+              <tr>
+                <th style="width: 29%">이런 화면·메시지가 나오면</th>
+                <th style="width: 24%">원인</th>
+                <th>이렇게 해결하세요</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="s"><code>'node' 용어가 … 인식되지 않습니다</code></td>
+                <td class="c">터미널이 PATH를 아직 못 읽음</td>
+                <td>
+                  ① 터미널을 <b>모두 닫고 새로 열기</b> ② <b>재부팅</b> ③ <code>Get-Command node</code> 로 확인 ④ 없으면 설치 마법사에서
+                  <b>Add to PATH</b> 가 제외됐던 것 → 재설치.
+                </td>
+              </tr>
+              <tr>
+                <td class="s">설치 도중 멈춘 것처럼 보임</td>
+                <td class="c">Native Modules 도구 자동 설치</td>
+                <td>STEP 4에서 체크를 <b>비워야</b> 합니다. 이미 시작됐다면 끝날 때까지 기다리거나, 설치 취소 후 다시 설치하며 체크를 해제하세요.</td>
+              </tr>
+              <tr>
+                <td class="s"><code>npm ERR! code EACCES</code> / 권한 오류</td>
+                <td class="c">전역 설치 폴더 권한</td>
+                <td>
+                  ① PowerShell을 <b>관리자 권한으로 실행</b> 후 재시도 ② 그래도 안 되면 <b>npm 방식 대신</b> 클로드 코드 네이티브 설치(<code
+                    >irm …</code
+                  >)를 사용하세요.
+                </td>
+              </tr>
+              <tr>
+                <td class="s"><code>이 시스템에서 스크립트를 실행할 수 없으므로</code></td>
+                <td class="c">PowerShell 실행 정책 Restricted</td>
+                <td><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> 실행 후 <b>Y</b> 입력 → 터미널 새로 열기.</td>
+              </tr>
+              <tr>
+                <td class="s"><code>npm ERR! network</code> / ETIMEDOUT</td>
+                <td class="c">기관 방화벽·프록시</td>
+                <td>
+                  ① <code>npm ping</code> 으로 확인 ② 사내망이면 전산실에 <b>registry.npmjs.org 허용</b> 요청 ③ 임시로 휴대폰 테더링 사용 ④ 클로드
+                  코드는 네이티브 설치로 우회.
+                </td>
+              </tr>
+              <tr>
+                <td class="s">node 버전이 v18 등 예전 것으로 나옴</td>
+                <td class="c">예전에 설치한 Node가 남아 있음</td>
+                <td><b>설정 → 앱</b> 에서 이전 Node.js 제거 → 재부팅 → LTS 다시 설치. 여러 버전이 섞이면 오류가 잦습니다.</td>
+              </tr>
+              <tr>
+                <td class="s">Current(v26)를 잘못 설치했음</td>
+                <td class="c">LTS 대신 최신 버전 선택</td>
+                <td>그대로 써도 대부분 동작하지만, 문제가 생기면 <b>제어판 → 프로그램 제거</b> 후 LTS로 다시 설치하세요.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="slide" data-no="14 / 14">
+        <div class="rail acc"></div>
+        <div class="head">
+          <div class="eyebrow"><span class="tag">마무리</span><span class="sm">CHECKLIST &amp; NEXT</span></div>
+          <h2>Node.js 설치 완료 확인</h2>
+          <p class="lead">아래가 모두 되면 완료입니다. 다음은 <b>VS Code 설치</b>입니다.</p>
+        </div>
+        <div class="hr"><i></i></div>
+        <div class="two">
+          <div class="panel">
+            <h3>✅ 완료 체크리스트</h3>
+            <ul class="chk">
+              <li>
+                <span class="box"></span
+                ><span><span class="t">LTS 버전을 내려받았다</span><span class="d">왼쪽 초록색 LTS 카드 (Current 아님)</span></span>
+              </li>
+              <li>
+                <span class="box"></span
+                ><span><span class="t">Add to PATH 가 켜진 채 설치했다</span><span class="d">Custom Setup 화면에서 💾 아이콘 확인</span></span>
+              </li>
+              <li>
+                <span class="box"></span
+                ><span><span class="t">Native Modules 체크는 비워 두었다</span><span class="d">설치 시간을 크게 줄여 줍니다</span></span>
+              </li>
+              <li>
+                <span class="box"></span><span><span class="t">설치 후 터미널을 새로 열었다</span><span class="d">또는 재부팅</span></span>
+              </li>
+              <li>
+                <span class="box"></span
+                ><span><span class="t">node --version 이 v24.x.x 로 나온다</span><span class="d">v로 시작하는 숫자</span></span>
+              </li>
+              <li>
+                <span class="box"></span><span><span class="t">npm --version 이 정상 출력된다</span><span class="d">11.x.x 형태</span></span>
+              </li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>➡️ 다음 단계 &amp; 참고</h3>
+            <ul class="nxt">
+              <li><b>④ VS Code 설치 가이드</b><span>코드를 보고 고칠 편집기를 설치합니다. (<b>04-vscode-guide</b>)</span></li>
+              <li><b>⑤ Claude Code 설치 가이드</b><span>npm 방식으로 설치할 때 Node.js가 필요합니다.</span></li>
+              <li>
+                <b>알아 두면 좋은 것</b><span>Node.js를 직접 다룰 일은 거의 없습니다. <b>클로드 코드가 대신 사용하는 엔진</b>이라고 생각하세요.</span>
+              </li>
+              <li>
+                <b>업데이트 방법</b><span>나중에 새 LTS가 나오면 <b>같은 방식으로 다시 설치</b>하면 됩니다. 기존 것을 지울 필요 없습니다.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="final"><b>최종 확인 명령</b><span>node --version · npm --version</span></div>
+      </section>
     </div>
-  </div>
-</section>
-
-<section class="slide" data-no="04 / 14">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 2</span><span class="sm">NODE.JS · 설치 시작</span></div>
-    <h2>.msi 파일 실행 → 라이선스 동의</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="6" fill="#417E38"/><rect x="8" y="30" width="884" height="22" fill="#417E38"/>
-<text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Node.js Setup</text>
-<rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18"/><text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
-<line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5"/>
-<rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text><rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47"/><text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Next &gt;</text><rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
-
-
-<rect x="8" y="52" width="884" height="72" fill="#FFFFFF"/>
-<text x="38" y="86" font-size="18" class="b" fill="#16202B">End-User License Agreement</text>
-<text x="38" y="110" font-size="12.5" fill="#5B6B7C">계속하려면 라이선스 조건에 동의해야 합니다.</text>
-<line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB"/>
-<circle cx="836" cy="88" r="22" fill="#417E38" opacity="0.14"/><text x="836" y="97" text-anchor="middle" font-size="22">🟢</text>
-<rect x="60" y="146" width="772" height="184" rx="4" fill="#FCFCFC" stroke="#D9E0E8"/>
-<text x="80" y="174" font-size="12.5" class="b" fill="#16202B">Node.js is licensed for use as follows:</text>
-<text x="80" y="200" font-size="11.5" fill="#5B6B7C">Copyright Node.js contributors. All rights reserved.</text>
-<text x="80" y="222" font-size="11.5" fill="#5B6B7C">Permission is hereby granted, free of charge, to any person obtaining a copy</text>
-<text x="80" y="244" font-size="11.5" fill="#5B6B7C">of this software and associated documentation files (the "Software"), to deal</text>
-<text x="80" y="266" font-size="11.5" fill="#5B6B7C">in the Software without restriction, including without limitation the rights</text>
-<text x="80" y="288" font-size="11.5" fill="#5B6B7C">to use, copy, modify, merge, publish, distribute, sublicense, and/or sell …</text>
-<rect x="60" y="348" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#0E2A47" stroke-width="1.6"/><path d="M63.5 356.6l3.6 3.8 6.6-7.6" stroke="#0E2A47" stroke-width="2.4" fill="none" stroke-linecap="round"/><text x="87" y="362" font-size="13.5" fill="#24292F">I accept the terms in the License Agreement</text>
-<rect x="60" y="386" width="400" height="70" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2"/>
-<text x="106" y="416" font-size="13.5" class="b" fill="#C1521A">여기까지 오는 길</text>
-<text x="80" y="442" font-size="12.5" fill="#3A4855">.msi 더블클릭 → UAC "예" → Welcome 화면 Next</text>
-<circle cx="84" cy="410" r="15" fill="#F26B21"/><text x="84" y="416" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="500" y="384" width="200" height="42" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="730" cy="405" r="15" fill="#F26B21"/><text x="730" y="411" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<text x="516" y="411" font-size="13" class="b" fill="#5B6B7C">Welcome 화면 → Next</text>
-<rect x="54" y="342" width="380" height="30" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="462" cy="357" r="15" fill="#F26B21"/><text x="462" y="363" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="514" r="15" fill="#F26B21"/><text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
-
-    </svg></div>
-    <div class="side">
-      <div class="goal"><b>이 단계의 목표</b><p>설치 마법사를 열고 라이선스에 동의합니다.</p></div>
-      <ol class="acts"><li>내려받은 <code>node-v24.x.x-x64.msi</code> 를 <b>더블클릭</b>하고, UAC 창이 뜨면 <b>예</b>.</li><li>첫 <b>Welcome</b> 화면에서 <b>Next</b>.</li><li><b>I accept the terms in the License Agreement</b> 를 체크합니다.</li><li><b>Next</b> 를 누릅니다.</li></ol>
-      
-      <div class="tip "><b>.msi 가 뭔가요?</b><p>Windows 표준 설치 파일 형식입니다. <b>.exe</b> 와 똑같이 더블클릭하면 됩니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="05 / 14">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 3</span><span class="sm">NODE.JS · 설치 마법사 ★확인</span></div>
-    <h2><b>Add to PATH</b> 켜져 있는지 확인</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="6" fill="#417E38"/><rect x="8" y="30" width="884" height="22" fill="#417E38"/>
-<text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Node.js Setup</text>
-<rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18"/><text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
-<line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5"/>
-<rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text><rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47"/><text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Next &gt;</text><rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
-
-
-<rect x="8" y="52" width="884" height="72" fill="#FFFFFF"/>
-<text x="38" y="86" font-size="18" class="b" fill="#16202B">Custom Setup</text>
-<text x="38" y="110" font-size="12.5" fill="#5B6B7C">설치할 항목을 고릅니다. 기본값 그대로 두면 됩니다.</text>
-<line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB"/>
-<circle cx="836" cy="88" r="22" fill="#417E38" opacity="0.14"/><text x="836" y="97" text-anchor="middle" font-size="22">🟢</text>
-<rect x="60" y="146" width="420" height="230" rx="4" fill="#FCFCFC" stroke="#D9E0E8"/>
-<text x="84" y="176" font-size="13" fill="#16202B">💾  Node.js runtime</text>
-<text x="84" y="208" font-size="13" fill="#16202B">💾  corepack manager</text>
-<text x="84" y="240" font-size="13" fill="#16202B">💾  npm package manager</text>
-<text x="84" y="272" font-size="13" fill="#16202B">💾  Online documentation shortcuts</text>
-<rect x="72" y="288" width="396" height="32" rx="4" fill="#1F6FEB" opacity="0.12"/>
-<text x="84" y="309" font-size="13" class="b" fill="#0E2A47">💾  Add to PATH</text>
-<rect x="500" y="146" width="332" height="120" rx="4" fill="#F4F6F9" stroke="#D9E0E8"/>
-<text x="520" y="176" font-size="12.5" class="b" fill="#16202B">Destination Folder</text>
-<text x="520" y="202" font-size="11.5" class="m" fill="#5B6B7C">C:\Program Files\nodejs\</text>
-<text x="520" y="232" font-size="11.5" fill="#5B6B7C">그대로 두고 Next 를 누른 뒤</text>
-<text x="520" y="252" font-size="11.5" fill="#5B6B7C">이 Custom Setup 화면이 나옵니다.</text>
-<rect x="60" y="396" width="772" height="46" rx="6" fill="#FFF1E7" stroke="#F26B21"/>
-<text x="80" y="424" font-size="12.5" fill="#3A4855">앞의 아이콘이 💾(디스크)면 설치됨, ✕(빨간 X)면 제외됨 — Add to PATH는 반드시 💾 여야 합니다.</text>
-<rect x="496" y="142" width="340" height="128" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="858" cy="206" r="15" fill="#F26B21"/><text x="858" y="212" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="68" y="284" width="404" height="40" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="506" cy="304" r="15" fill="#F26B21"/><text x="506" y="310" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="514" r="15" fill="#F26B21"/><text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>기본값 그대로 두되, Add to PATH가 설치 대상인지만 눈으로 확인합니다.</p></div>
-      <ol class="acts"><li><b>Destination Folder</b> 화면은 그대로 <b>Next</b>. (<code>C:\Program Files\nodejs\</code>)</li><li><b>Custom Setup</b> 화면에서 <b>Add to PATH</b> 앞에 <b>💾 디스크 아이콘</b>이 있는지 확인합니다.</li><li>아무것도 바꾸지 말고 <b>Next</b> 를 누릅니다.</li></ol>
-      
-      <div class="tip warn"><b>✕ 표시가 있으면 눌러서 바꾸세요</b><p>항목 앞이 <b>✕(빨간 X)</b> 면 제외된 상태입니다. 클릭 → <b>Will be installed on local hard drive</b> 를 선택하세요.</p></div><div class="tip info"><b>PATH가 뭔가요?</b><p>"이 프로그램은 어느 창에서든 이름만 부르면 실행된다"고 Windows에 알려 주는 목록입니다. 여기 없으면 <code>node</code> 명령이 동작하지 않습니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="06 / 14">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 4</span><span class="sm">NODE.JS · 설치 마법사</span></div>
-    <h2>Tools for Native Modules → <b>체크하지 말고 Next</b></h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="6" fill="#417E38"/><rect x="8" y="30" width="884" height="22" fill="#417E38"/>
-<text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Node.js Setup</text>
-<rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18"/><text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
-<line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5"/>
-<rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text><rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47"/><text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Next &gt;</text><rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
-
-
-<rect x="8" y="52" width="884" height="72" fill="#FFFFFF"/>
-<text x="38" y="86" font-size="18" class="b" fill="#16202B">Tools for Native Modules</text>
-<text x="38" y="110" font-size="12.5" fill="#5B6B7C">일부 npm 모듈을 컴파일하는 데 필요한 추가 도구입니다.</text>
-<line x1="8" y1="124" x2="892" y2="124" stroke="#E4E7EB"/>
-<circle cx="836" cy="88" r="22" fill="#417E38" opacity="0.14"/><text x="836" y="97" text-anchor="middle" font-size="22">🟢</text>
-<text x="60" y="168" font-size="13" fill="#3A4855">Some npm modules need to be compiled from C/C++ when installing.</text>
-<text x="60" y="192" font-size="13" fill="#3A4855">If you want to be able to install such modules, some tools</text>
-<text x="60" y="216" font-size="13" fill="#3A4855">(Python and Visual Studio Build Tools) need to be installed.</text>
-<rect x="60" y="254" width="17" height="17" rx="3" fill="#FFFFFF" stroke="#9AA5B1" stroke-width="1.6"/><text x="87" y="268" font-size="13.5" fill="#24292F">Automatically install the necessary tools. Note that this will also</text>
-<text x="87" y="290" font-size="13.5" fill="#24292F">install Chocolatey. The script will pop up in a new window after</text>
-<text x="87" y="312" font-size="13.5" fill="#24292F">the installation completes.</text>
-<rect x="60" y="344" width="500" height="100" rx="6" fill="#FDEEEB" stroke="#C4341C"/>
-<text x="82" y="372" font-size="13.5" class="b" fill="#C4341C">체크하지 마세요 (비워 두기)</text>
-<text x="82" y="398" font-size="12.5" fill="#3A4855">체크하면 Python + Visual Studio 빌드 도구까지</text>
-<text x="82" y="420" font-size="12.5" fill="#3A4855">내려받아 10~30분이 더 걸립니다.</text>
-<rect x="54" y="138" width="780" height="92" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="858" cy="184" r="15" fill="#F26B21"/><text x="858" y="190" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="54" y="248" width="30" height="30" rx="6" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="32" cy="263" r="15" fill="#F26B21"/><text x="32" y="269" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="514" r="15" fill="#F26B21"/><text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-
-    </svg></div>
-    <div class="side">
-      <div class="goal"><b>이 단계의 목표</b><p>용량이 큰 추가 도구를 건너뛰어 설치 시간을 줄입니다.</p></div>
-      <ol class="acts"><li><b>Tools for Native Modules</b> 화면이 나옵니다.</li><li><b>Automatically install the necessary tools…</b> 체크박스는 <b>비워 둡니다.</b></li><li><b>Next</b> 를 누릅니다.</li></ol>
-      
-      <div class="tip warn"><b>체크하면 오래 걸립니다</b><p>체크하면 Python·Visual Studio 빌드 도구까지 자동 설치되어 <b>10~30분</b>이 더 걸립니다. 클로드 코드 사용에는 필요 없습니다.</p></div><div class="tip "><b>나중에 필요해지면?</b><p>그때 다시 설치하면 됩니다. 지금은 건너뛰는 것이 정답입니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="07 / 14">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 5</span><span class="sm">NODE.JS · 설치 완료</span></div>
-    <h2><b>Install</b> → 잠시 대기 → <b>Finish</b></h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="6" fill="#F0F0F0" stroke="#C7C7C7" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="6" fill="#417E38"/><rect x="8" y="30" width="884" height="22" fill="#417E38"/>
-<text x="30" y="37" font-size="15" class="b" fill="#FFFFFF">Node.js Setup</text>
-<rect x="800" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.18"/><text x="812" y="35" text-anchor="middle" font-size="14" fill="#fff">–</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.28"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
-<line x1="8" y1="476" x2="892" y2="476" stroke="#DADADA" stroke-width="1.5"/>
-<rect x="492" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="550" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">&lt; Back</text><rect x="620" y="496" width="116" height="36" rx="4" fill="#0E2A47" stroke="#0E2A47"/><text x="678" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#FFFFFF">Finish</text><rect x="748" y="496" width="116" height="36" rx="4" fill="#FCFCFC" stroke="#ADADAD"/><text x="806" y="519" text-anchor="middle" font-size="13.5" class="b" fill="#24292F">Cancel</text>
-
-<rect x="8" y="52" width="884" height="424" fill="#FFFFFF"/>
-<rect x="8" y="52" width="270" height="424" fill="#EFF5EE"/>
-<text x="143" y="196" text-anchor="middle" font-size="56">🟢</text>
-<text x="143" y="244" text-anchor="middle" font-size="16" class="b" fill="#417E38">Node.js</text>
-<text x="143" y="268" text-anchor="middle" font-size="12" fill="#6E8A6B">v24.x.x LTS</text>
-<text x="308" y="104" font-size="20" class="b" fill="#16202B">Completed the Node.js Setup Wizard</text>
-<text x="308" y="132" font-size="13" fill="#5B6B7C">Node.js has been successfully installed.</text>
-<rect x="308" y="156" width="300" height="70" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2"/>
-<text x="354" y="186" font-size="13.5" class="b" fill="#C1521A">Install 클릭 → UAC "예"</text>
-<text x="328" y="212" font-size="12.5" fill="#3A4855">Ready to install 화면에서 누릅니다.</text>
-<circle cx="332" cy="180" r="15" fill="#F26B21"/><text x="332" y="186" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="628" y="156" width="236" height="70" rx="10" fill="#FFF1E7" stroke="#F26B21" stroke-width="2"/>
-<text x="674" y="186" font-size="13.5" class="b" fill="#C1521A">1~2분 대기</text>
-<text x="648" y="212" font-size="12.5" fill="#3A4855">진행 막대가 끝날 때까지</text>
-<circle cx="652" cy="180" r="15" fill="#F26B21"/><text x="652" y="186" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="308" y="270" width="556" height="112" rx="8" fill="#F0F7F1" stroke="#1A7F37"/>
-<text x="330" y="298" font-size="13.5" class="b" fill="#1A7F37">함께 설치된 것</text>
-<text x="330" y="324" font-size="12.5" fill="#3A4855">• node — 자바스크립트 실행 엔진      • npm — 프로그램 설치 도구</text>
-<text x="330" y="348" font-size="12.5" fill="#3A4855">• PATH 등록 — 어느 창에서나 node / npm 명령 사용 가능</text>
-<text x="330" y="372" font-size="12.5" class="b" fill="#1A7F37">이 문구가 보이면 설치 성공입니다.</text>
-<rect x="304" y="88" width="560" height="60" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="280" cy="118" r="15" fill="#F26B21"/><text x="280" y="124" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="616" y="492" width="124" height="44" rx="9" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="466" cy="514" r="15" fill="#F26B21"/><text x="466" y="520" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">4</text>
-
-    </svg></div>
-    <div class="side">
-      <div class="goal"><b>이 단계의 목표</b><p>실제 설치를 진행하고 마법사를 닫습니다.</p></div>
-      <ol class="acts"><li><b>Ready to install</b> 화면에서 <b>Install</b> 을 누르고, UAC 창이 뜨면 <b>예</b>.</li><li>초록색 진행 막대가 끝날 때까지 1~2분 기다립니다.</li><li><b>Completed the Node.js Setup Wizard</b> 문구를 확인합니다.</li><li><b>Finish</b> 를 눌러 창을 닫습니다.</li></ol>
-      
-      <div class="tip warn"><b>검은 창이 잠깐 떠도 정상</b><p>설치 마무리에 명령 창이 깜빡일 수 있습니다. 저절로 닫힐 때까지 두세요.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="08 / 14">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 6</span><span class="sm">NODE.JS · 반영</span></div>
-    <h2>터미널 새로 열기 (또는 재부팅)</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#1B2733"/>
-<rect x="440" y="60" width="392" height="120" rx="10" fill="#FFFFFF"/>
-<text x="464" y="96" font-size="15" class="b" fill="#C4341C">❌ 이렇게 하면 실패</text>
-<text x="464" y="126" font-size="12.5" fill="#3A4855">설치 전부터 열려 있던 터미널에</text>
-<text x="464" y="148" font-size="12.5" fill="#3A4855">그대로 node --version 입력</text>
-<rect x="60" y="60" width="340" height="440" rx="10" fill="#0E2A47"/>
-<rect x="60" y="60" width="340" height="46" rx="10" fill="#F26B21"/><rect x="60" y="86" width="340" height="20" fill="#F26B21"/>
-<text x="84" y="90" font-size="14" class="b" fill="#FFFFFF">시작 메뉴 검색</text>
-<rect x="84" y="132" width="292" height="42" rx="21" fill="#FFFFFF"/>
-<text x="106" y="159" font-size="14" class="m" fill="#16202B">powershell</text>
-<circle cx="356" cy="153" r="10" fill="#0E2A47"/><text x="356" y="158" text-anchor="middle" font-size="11" fill="#fff">🔍</text>
-<text x="84" y="206" font-size="11.5" class="b" fill="#F9B27A">가장 정확</text>
-<rect x="84" y="216" width="292" height="56" rx="8" fill="#FFFFFF"/>
-<text x="106" y="240" font-size="14" class="b" fill="#16202B">Windows PowerShell</text>
-<text x="106" y="260" font-size="11.5" fill="#5B6B7C">앱</text>
-<rect x="84" y="288" width="292" height="46" rx="8" fill="#FFFFFF" opacity="0.5"/>
-<text x="106" y="316" font-size="13" fill="#16202B">Windows PowerShell ISE</text>
-<rect x="84" y="348" width="292" height="46" rx="8" fill="#FFFFFF" opacity="0.5"/>
-<text x="106" y="376" font-size="13" fill="#16202B">Windows Terminal</text>
-<rect x="440" y="200" width="392" height="92" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="486" y="230" font-size="13.5" class="b" fill="#F9B27A">먼저 기존 창을 모두 닫습니다</text>
-<text x="460" y="256" font-size="12.5" fill="#DCE6EF">열려 있는 PowerShell·CMD 창의 ✕ 를 눌러</text>
-<text x="460" y="278" font-size="12.5" fill="#DCE6EF">전부 닫은 뒤 새로 여세요.</text>
-<circle cx="464" cy="224" r="15" fill="#F26B21"/><text x="464" y="230" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="80" y="128" width="300" height="50" rx="25" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="410" cy="153" r="15" fill="#F26B21"/><text x="410" y="159" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="80" y="212" width="300" height="64" rx="10" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="410" cy="244" r="15" fill="#F26B21"/><text x="410" y="250" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="440" y="318" width="392" height="182" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="464" y="352" font-size="14" class="b" fill="#F9B27A">왜 새 창이어야 하나요?</text>
-<text x="464" y="384" font-size="12.5" fill="#DCE6EF">PATH(프로그램 목록)는 창이 열릴 때</text>
-<text x="464" y="406" font-size="12.5" fill="#DCE6EF">한 번만 읽힙니다. 이미 열린 창은</text>
-<text x="464" y="428" font-size="12.5" fill="#DCE6EF">설치 전 목록을 그대로 들고 있습니다.</text>
-<text x="464" y="462" font-size="12.5" class="b" fill="#F9B27A">→ 새로 열어야 node 를 찾습니다</text>
-    </svg></div>
-    <div class="side">
-      <div class="goal"><b>이 단계의 목표</b><p>PATH 등록 내용을 시스템에 적용합니다. 이 단계를 건너뛰면 다음 확인이 실패합니다.</p></div>
-      <ol class="acts"><li>열려 있던 <b>PowerShell·CMD 창을 모두 닫습니다.</b></li><li><b>Windows 키</b> 를 누르고 <b>powershell</b> 이라고 입력합니다.</li><li>목록에서 <b>Windows PowerShell</b> 을 클릭해 실행합니다.</li></ol>
-      
-      <div class="tip warn"><b>가장 흔한 실수</b><p>설치 <b>전에</b> 열어 둔 터미널에는 새 PATH가 반영되지 않습니다. "설치했는데 안 된다"의 90%가 이 경우입니다.</p></div><div class="tip ok"><b>재부팅이 가장 확실</b><p>시간이 있다면 재부팅하세요. Node.js와 Git 모두 확실히 반영됩니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="09 / 14">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 7</span><span class="sm">NODE.JS · 설치 확인</span></div>
-    <h2><b>node --version</b> 으로 확인</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
-<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<text x="34" y="106" class="m " font-size="14" fill="#9FC6EE">Windows PowerShell</text><text x="34" y="128" class="m " font-size="12.5" fill="#7FA8D4">Copyright (C) Microsoft Corporation. All rights reserved.</text><text x="34" y="172" class="m b" font-size="15" fill="#FFFFFF">PS C:\Users\hufs&gt; node --version</text><text x="34" y="210" class="m b" font-size="16" fill="#7EE787">v24.9.0</text><text x="34" y="258" class="m b" font-size="15" fill="#FFFFFF">PS C:\Users\hufs&gt; npm --version</text><text x="34" y="296" class="m b" font-size="16" fill="#7EE787">11.6.2</text><text x="34" y="344" class="m " font-size="15" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
-<rect x="26" y="151" width="330" height="30" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="380" cy="166" r="15" fill="#F26B21"/><text x="380" y="172" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="26" y="188" width="330" height="31" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="380" cy="203.5" r="15" fill="#F26B21"/><text x="380" y="209.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="26" y="237" width="330" height="68" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="380" cy="271" r="15" fill="#F26B21"/><text x="380" y="277" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="520" y="330" width="352" height="128" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="544" y="362" font-size="14" class="b" fill="#F9B27A">이 두 줄이 성공의 증거</text>
-<text x="544" y="392" font-size="12.5" fill="#DCE6EF">node → v로 시작하는 숫자</text>
-<text x="544" y="414" font-size="12.5" fill="#DCE6EF">npm  → 숫자.숫자.숫자</text>
-<text x="544" y="440" font-size="12" fill="#9FC6EE">숫자가 달라도 전혀 문제없습니다</text>
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>Node.js가 정상 설치되었는지 확인합니다.</p></div>
-      <ol class="acts"><li>새로 연 PowerShell에 <code>node --version</code> 을 붙여넣고 Enter. (붙여넣기 = 마우스 오른쪽 클릭)</li><li><code>v24.x.x</code> 처럼 <b>v로 시작하는 숫자</b>가 나오면 성공입니다.</li><li>이어서 <code>npm --version</code> 도 확인합니다.</li></ol>
-      <div class="cmd">
-  <b class="lbl">Node.js 버전 확인</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="node --version">복사</button><pre>node --version</pre></div>
-  <div class="out">→ v24.x.x</div></div><div class="cmd">
-  <b class="lbl">npm 버전 확인</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="npm --version">복사</button><pre>npm --version</pre></div>
-  <div class="out">→ 11.x.x</div></div>
-      <div class="tip ok"><b>두 개 다 나와야 정상</b><p>npm은 Node.js와 함께 설치됩니다. 둘 다 버전이 보이면 완료입니다.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="10 / 14">
-  <div class="rail"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">STEP 8</span><span class="sm">NODE.JS · 동작 시험</span></div>
-    <h2>npm이 실제로 동작하는지 시험</h2>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="body">
-    <div class="shot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" preserveAspectRatio="xMidYMid meet">
-      <style>text{font-family:'Malgun Gothic','Nanum Gothic',sans-serif;}.m{font-family:'Consolas','D2Coding',monospace;}.b{font-weight:700;}</style>
-      <rect x="8" y="8" width="884" height="544" rx="8" fill="#012456" stroke="#0A3A6B" stroke-width="1.5"/>
-<rect x="8" y="8" width="884" height="44" rx="8" fill="#0B3766"/><rect x="8" y="32" width="884" height="20" fill="#0B3766"/>
-<text x="32" y="37" font-size="14" class="b" fill="#DCE9F7">Windows PowerShell</text>
-<rect x="856" y="18" width="24" height="24" rx="3" fill="#FFFFFF" opacity="0.14"/><text x="868" y="35" text-anchor="middle" font-size="14" fill="#fff">✕</text>
-<text x="34" y="106" class="m b" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; npm config get prefix</text><text x="34" y="138" class="m b" font-size="14" fill="#7EE787">C:\Users\hufs\AppData\Roaming\npm</text><text x="34" y="188" class="m b" font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; npm ping</text><text x="34" y="220" class="m " font-size="13" fill="#9FC6EE">npm notice PING https://registry.npmjs.org/</text><text x="34" y="248" class="m b" font-size="14" fill="#7EE787">npm notice PONG 214ms</text><text x="34" y="298" class="m " font-size="14" fill="#FFFFFF">PS C:\Users\hufs&gt; _</text>
-<rect x="26" y="86" width="400" height="61" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="450" cy="116.5" r="15" fill="#F26B21"/><text x="450" y="122.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">1</text>
-<rect x="26" y="168" width="300" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="350" cy="182.5" r="15" fill="#F26B21"/><text x="350" y="188.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">2</text>
-<rect x="26" y="228" width="300" height="29" rx="8" fill="none" stroke="#F26B21" stroke-width="3"/><circle cx="350" cy="242.5" r="15" fill="#F26B21"/><text x="350" y="248.5" text-anchor="middle" font-size="15" class="b" fill="#FFFFFF">3</text>
-<rect x="470" y="330" width="402" height="170" rx="10" fill="#0E2A47" stroke="#F26B21" stroke-width="2"/>
-<text x="494" y="362" font-size="14" class="b" fill="#F9B27A">PONG 이 나오면?</text>
-<text x="494" y="392" font-size="12.5" fill="#DCE6EF">클로드 코드를 npm으로 설치할 수 있습니다.</text>
-<text x="494" y="428" font-size="13" class="b" fill="#FF9F6B">실패(timeout)한다면?</text>
-<text x="494" y="456" font-size="12.5" fill="#DCE6EF">방화벽·프록시 문제입니다. 클로드 코드는</text>
-<text x="494" y="478" font-size="12.5" fill="#DCE6EF">네이티브 방식(irm)으로 설치하세요.</text>
-    </svg></div>
-    <div class="side dense">
-      <div class="goal"><b>이 단계의 목표</b><p>클로드 코드를 npm으로 설치할 수 있는 상태인지 미리 점검합니다.</p></div>
-      <ol class="acts"><li><code>npm config get prefix</code> 를 실행해 <b>설치 폴더 경로</b>가 나오는지 봅니다.</li><li><code>npm ping</code> 을 실행합니다.</li><li><b>PONG</b> 이 나오면 인터넷으로 프로그램을 받아올 수 있는 상태입니다.</li></ol>
-      <div class="cmd">
-  <b class="lbl">① npm 전역 설치 폴더 확인</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="npm config get prefix">복사</button><pre>npm config get prefix</pre></div>
-  </div><div class="cmd">
-  <b class="lbl">② npm 서버 연결 시험</b>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="npm ping">복사</button><pre>npm ping</pre></div>
-  <div class="out">→ npm notice PONG</div></div>
-      <div class="tip warn"><b>npm ping 이 실패한다면</b><p>기관 방화벽·프록시 때문입니다. 이 경우 클로드 코드는 <b>네이티브 설치(irm)</b> 로 진행하세요.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-no="11 / 14">
-  <div class="rail acc"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 1/2</span></div>
-    <h2>Node.js 명령어 모음 (복사해서 사용) <span style="font-size:22px;color:#8A94A0;font-weight:700">(1/2)</span></h2>
-    <p class="lead">오른쪽 위 <b>복사</b> 버튼 → PowerShell에서 <b>마우스 오른쪽 클릭</b>으로 붙여넣기 → Enter.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="cgrid"><div class="ccard">
-  <div class="ct">① Node.js 버전 확인</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="node --version">복사</button><pre>node --version</pre></div>
-  <div class="out">→ v24.x.x</div>
-  <div class="cd"><b>v로 시작하는 숫자</b>가 보이면 설치 성공입니다.</div>
-</div><div class="ccard">
-  <div class="ct">② npm 버전 확인</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="npm --version">복사</button><pre>npm --version</pre></div>
-  <div class="out">→ 11.x.x</div>
-  <div class="cd">Node.js와 함께 설치되는 패키지 관리자입니다.</div>
-</div><div class="ccard">
-  <div class="ct">③ 설치 위치 확인 (문제 진단)</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="Get-Command node | Select-Object Source">복사</button><pre>Get-Command node | Select-Object Source</pre></div>
-  
-  <div class="cd">경로가 나오면 설치는 정상, PATH만 점검하면 됩니다.</div>
-</div><div class="ccard">
-  <div class="ct">④ npm 전역 폴더 확인</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="npm config get prefix">복사</button><pre>npm config get prefix</pre></div>
-  
-  <div class="cd">npm으로 설치한 프로그램이 저장되는 위치입니다.</div>
-</div><div class="ccard">
-  <div class="ct">⑤ npm 서버 연결 시험</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="npm ping">복사</button><pre>npm ping</pre></div>
-  <div class="out">→ npm notice PONG</div>
-  <div class="cd">실패하면 방화벽·프록시 문제입니다.</div>
-</div><div class="ccard">
-  <div class="ct">⑥ npm 캐시 정리 (설치 오류 시)</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="npm cache clean --force">복사</button><pre>npm cache clean --force</pre></div>
-  
-  <div class="cd">설치가 자꾸 실패할 때 한 번 실행한 뒤 재시도하세요.</div>
-</div></div>
-</section>
-
-<section class="slide" data-no="12 / 14">
-  <div class="rail acc"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">명령어 모음</span><span class="sm">COPY &amp; PASTE · 2/2</span></div>
-    <h2>Node.js 명령어 모음 (복사해서 사용) <span style="font-size:22px;color:#8A94A0;font-weight:700">(2/2)</span></h2>
-    <p class="lead">오른쪽 위 <b>복사</b> 버튼 → PowerShell에서 <b>마우스 오른쪽 클릭</b>으로 붙여넣기 → Enter.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="cgrid"><div class="ccard">
-  <div class="ct">⑦ 실행 정책 확인 (npm 스크립트 오류 시)</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="Get-ExecutionPolicy -Scope CurrentUser">복사</button><pre>Get-ExecutionPolicy -Scope CurrentUser</pre></div>
-  
-  <div class="cd"><code>Restricted</code> 가 나오면 아래 ⑧을 실행하세요.</div>
-</div><div class="ccard">
-  <div class="ct">⑧ 실행 정책 완화 (⑦이 Restricted일 때만)</div>
-  <div class="cmdwrap"><button class="cp" type="button" data-c="Set-ExecutionPolicy -Scope CurrentUser RemoteSigned">복사</button><pre>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</pre></div>
-  
-  <div class="cd">내 계정에만 적용되는 안전한 설정입니다. 물어보면 <b>Y</b> 입력.</div>
-</div></div>
-</section>
-
-<section class="slide" data-no="13 / 14">
-  <div class="rail acc"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">문제 해결</span><span class="sm">TROUBLESHOOTING</span></div>
-    <h2>Node.js — 문제가 생겼을 때</h2>
-    <p class="lead">증상별 해결 순서입니다. 대부분 <b>새 터미널</b> 또는 <b>재부팅</b> 으로 해결됩니다.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="tbwrap"><table class="tb">
-    <thead><tr><th style="width:29%">이런 화면·메시지가 나오면</th><th style="width:24%">원인</th><th>이렇게 해결하세요</th></tr></thead>
-    <tbody><tr><td class="s"><code>'node' 용어가 … 인식되지 않습니다</code></td><td class="c">터미널이 PATH를 아직 못 읽음</td><td>① 터미널을 <b>모두 닫고 새로 열기</b> ② <b>재부팅</b> ③ <code>Get-Command node</code> 로 확인 ④ 없으면 설치 마법사에서 <b>Add to PATH</b> 가 제외됐던 것 → 재설치.</td></tr><tr><td class="s">설치 도중 멈춘 것처럼 보임</td><td class="c">Native Modules 도구 자동 설치</td><td>STEP 4에서 체크를 <b>비워야</b> 합니다. 이미 시작됐다면 끝날 때까지 기다리거나, 설치 취소 후 다시 설치하며 체크를 해제하세요.</td></tr><tr><td class="s"><code>npm ERR! code EACCES</code> / 권한 오류</td><td class="c">전역 설치 폴더 권한</td><td>① PowerShell을 <b>관리자 권한으로 실행</b> 후 재시도 ② 그래도 안 되면 <b>npm 방식 대신</b> 클로드 코드 네이티브 설치(<code>irm …</code>)를 사용하세요.</td></tr><tr><td class="s"><code>이 시스템에서 스크립트를 실행할 수 없으므로</code></td><td class="c">PowerShell 실행 정책 Restricted</td><td><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> 실행 후 <b>Y</b> 입력 → 터미널 새로 열기.</td></tr><tr><td class="s"><code>npm ERR! network</code> / ETIMEDOUT</td><td class="c">기관 방화벽·프록시</td><td>① <code>npm ping</code> 으로 확인 ② 사내망이면 전산실에 <b>registry.npmjs.org 허용</b> 요청 ③ 임시로 휴대폰 테더링 사용 ④ 클로드 코드는 네이티브 설치로 우회.</td></tr><tr><td class="s">node 버전이 v18 등 예전 것으로 나옴</td><td class="c">예전에 설치한 Node가 남아 있음</td><td><b>설정 → 앱</b> 에서 이전 Node.js 제거 → 재부팅 → LTS 다시 설치. 여러 버전이 섞이면 오류가 잦습니다.</td></tr><tr><td class="s">Current(v26)를 잘못 설치했음</td><td class="c">LTS 대신 최신 버전 선택</td><td>그대로 써도 대부분 동작하지만, 문제가 생기면 <b>제어판 → 프로그램 제거</b> 후 LTS로 다시 설치하세요.</td></tr></tbody>
-  </table></div>
-</section>
-
-<section class="slide" data-no="14 / 14">
-  <div class="rail acc"></div>
-  <div class="head">
-    <div class="eyebrow"><span class="tag">마무리</span><span class="sm">CHECKLIST &amp; NEXT</span></div>
-    <h2>Node.js 설치 완료 확인</h2>
-    <p class="lead">아래가 모두 되면 완료입니다. 다음은 <b>VS Code 설치</b>입니다.</p>
-  </div>
-  <div class="hr"><i></i></div>
-  <div class="two">
-    <div class="panel"><h3>✅ 완료 체크리스트</h3><ul class="chk"><li><span class="box"></span><span><span class="t">LTS 버전을 내려받았다</span><span class="d">왼쪽 초록색 LTS 카드 (Current 아님)</span></span></li><li><span class="box"></span><span><span class="t">Add to PATH 가 켜진 채 설치했다</span><span class="d">Custom Setup 화면에서 💾 아이콘 확인</span></span></li><li><span class="box"></span><span><span class="t">Native Modules 체크는 비워 두었다</span><span class="d">설치 시간을 크게 줄여 줍니다</span></span></li><li><span class="box"></span><span><span class="t">설치 후 터미널을 새로 열었다</span><span class="d">또는 재부팅</span></span></li><li><span class="box"></span><span><span class="t">node --version 이 v24.x.x 로 나온다</span><span class="d">v로 시작하는 숫자</span></span></li><li><span class="box"></span><span><span class="t">npm --version 이 정상 출력된다</span><span class="d">11.x.x 형태</span></span></li></ul></div>
-    <div class="panel"><h3>➡️ 다음 단계 &amp; 참고</h3><ul class="nxt"><li><b>④ VS Code 설치 가이드</b><span>코드를 보고 고칠 편집기를 설치합니다. (<b>04-vscode-guide</b>)</span></li><li><b>⑤ Claude Code 설치 가이드</b><span>npm 방식으로 설치할 때 Node.js가 필요합니다.</span></li><li><b>알아 두면 좋은 것</b><span>Node.js를 직접 다룰 일은 거의 없습니다. <b>클로드 코드가 대신 사용하는 엔진</b>이라고 생각하세요.</span></li><li><b>업데이트 방법</b><span>나중에 새 LTS가 나오면 <b>같은 방식으로 다시 설치</b>하면 됩니다. 기존 것을 지울 필요 없습니다.</span></li></ul></div>
-  </div>
-  <div class="final"><b>최종 확인 명령</b><span>node --version   ·   npm --version</span></div>
-</section>
-
-</div>
-<script>
-function copyText(t){
-  if(navigator.clipboard && window.isSecureContext){ return navigator.clipboard.writeText(t); }
-  var ta=document.createElement('textarea'); ta.value=t;
-  ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta);
-  ta.focus(); ta.select();
-  try{ document.execCommand('copy'); }catch(e){}
-  document.body.removeChild(ta); return Promise.resolve();
-}
-var toast=document.createElement('div'); toast.className='toast'; toast.textContent='복사되었습니다';
-document.addEventListener('DOMContentLoaded',function(){ document.body.appendChild(toast); });
-document.addEventListener('click',function(e){
-  var b=e.target.closest ? e.target.closest('.cp') : null; if(!b) return;
-  copyText(b.getAttribute('data-c')).then(function(){
-    var old=b.textContent; b.textContent='복사됨'; b.classList.add('done');
-    toast.classList.add('on');
-    setTimeout(function(){ b.textContent=old; b.classList.remove('done'); toast.classList.remove('on'); },1400);
-  });
-});
-</script>
-</body>
+    <script>
+      function copyText(t) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(t);
+        }
+        var ta = document.createElement("textarea");
+        ta.value = t;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand("copy");
+        } catch (e) {}
+        document.body.removeChild(ta);
+        return Promise.resolve();
+      }
+      var toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = "복사되었습니다";
+      document.addEventListener("DOMContentLoaded", function () {
+        document.body.appendChild(toast);
+      });
+      document.addEventListener("click", function (e) {
+        var b = e.target.closest ? e.target.closest(".cp") : null;
+        if (!b) return;
+        copyText(b.getAttribute("data-c")).then(function () {
+          var old = b.textContent;
+          b.textContent = "복사됨";
+          b.classList.add("done");
+          toast.classList.add("on");
+          setTimeout(function () {
+            b.textContent = old;
+            b.classList.remove("done");
+            toast.classList.remove("on");
+          }, 1400);
+        });
+      });
+    </script>
+  </body>
 </html>
